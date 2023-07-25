@@ -5,8 +5,7 @@ import 'package:solvify/firebase_options.dart';
 import 'package:solvify/pages/signin_signup/login_page.dart';
 
 void main() async {
-  // Firebase with Chrome Extension Is Broken.
-  // WidgetsFlutterBinding.ensureInitialized();
+  WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   runApp(const MyApp());
 }
