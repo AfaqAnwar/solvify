@@ -4,7 +4,7 @@ import {
   _registerComponent as t,
   registerVersion as r,
   SDK_VERSION as n,
-} from "./firebase/firebase-app.js";
+} from "./firebase-app.js";
 const stringToByteArray$1 = function (e) {
     const t = [];
     let r = 0;

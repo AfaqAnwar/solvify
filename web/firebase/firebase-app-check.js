@@ -3,7 +3,7 @@ import {
   getApp as e,
   _registerComponent as t,
   registerVersion as r,
-} from "./firebase/firebase-app.js";
+} from "./firebase-app.js";
 const n = {
   byteToCharMap_: null,
   charToByteMap_: null,

@@ -4,7 +4,7 @@ import {
   _getProvider,
   getApp as r,
   SDK_VERSION as n,
-} from "./firebase/firebase-app.js";
+} from "./firebase-app.js";
 function isIndexedDBAvailable() {
   try {
     return "object" == typeof indexedDB;

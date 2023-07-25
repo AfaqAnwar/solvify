@@ -4,7 +4,7 @@ import {
   registerVersion as t,
   getApp as r,
   SDK_VERSION as n,
-} from "./firebase/firebase-app.js";
+} from "./firebase-app.js";
 const i = {
   byteToCharMap_: null,
   charToByteMap_: null,

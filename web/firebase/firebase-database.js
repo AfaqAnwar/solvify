@@ -4,7 +4,7 @@ import {
   _registerComponent as t,
   registerVersion as n,
   SDK_VERSION as r,
-} from "./firebase/firebase-app.js";
+} from "./firebase-app.js";
 const i = !1,
   o = "${JSCORE_VERSION}",
   assert = function (e, t) {
@@ -6906,7 +6906,6 @@ function repoGenerateServerValues(e) {
       t.timestamp || new Date().getTime()),
     t
   );
-  var t;
 }
 function repoOnConnectStatus(e, t) {
   repoUpdateInfo(e, "connected", t),
