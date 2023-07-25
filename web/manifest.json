@@ -2,11 +2,12 @@
     "name": "Solvify",
     "description": "AI powered Chrome extension that automatically solves your homework problems.",
     "version": "0.0.1",
-    "content_security_policy": {
-        "extension_pages": "script-src 'self' ; object-src 'self'"
-    },
+    "manifest_version": 3,
+    "permissions": ["activeTab"],
     "action": {
         "default_popup": "index.html"
     },
-    "manifest_version": 3
+    "content_security_policy": {
+        "extension_pages": "script-src 'self'; object-src 'self'"
+    }
 }
