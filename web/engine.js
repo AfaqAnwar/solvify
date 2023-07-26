@@ -1,5 +1,3 @@
-console.log("calling engine.js file...");
-
 window.ff_trigger_firebase_core = async (callback) => {
   callback(await import("./firebase/firebase-app.js"));
 };

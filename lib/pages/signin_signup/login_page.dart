@@ -1,4 +1,3 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:solvify/components/generic_components/styled_modal.dart';
@@ -20,6 +19,8 @@ class _LoginPageState extends State<LoginPage> {
   final passwordController = TextEditingController();
 
   bool checkFields() {
+    //! For testing purposes, comment out the return true; line below.
+    return true;
     if (emailController.text.trim().toString().isEmpty ||
         passwordController.text.trim().toString().isEmpty) {
       return false;
@@ -45,8 +46,7 @@ class _LoginPageState extends State<LoginPage> {
             );
           });
       try {
-        await FirebaseAuth.instance.signInWithEmailAndPassword(
-            email: emailController.text, password: passwordController.text);
+        //! Implement JS Login here
         // ignore: use_build_context_synchronously
         Navigator.pop(context);
         Future.delayed(const Duration(milliseconds: 500), () {
@@ -56,11 +56,12 @@ class _LoginPageState extends State<LoginPage> {
                   child: const MainAppPage(),
                   type: PageTransitionType.rightToLeftWithFade));
         });
-      } on FirebaseAuthException catch (e) {
+      } on Exception {
+        //! Handle Error Here
         // ignore: use_build_context_synchronously
-        Navigator.pop(context);
+/*         Navigator.pop(context);
         String errorMessage = "";
-        switch (e.code) {
+        switch (e.toString()) {
           case "invalid-email":
             errorMessage = "You entered an invalid email address.";
             break;
@@ -88,7 +89,7 @@ class _LoginPageState extends State<LoginPage> {
             builder: (context) => StyledModal(
                 backgroundColor: AppStyle.secondaryBackground,
                 title: 'Login Error',
-                body: errorMessage.toString()));
+                body: errorMessage.toString())); */
       }
     }
   }
