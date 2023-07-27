@@ -11,3 +11,6 @@ external void clearState();
 
 @JS('registerUser')
 external void registerUser(String email, String password);
+
+@JS('checkSession')
+external void checkSession();

@@ -3,11 +3,12 @@
     "description": "AI powered Chrome extension that automatically solves your homework problems.",
     "version": "0.0.1",
     "manifest_version": 3,
-    "permissions": ["activeTab"],
+    "permissions": ["activeTab", "storage"],
     "action": {
         "default_popup": "index.html"
     },
     "content_security_policy": {
         "extension_pages": "script-src 'self' http://localhost:* http://127.0.0.1:*; object-src 'self'"
     }
+
 }

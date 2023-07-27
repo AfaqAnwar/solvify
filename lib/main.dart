@@ -1,6 +1,12 @@
+// ignore: avoid_web_libraries_in_flutter
+import 'dart:js' as js;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:solvify/app_host.dart';
+import 'package:solvify/firebase_js.dart';
+import 'package:solvify/functions_js.dart';
+import 'package:solvify/pages/app_pages/main_app_page.dart';
 import 'package:solvify/pages/registration/register_page.dart';
 import 'package:solvify/pages/signin_signup/login_page.dart';
 
@@ -15,35 +21,9 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: []);
-    return MaterialApp(
-        debugShowCheckedModeBanner: false,
-        home: FutureBuilder(
-            future: buildBody(),
-            builder: (context, snapshot) {
-              if (snapshot.hasData) {
-                return snapshot.data as Widget;
-              } else {
-                return const Scaffold(
-                  body: Center(
-                    child: CircularProgressIndicator(),
-                  ),
-                );
-              }
-            }));
-  }
-
-  Future<Widget> buildBody() async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    Widget pageToDisplay = const LoginPage();
-    switch (prefs.getString("currentPage")) {
-      case "login":
-        pageToDisplay = const LoginPage();
-        break;
-      case "register":
-        pageToDisplay = const RegisterPage();
-        break;
-    }
-
-    return pageToDisplay;
+    return const MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: AppHost(),
+    );
   }
 }
