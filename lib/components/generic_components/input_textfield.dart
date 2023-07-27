@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class LoginTextField extends StatelessWidget {
+class InputTextField extends StatelessWidget {
   // ignore: prefer_typing_uninitialized_variables
   final controller;
   final String hintText;
@@ -11,7 +11,7 @@ class LoginTextField extends StatelessWidget {
   final Color textFieldBorderColor;
   final Color textFieldBorderFocusColor;
 
-  const LoginTextField(
+  const InputTextField(
       {super.key,
       required this.controller,
       required this.hintText,

@@ -2,26 +2,27 @@
 import 'dart:js' as js;
 import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
-import 'package:solvify/firebase_js.dart';
+import 'package:solvify/components/generic_components/styled_button.dart';
 import 'package:solvify/components/generic_components/styled_modal.dart';
 import 'package:solvify/components/generic_components/input_textfield.dart';
-import 'package:solvify/components/generic_components/styled_button.dart';
-import 'package:solvify/pages/app_pages/main_app_page.dart';
-import 'package:solvify/pages/registration/register_page.dart';
+import 'package:solvify/firebase_js.dart';
+import 'package:solvify/pages/registration/register_onboard.dart';
+import 'package:solvify/pages/signin_signup/login_page.dart';
 import 'package:solvify/styles/app_style.dart';
 
-class LoginPage extends StatefulWidget {
-  const LoginPage({super.key});
+class RegisterPage extends StatefulWidget {
+  const RegisterPage({super.key});
 
   @override
-  State<LoginPage> createState() => _LoginPageState();
+  State<RegisterPage> createState() => _RegisterPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _RegisterPageState extends State<RegisterPage> {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
+  final passwordConfirmController = TextEditingController();
 
-  bool checkFields() {
+  bool checkFieldsEmpty() {
     if (emailController.text.trim().toString().isEmpty ||
         passwordController.text.trim().toString().isEmpty) {
       return false;
@@ -30,25 +31,36 @@ class _LoginPageState extends State<LoginPage> {
     }
   }
 
-  void signIn() async {
-    if (checkFields() == false) {
+  bool checkPasswordsMatch() {
+    if (passwordController.text.trim().toString() ==
+        passwordConfirmController.text.trim().toString()) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  void register() async {
+    if (checkFieldsEmpty() == false) {
       displayError("empty-fields");
+    } else if (checkPasswordsMatch() == false) {
+      displayError("passwords-dont-match");
     } else {
       displayLoad();
 
-      signUserIn(emailController.text.trim().toString(),
+      registerUser(emailController.text.trim().toString(),
           passwordController.text.trim().toString());
 
       var state = js.JsObject.fromBrowserObject(js.context['userState']);
 
-      Future.delayed(const Duration(milliseconds: 500), () {
+      Future.delayed(const Duration(milliseconds: 1000), () {
         if (state['loggedIn'] == true) {
           Navigator.pop(context);
           Future.delayed(const Duration(milliseconds: 500), () {
             Navigator.pushReplacement(
                 context,
                 PageTransition(
-                    child: const MainAppPage(),
+                    child: const RegisterOnboard(),
                     type: PageTransitionType.rightToLeftWithFade));
           });
         } else {
@@ -65,26 +77,20 @@ class _LoginPageState extends State<LoginPage> {
 
   void displayError(String errorMessage) {
     switch (errorMessage) {
-      case "invalid-email":
-        errorMessage = "You entered an invalid email address.";
-        break;
-      case "wrong-password":
-        errorMessage = "Your password is wrong.";
-        break;
-      case "user-not-found":
-        errorMessage = "User with this email doesn't exist.";
-        break;
-      case "user-disabled":
-        errorMessage = "User with this email has been disabled.";
-        break;
-      case "too-many-requests":
-        errorMessage = "Too many requests. Try again later.";
-        break;
-      case "operation-now-alllowed":
-        errorMessage = "Signing in with Email and Password is not enabled.";
-        break;
       case "empty-fields":
         errorMessage = "Please fill out both your email and password.";
+        break;
+      case "passwords-dont-match":
+        errorMessage = "Your passwords don't match.";
+        break;
+      case "email-already-in-use":
+        errorMessage = "This email is already in use.";
+        break;
+      case "invalid-email":
+        errorMessage = "This email is invalid.";
+        break;
+      case "weak-password":
+        errorMessage = "Your password is too weak.";
         break;
       default:
         errorMessage = "An undefined error happened - $errorMessage";
@@ -93,7 +99,7 @@ class _LoginPageState extends State<LoginPage> {
         context: context,
         builder: (context) => StyledModal(
             backgroundColor: AppStyle.secondaryBackground,
-            title: 'Login Error',
+            title: 'Registration Error',
             body: errorMessage.toString()));
   }
 
@@ -107,18 +113,28 @@ class _LoginPageState extends State<LoginPage> {
         });
   }
 
-  void goToRegister() {
+  void goBackToLogin() {
     Navigator.push(
         context,
         PageTransition(
-            child: const RegisterPage(),
-            childCurrent: const LoginPage(),
-            type: PageTransitionType.rightToLeftPop));
+            child: const LoginPage(),
+            childCurrent: const RegisterPage(),
+            type: PageTransitionType.leftToRightPop));
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back_ios),
+          splashRadius: 0.1,
+          color: AppStyle.primaryAccent,
+          onPressed: goBackToLogin,
+        ),
+      ),
       backgroundColor: AppStyle.primaryBackground,
       body: SafeArea(
         child: Center(
@@ -162,42 +178,24 @@ class _LoginPageState extends State<LoginPage> {
                 const SizedBox(
                   height: 10,
                 ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 25),
-                  child:
-                      Row(mainAxisAlignment: MainAxisAlignment.end, children: [
-                    Text("Forgot Password?",
-                        style: TextStyle(color: AppStyle.primaryAccent)),
-                  ]),
+                InputTextField(
+                  controller: passwordConfirmController,
+                  hintText: "Confirm Password",
+                  obscureText: true,
+                  textFieldBackgroundColor: AppStyle.secondaryBackground,
+                  textFieldHintTextColor: Colors.grey.shade400,
+                  textFieldTextColor: Colors.black,
+                  textFieldBorderColor: Colors.grey.shade400,
+                  textFieldBorderFocusColor: AppStyle.primaryAccent,
                 ),
                 const SizedBox(
                   height: 50,
                 ),
                 StyledButton(
-                  onTap: signIn,
+                  onTap: register,
                   buttonColor: AppStyle.primaryAccent,
-                  buttonText: 'Sign In',
+                  buttonText: 'Register',
                   buttonTextColor: Colors.white,
-                ),
-                const SizedBox(
-                  height: 50,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text("Not a member?",
-                        style: TextStyle(color: Colors.grey.shade700)),
-                    const SizedBox(width: 4),
-                    GestureDetector(
-                      onTap: goToRegister,
-                      child: Text(
-                        "Register Now!",
-                        style: TextStyle(
-                            color: AppStyle.primaryAccent,
-                            fontWeight: FontWeight.bold),
-                      ),
-                    ),
-                  ],
                 ),
               ],
             ),

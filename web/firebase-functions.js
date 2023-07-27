@@ -1,8 +1,7 @@
-console.log("common.js loaded");
-
 import {
   getAuth,
   signInWithEmailAndPassword,
+  createUserWithEmailAndPassword,
 } from "./firebase/firebase-auth.js";
 
 window.userState = {
@@ -10,14 +9,6 @@ window.userState = {
   email: "",
   uid: "",
   error: "",
-};
-
-window.alertMessage = (text) => {
-  alert(text);
-};
-
-window.logger = (flutter_value) => {
-  console.log({ js_context: this, flutter_value });
 };
 
 window.signUserIn = async (email, password) => {
@@ -34,8 +25,26 @@ window.signUserIn = async (email, password) => {
     .catch((error) => {
       window.userState.loggedIn = false;
       const errorCode = error.code;
-      const errorMessage = error.message;
       window.userState.error = errorCode;
+    });
+};
+
+window.registerUser = async (email, password) => {
+  const auth = getAuth();
+  createUserWithEmailAndPassword(auth, email, password)
+    .then((userCredential) => {
+      // Signed in
+      const user = userCredential.user;
+      window.userState.loggedIn = true;
+      window.userState.email = user.email;
+      window.userState.uid = user.uid;
+      // ...
+    })
+    .catch((error) => {
+      window.userState.loggedIn = false;
+      const errorCode = error.code;
+      window.userState.error = errorCode;
+      // ..
     });
 };
 
