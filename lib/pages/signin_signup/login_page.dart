@@ -2,6 +2,7 @@
 import 'dart:js' as js;
 import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:solvify/firebase_js.dart';
 import 'package:solvify/components/generic_components/styled_modal.dart';
 import 'package:solvify/components/generic_components/input_textfield.dart';
@@ -18,8 +19,22 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
+
+  void setSharedState() async {
+    final SharedPreferences prefs = await _prefs;
+    setState(() {
+      prefs.setString("currentPage", "login");
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    setSharedState();
+  }
 
   bool checkFields() {
     if (emailController.text.trim().toString().isEmpty ||
@@ -108,12 +123,10 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   void goToRegister() {
-    Navigator.push(
+    Navigator.pushReplacement(
         context,
         PageTransition(
-            child: const RegisterPage(),
-            childCurrent: const LoginPage(),
-            type: PageTransitionType.rightToLeftPop));
+            child: const RegisterPage(), type: PageTransitionType.rightToLeft));
   }
 
   @override

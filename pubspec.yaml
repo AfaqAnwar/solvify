@@ -29,6 +29,9 @@ environment:
 # versions available, run `flutter pub outdated`.
 dependencies:
   page_transition: ^2.0.9
+  lottie: ^2.5.0
+  im_stepper: ^1.0.1+1
+  shared_preferences: ^2.2.0
   js: ^0.6.7
   flutter:
     sdk: flutter

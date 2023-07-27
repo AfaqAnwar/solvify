@@ -2,11 +2,12 @@
 import 'dart:js' as js;
 import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:solvify/components/generic_components/styled_button.dart';
 import 'package:solvify/components/generic_components/styled_modal.dart';
 import 'package:solvify/components/generic_components/input_textfield.dart';
 import 'package:solvify/firebase_js.dart';
-import 'package:solvify/pages/registration/register_onboard.dart';
+import 'package:solvify/pages/registration/onboarding/register_onboard_host.dart';
 import 'package:solvify/pages/signin_signup/login_page.dart';
 import 'package:solvify/styles/app_style.dart';
 
@@ -18,9 +19,23 @@ class RegisterPage extends StatefulWidget {
 }
 
 class _RegisterPageState extends State<RegisterPage> {
+  final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
   final passwordConfirmController = TextEditingController();
+
+  void setSharedState() async {
+    final SharedPreferences prefs = await _prefs;
+    setState(() {
+      prefs.setString("currentPage", "register");
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    setSharedState();
+  }
 
   bool checkFieldsEmpty() {
     if (emailController.text.trim().toString().isEmpty ||
@@ -60,7 +75,7 @@ class _RegisterPageState extends State<RegisterPage> {
             Navigator.pushReplacement(
                 context,
                 PageTransition(
-                    child: const RegisterOnboard(),
+                    child: const RegisterOnboardHost(),
                     type: PageTransitionType.rightToLeftWithFade));
           });
         } else {
@@ -114,12 +129,10 @@ class _RegisterPageState extends State<RegisterPage> {
   }
 
   void goBackToLogin() {
-    Navigator.push(
+    Navigator.pushReplacement(
         context,
         PageTransition(
-            child: const LoginPage(),
-            childCurrent: const RegisterPage(),
-            type: PageTransitionType.leftToRightPop));
+            child: const LoginPage(), type: PageTransitionType.leftToRight));
   }
 
   @override
@@ -163,7 +176,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   textFieldBorderFocusColor: AppStyle.primaryAccent,
                 ),
                 const SizedBox(
-                  height: 10,
+                  height: 20,
                 ),
                 InputTextField(
                   controller: passwordController,
