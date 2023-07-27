@@ -1,14 +1,13 @@
 // ignore: avoid_web_libraries_in_flutter
 import 'dart:js' as js;
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:solvify/firebase_js.dart';
-import 'package:solvify/functions_js.dart';
 import 'package:solvify/pages/app_pages/main_app_page.dart';
 import 'package:solvify/pages/registration/register_page.dart';
 import 'package:solvify/pages/signin_signup/login_page.dart';
+import 'package:solvify/styles/app_style.dart';
 
 class AppHost extends StatefulWidget {
   const AppHost({super.key});
@@ -26,7 +25,12 @@ class _AppHostState extends State<AppHost> {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(body: Center(child: CircularProgressIndicator()));
+    return Scaffold(
+        backgroundColor: AppStyle.primaryBackground,
+        body: Center(
+            child: CircularProgressIndicator(
+          color: AppStyle.primaryAccent,
+        )));
   }
 
   Future pushPage() async {

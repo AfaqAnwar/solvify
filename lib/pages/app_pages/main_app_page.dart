@@ -15,7 +15,6 @@ class _MainAppPageState extends State<MainAppPage> {
     final SharedPreferences prefs = await _prefs;
     setState(() {
       prefs.setString("currentPage", "app");
-      print(prefs.getString("currentPage"));
     });
   }
 
