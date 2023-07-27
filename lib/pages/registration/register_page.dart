@@ -113,9 +113,11 @@ class _RegisterPageState extends State<RegisterPage> {
     showDialog(
         context: context,
         builder: (context) => StyledModal(
-            backgroundColor: AppStyle.secondaryBackground,
-            title: 'Registration Error',
-            body: errorMessage.toString()));
+              backgroundColor: AppStyle.secondaryBackground,
+              title: 'Registration Error',
+              body: errorMessage.toString(),
+              onTap: () => Navigator.pop(context),
+            ));
   }
 
   void displayLoad() {

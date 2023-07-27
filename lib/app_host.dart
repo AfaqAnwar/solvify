@@ -5,6 +5,7 @@ import 'package:page_transition/page_transition.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:solvify/firebase_js.dart';
 import 'package:solvify/pages/app_pages/main_app_page.dart';
+import 'package:solvify/pages/registration/onboarding/register_onboard_host.dart';
 import 'package:solvify/pages/registration/register_page.dart';
 import 'package:solvify/pages/signin_signup/login_page.dart';
 import 'package:solvify/styles/app_style.dart';
@@ -50,6 +51,11 @@ class _AppHostState extends State<AppHost> {
         case "app":
           if (state["sessionActive"] == true) {
             pageToDisplay = const MainAppPage();
+          }
+          break;
+        case "register_onboard_0":
+          if (state["sessionActive"] == true) {
+            pageToDisplay = const RegisterOnboardHost();
           }
           break;
       }

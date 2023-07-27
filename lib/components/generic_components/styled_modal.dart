@@ -3,6 +3,7 @@ import 'package:solvify/components/generic_components/styled_modal_button.dart';
 import 'package:solvify/styles/app_style.dart';
 
 class StyledModal extends StatelessWidget {
+  final Function()? onTap;
   final Color backgroundColor;
   final String title;
   final String body;
@@ -11,7 +12,8 @@ class StyledModal extends StatelessWidget {
       {super.key,
       required this.backgroundColor,
       required this.title,
-      required this.body});
+      required this.body,
+      required this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -47,7 +49,7 @@ class StyledModal extends StatelessWidget {
             ),
             StyledModalButton(
                 onTap: () {
-                  Navigator.pop(context);
+                  onTap!();
                 },
                 buttonColor: AppStyle.primaryDarkAccent,
                 buttonText: "Okay",

@@ -107,9 +107,11 @@ class _LoginPageState extends State<LoginPage> {
     showDialog(
         context: context,
         builder: (context) => StyledModal(
-            backgroundColor: AppStyle.secondaryBackground,
-            title: 'Login Error',
-            body: errorMessage.toString()));
+              backgroundColor: AppStyle.secondaryBackground,
+              title: 'Login Error',
+              body: errorMessage.toString(),
+              onTap: () => Navigator.pop(context),
+            ));
   }
 
   void displayLoad() {

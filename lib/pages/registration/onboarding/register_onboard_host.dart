@@ -1,5 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:im_stepper/stepper.dart';
+import 'package:page_transition/page_transition.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:solvify/components/generic_components/styled_modal.dart';
+import 'package:solvify/pages/registration/onboarding/register_onboard_first_page.dart';
+import 'package:solvify/pages/registration/onboarding/register_onboard_second_page.dart';
+import 'package:solvify/pages/registration/onboarding/register_onboard_third_page.dart';
+import 'package:solvify/pages/signin_signup/login_page.dart';
 import 'package:solvify/styles/app_style.dart';
 
 class RegisterOnboardHost extends StatefulWidget {
@@ -10,8 +17,31 @@ class RegisterOnboardHost extends StatefulWidget {
 }
 
 class _RegisterOnboardHostState extends State<RegisterOnboardHost> {
+  final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
   int currentIndex = 0;
   int totalIndex = 3;
+  String buttonText = "Next";
+
+  void setSharedState() async {
+    final SharedPreferences prefs = await _prefs;
+    setState(() {
+      prefs.setString("currentPage", "register_onboard_0");
+    });
+  }
+
+  void parseCurrentIndex() async {
+    final SharedPreferences prefs = await _prefs;
+    prefs.getString("currentPage");
+    List<String> splitString = prefs.getString("currentPage")!.split("_");
+    currentIndex = int.parse(splitString[2]);
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    setSharedState();
+    parseCurrentIndex();
+  }
 
   void updateIndex() {
     if (currentIndex < totalIndex - 1) {
@@ -26,6 +56,40 @@ class _RegisterOnboardHostState extends State<RegisterOnboardHost> {
       setState(() {
         currentIndex--;
       });
+    } else {
+      showPopUp();
+    }
+  }
+
+  void showPopUp() {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return StyledModal(
+            backgroundColor: AppStyle.primaryBackground,
+            title: "Are you sure?",
+            body:
+                "You will be logged out of your account and redirected to the login page.",
+            onTap: () {
+              Navigator.pop(context);
+              Navigator.pushReplacement(
+                  context,
+                  PageTransition(
+                      type: PageTransitionType.fade, child: const LoginPage()));
+            },
+          );
+        });
+  }
+
+  void updateButtonText() {
+    if (currentIndex == totalIndex - 1) {
+      setState(() {
+        buttonText = "Let's Go!";
+      });
+    } else {
+      setState(() {
+        buttonText = "Next";
+      });
     }
   }
 
@@ -33,74 +97,72 @@ class _RegisterOnboardHostState extends State<RegisterOnboardHost> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          backgroundColor: Colors.transparent,
+          backgroundColor: AppStyle.primaryBackground,
           elevation: 0,
           leading: IconButton(
             icon: const Icon(Icons.arrow_back_ios),
             splashRadius: 0.1,
             color: AppStyle.primaryAccent,
-            onPressed: () {},
+            onPressed: () {
+              updateIndexBackwards();
+            },
           ),
         ),
-        bottomNavigationBar: buildBottomNavBar(),
-        backgroundColor: Colors.white,
+        backgroundColor: AppStyle.primaryBackground,
         body: buildBody());
   }
 
   Widget buildBottomNavBar() {
-    return Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 30),
-        child: SafeArea(
-          child: Padding(
-            padding: MediaQuery.of(context).viewInsets,
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 15.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  RawMaterialButton(
-                    elevation: 0,
-                    constraints: const BoxConstraints(
-                      minWidth: 50,
-                      minHeight: 50,
-                    ),
-                    fillColor: AppStyle.primaryAccent,
-                    shape: const CircleBorder(),
-                    onPressed: () {},
-                    child: const Icon(
-                      Icons.arrow_forward_ios,
-                      color: Colors.white,
-                    ),
-                  ),
-                ],
-              ),
-            ),
+    return Center(
+      child: GestureDetector(
+        onTap: () {
+          updateIndex();
+        },
+        child: Container(
+          padding: const EdgeInsets.all(35),
+          decoration: BoxDecoration(
+            color: AppStyle.primaryAccent,
           ),
-        ));
-  }
-
-  Widget buildBody() {
-    return SingleChildScrollView(
-      physics: const NeverScrollableScrollPhysics(),
-      child: SizedBox(
-        child: SafeArea(
-          child: Column(children: [
-            buildDotStepper(),
-            updateBodyContent(),
-          ]),
+          child: Center(
+              child: Text(
+            buttonText,
+            style: const TextStyle(
+                color: Colors.white, fontWeight: FontWeight.bold, fontSize: 16),
+          )),
         ),
       ),
     );
   }
 
+  Widget buildBody() {
+    return Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          const SizedBox(height: 5),
+          buildDotStepper(),
+          const SizedBox(height: 15),
+          Text("HOW SOLVIFY WORKS",
+              style: TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                  color: AppStyle.primaryAccent)),
+          Expanded(child: Container()),
+          updateBodyContent(),
+          Expanded(child: Container()),
+          buildBottomNavBar(),
+        ]);
+  }
+
   Widget updateBodyContent() {
+    updateButtonText();
     switch (currentIndex) {
       case 0:
-        return const Text('Page 1');
+        return const RegisterOnboardFirstPage();
       case 1:
-        return const Text('Page 2');
+        return const RegisterOnboardSecondPage();
       case 2:
-        return const Text('Page 3');
+        return const RegisterOnboardThirdPage();
       default:
         return const CircularProgressIndicator();
     }
@@ -109,7 +171,6 @@ class _RegisterOnboardHostState extends State<RegisterOnboardHost> {
   Widget buildDotStepper() {
     return Column(
       children: [
-        const SizedBox(height: 10),
         DotStepper(
           tappingEnabled: false,
           dotCount: totalIndex,
@@ -124,10 +185,9 @@ class _RegisterOnboardHostState extends State<RegisterOnboardHost> {
               strokeWidth: 1),
           indicatorDecoration: IndicatorDecoration(
               color: AppStyle.primaryAccent,
-              strokeColor: AppStyle.primaryLightAccent,
+              strokeColor: AppStyle.primaryAccent,
               strokeWidth: 1),
         ),
-        const SizedBox(height: 80),
       ],
     );
   }
