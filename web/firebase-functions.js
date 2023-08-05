@@ -18,14 +18,17 @@ window.userState = {
 window.auth = getAuth();
 
 window.signUserIn = async (email, password) => {
+  window.clearState();
+  var logged = false;
   window.auth = await getAuth();
-  signInWithEmailAndPassword(window.auth, email, password)
+  await signInWithEmailAndPassword(window.auth, email, password)
     .then((userCredential) => {
       // Signed in
       const user = userCredential.user;
       window.userState.loggedIn = true;
       window.userState.email = user.email;
       window.userState.uid = user.uid;
+      logged = true;
     })
     .catch((error) => {
       window.userState.loggedIn = false;
@@ -33,17 +36,21 @@ window.signUserIn = async (email, password) => {
       window.userState.error = errorCode;
       window.userState.sessionActive = false;
     });
+  return logged;
 };
 
 window.registerUser = async (email, password) => {
+  window.clearState();
+  var registered = false;
   window.auth = getAuth();
-  createUserWithEmailAndPassword(window.auth, email, password)
+  await createUserWithEmailAndPassword(window.auth, email, password)
     .then((userCredential) => {
       // Signed in
       const user = userCredential.user;
       window.userState.loggedIn = true;
       window.userState.email = user.email;
       window.userState.uid = user.uid;
+      registered = true;
     })
     .catch((error) => {
       window.userState.loggedIn = false;
@@ -51,6 +58,7 @@ window.registerUser = async (email, password) => {
       window.userState.error = errorCode;
       window.userState.sessionActive = false;
     });
+  return registered;
 };
 
 function saveAuth() {
@@ -66,6 +74,7 @@ function saveAuth() {
 }
 
 window.clearState = () => {
+  console.log("clearing state");
   window.userState.loggedIn = false;
   window.userState.email = "";
   window.userState.uid = "";
@@ -79,6 +88,5 @@ window.checkSession = () => {
     } else {
       window.userState.sessionActive = false;
     }
-    console.log(window.userState.sessionActive);
   });
 };

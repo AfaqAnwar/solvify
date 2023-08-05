@@ -1,11 +1,23 @@
-window.setStateOfExtension = (customKey, customValue) => {
-  chrome.storage.sync.set({ customKey: customValue }, function () {
-    console.log("Value is set to " + customValue);
-  });
+window.clientVariables = {
+  html: "",
 };
 
-window.getStateOfExtension = (customKey) => {
-  chrome.storage.sync.get([customKey], function (result) {
-    console.log("Value currently is " + result.customKey);
+window.scrapeHTML = async () => {
+  const [tab] = await chrome.tabs.query({
+    active: true,
+    currentWindow: true,
   });
+  let result;
+  try {
+    [{ result }] = await chrome.scripting.executeScript({
+      target: { tabId: tab.id },
+      func: () => document.documentElement.innerText,
+    });
+  } catch (e) {
+    console.log(e);
+    return false;
+  }
+
+  window.clientVariables.html = result;
+  return true;
 };

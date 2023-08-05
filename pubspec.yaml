@@ -28,11 +28,14 @@ environment:
 # the latest version available on pub.dev. To see which dependencies have newer
 # versions available, run `flutter pub outdated`.
 dependencies:
+  dart_openai: ^4.0.0
   page_transition: ^2.0.9
   lottie: ^2.5.0
   im_stepper: ^1.0.1+1
   shared_preferences: ^2.2.0
   js: ^0.6.7
+  envied: ^0.3.0+3
+
   flutter:
     sdk: flutter
 
@@ -46,6 +49,8 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^2.0.0
+  envied_generator: ^0.3.0+3
+  build_runner: ^2.4.6
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -63,6 +68,8 @@ flutter:
     - assets/gifs/scan.gif
     - assets/gifs/ai.gif
     - assets/gifs/answer.gif
+    - assets/gifs/idle.gif
+    - assets/gifs/load.gif
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

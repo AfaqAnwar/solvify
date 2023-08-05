@@ -1,5 +1,7 @@
 // ignore: avoid_web_libraries_in_flutter
 import 'dart:js' as js;
+// ignore: avoid_web_libraries_in_flutter
+import 'dart:js_util';
 import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -51,13 +53,15 @@ class _LoginPageState extends State<LoginPage> {
     } else {
       displayLoad();
 
-      signUserIn(emailController.text.trim().toString(),
-          passwordController.text.trim().toString());
+      dynamic result = await promiseToFuture(signUserIn(
+          emailController.text.trim().toString(),
+          passwordController.text.trim().toString()));
 
       var state = js.JsObject.fromBrowserObject(js.context['userState']);
 
-      Future.delayed(const Duration(milliseconds: 500), () {
+      if (result == true) {
         if (state['loggedIn'] == true) {
+          // ignore: use_build_context_synchronously
           Navigator.pop(context);
           Future.delayed(const Duration(milliseconds: 500), () {
             Navigator.pushReplacement(
@@ -66,15 +70,15 @@ class _LoginPageState extends State<LoginPage> {
                     child: const MainAppPage(),
                     type: PageTransitionType.rightToLeftWithFade));
           });
-        } else {
-          Future.delayed(const Duration(milliseconds: 500), () {
-            Navigator.pop(context);
-            String errorMessage =
-                state['error'].toString().replaceAll("auth/", "");
-            displayError(errorMessage);
-          });
         }
-      });
+      } else {
+        Future.delayed(const Duration(milliseconds: 500), () {
+          Navigator.pop(context);
+          String errorMessage =
+              state['error'].toString().replaceAll("auth/", "");
+          displayError(errorMessage);
+        });
+      }
     }
   }
 

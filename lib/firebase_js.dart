@@ -4,13 +4,13 @@ library main;
 import 'package:js/js.dart';
 
 @JS('signUserIn')
-external void signUserIn(String email, String password);
+external dynamic signUserIn(String email, String password);
 
 @JS('clearState')
-external void clearState();
+external dynamic clearState();
 
 @JS('registerUser')
-external void registerUser(String email, String password);
+external dynamic registerUser(String email, String password);
 
 @JS('checkSession')
-external void checkSession();
+external dynamic checkSession();
