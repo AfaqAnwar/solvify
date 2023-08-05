@@ -27,6 +27,8 @@ class _MainAppPageState extends State<MainAppPage> {
   double _imageOpacity = 1;
   double _buttonOpacity = 1;
   bool _loading = false;
+  String buttonText = "Solve!";
+  late Widget bodyContent;
 
   void setSharedState() async {
     final SharedPreferences prefs = await _prefs;
@@ -39,6 +41,40 @@ class _MainAppPageState extends State<MainAppPage> {
   void initState() {
     super.initState();
     setSharedState();
+    bodyContent = getImage();
+  }
+
+  Widget getImage() {
+    return SizedBox(
+      height: 150,
+      child: Image(
+        key: ValueKey<AssetImage>(logo),
+        image: logo,
+        fit: BoxFit.fill,
+      ),
+    );
+  }
+
+  Widget getBody() {
+    return Column(children: [
+      Text(
+        textAlign: TextAlign.center,
+        solver.getQuestion(),
+        style: TextStyle(
+          color: AppStyle.primaryAccent,
+          fontSize: 14,
+        ),
+      ),
+      const SizedBox(height: 10),
+      Text(
+        textAlign: TextAlign.center,
+        solver.getAnswer(),
+        style: TextStyle(
+            color: AppStyle.primaryAccent,
+            fontSize: 12,
+            fontWeight: FontWeight.bold),
+      ),
+    ]);
   }
 
   void setLoadingAndChangeAssets() {
@@ -51,12 +87,26 @@ class _MainAppPageState extends State<MainAppPage> {
           const Duration(milliseconds: 500),
           () => setState(() {
                 logo = const AssetImage('assets/gifs/load.gif');
+                bodyContent = getImage();
                 titleText = "Loading...";
                 _textOpacity = 1;
                 _imageOpacity = 1;
                 _loading = true;
               }));
     }
+  }
+
+  void finishLoadUpdateBody() {
+    setState(() {
+      logo = const AssetImage('assets/gifs/idle.gif');
+      titleText = "Solvify";
+      _textOpacity = 1;
+      _imageOpacity = 1;
+      _buttonOpacity = 1;
+      _loading = false;
+      buttonText = "Solve Again!";
+      bodyContent = getBody();
+    });
   }
 
   Future<void> scrape() async {
@@ -75,13 +125,29 @@ class _MainAppPageState extends State<MainAppPage> {
       messages: [
         const OpenAIChatCompletionChoiceMessageModel(
             content:
-                "You are a highly capable advanced HTML / text scraping specialist. You specialize in finding questions and any answer choices if present within some given HTML code or the inner text of HTML code. Please provide back the question and the answer choices (if present) ONLY. Do not provide anything else. Please be advised some questions may be fill in the blank and some may be multiple choice. If you cannot find the question simply reply with 'ERROR'.",
+                "You are a highly capable advanced HTML / text scraping specialist. You specialize in finding questions and any answer choices if present within some given HTML code or the inner text of HTML code. Please provide back the question and the answer choices (if present) ONLY. DO NOT PROVIDE THE ANSWER OR ANYTHING ELSE I SIMPLY ONLY WANT THE QUESTION AND CHOICES IF ANY ARE PRESENT. Please be advised some questions may be fill in the blank and some may be multiple choice. If the question is fill in the blank simply add a '_' where the blank is. If you cannot find the question simply reply with 'ERROR'.",
             role: OpenAIChatMessageRole.system),
         OpenAIChatCompletionChoiceMessageModel(
             content: solver.getBodyText(), role: OpenAIChatMessageRole.user),
       ],
     );
-    solver.setQuestion(chatCompletion.choices[0].toString());
+    solver.setQuestion(chatCompletion.choices.first.message.content);
+  }
+
+  Future<void> answer() async {
+    OpenAIChatCompletionModel chatCompletion =
+        await OpenAI.instance.chat.create(
+      model: "gpt-4",
+      messages: [
+        const OpenAIChatCompletionChoiceMessageModel(
+            content:
+                "You are a highly capable advanced homework helping specialist. You specialize in finding answers to any questions I give you along with a percentage of how confident you are that it is the right answer. Please provide the CORRECT ANSWER(S) ONLY. Do not repeat the question or provide any explanation. In addition, if it is a fill in the blank question do not repeat the entire statement or phrase, just provide the missing word(s). Please also be mindful that some questions may have multiple answers, if this is the case list the answers out line by line otherwise keep the answer on one line. If you cannot find the answer to a question just reply with a question mark. If any errors occur please say ERROR.",
+            role: OpenAIChatMessageRole.system),
+        OpenAIChatCompletionChoiceMessageModel(
+            content: solver.getQuestion(), role: OpenAIChatMessageRole.user),
+      ],
+    );
+    solver.setAnswer(chatCompletion.choices.first.message.content);
   }
 
   @override
@@ -107,17 +173,9 @@ class _MainAppPageState extends State<MainAppPage> {
               ),
               Expanded(child: Container()),
               AnimatedOpacity(
-                opacity: _imageOpacity,
-                duration: const Duration(milliseconds: 250),
-                child: SizedBox(
-                  height: 150,
-                  child: Image(
-                    key: ValueKey<AssetImage>(logo),
-                    image: logo,
-                    fit: BoxFit.fill,
-                  ),
-                ),
-              ),
+                  opacity: _imageOpacity,
+                  duration: const Duration(milliseconds: 250),
+                  child: bodyContent),
               Expanded(child: Container()),
               AnimatedOpacity(
                 duration: const Duration(milliseconds: 250),
@@ -127,11 +185,17 @@ class _MainAppPageState extends State<MainAppPage> {
                       if (_loading == false) {
                         setLoadingAndChangeAssets();
                         await scrape();
-                        parse();
+                        await parse();
+                        await answer();
+                        Future.delayed(
+                            const Duration(milliseconds: 100),
+                            () => setState(() {
+                                  finishLoadUpdateBody();
+                                }));
                       }
                     },
                     buttonColor: AppStyle.primaryAccent,
-                    buttonText: "Solve!",
+                    buttonText: buttonText,
                     buttonTextColor: Colors.white),
               ),
               const SizedBox(height: 50),
