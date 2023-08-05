@@ -3,6 +3,7 @@ import 'dart:js_util';
 
 import 'package:dart_openai/dart_openai.dart';
 import 'package:flutter/material.dart';
+import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:solvify/components/generic_components/styled_button.dart';
 import 'package:solvify/functions_js.dart';
@@ -59,20 +60,36 @@ class _MainAppPageState extends State<MainAppPage> {
     return Column(children: [
       Text(
         textAlign: TextAlign.center,
-        solver.getQuestion(),
-        style: TextStyle(
-          color: AppStyle.primaryAccent,
-          fontSize: 14,
-        ),
-      ),
-      const SizedBox(height: 10),
-      Text(
-        textAlign: TextAlign.center,
         solver.getAnswer(),
-        style: TextStyle(
-            color: AppStyle.primaryAccent,
-            fontSize: 12,
-            fontWeight: FontWeight.bold),
+        style: const TextStyle(
+            color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold),
+      ),
+      const SizedBox(height: 25),
+      CircularPercentIndicator(
+        backgroundColor: AppStyle.primaryBackground,
+        radius: 75.0,
+        lineWidth: 8.0,
+        animation: true,
+        percent: solver.getConfidenceAsDouble(),
+        center: Text(
+          solver.getConfidence(),
+          style: const TextStyle(
+              fontWeight: FontWeight.bold, fontSize: 18.0, color: Colors.white),
+        ),
+        footer: const Column(
+          children: [
+            SizedBox(height: 20),
+            Text(
+              "Confidence Rating",
+              style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 14.0,
+                  color: Colors.white),
+            ),
+          ],
+        ),
+        circularStrokeCap: CircularStrokeCap.round,
+        progressColor: AppStyle.primaryAccent,
       ),
     ]);
   }
@@ -141,13 +158,15 @@ class _MainAppPageState extends State<MainAppPage> {
       messages: [
         const OpenAIChatCompletionChoiceMessageModel(
             content:
-                "You are a highly capable advanced homework helping specialist. You specialize in finding answers to any questions I give you along with a percentage of how confident you are that it is the right answer. Please provide the CORRECT ANSWER(S) ONLY. Do not repeat the question or provide any explanation. In addition, if it is a fill in the blank question do not repeat the entire statement or phrase, just provide the missing word(s). Please also be mindful that some questions may have multiple answers, if this is the case list the answers out line by line otherwise keep the answer on one line. If you cannot find the answer to a question just reply with a question mark. If any errors occur please say ERROR.",
+                "You are a highly capable advanced homework helping specialist. You specialize in finding answers to any questions I give you. I also need a confidence rating so on a new line just put a percentage of how confident you are in your answer. Please format it as 'Confidence: ' with the rating followed afterwards so I can parse it easily. Please provide the CORRECT ANSWER(S) ONLY and the confidence percentage. Do not repeat the question or provide any explanation. In addition, if it is a fill in the blank question do not repeat the entire statement or phrase, just provide the missing word(s). Please also be mindful that some questions may have multiple answers, if this is the case list the answers out line by line otherwise keep the answer on one line. If you cannot find the answer to a question just reply with a question mark. If any errors occur please say ERROR.",
             role: OpenAIChatMessageRole.system),
         OpenAIChatCompletionChoiceMessageModel(
             content: solver.getQuestion(), role: OpenAIChatMessageRole.user),
       ],
     );
     solver.setAnswer(chatCompletion.choices.first.message.content);
+    solver.setConfidenceFromAnswer();
+    solver.parseAnswer();
   }
 
   @override
