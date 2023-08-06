@@ -48,4 +48,8 @@ class AppStyle {
   // Dark version of tertiary color
   static Color tertiaryDarkColor =
       const Color.fromARGB(255, 184, 134, 0); // darkest yellow
+
+  // Primary Green Success Indicator
+  static Color primarySuccess =
+      const Color.fromARGB(255, 1, 182, 54); // pure green
 }

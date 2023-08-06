@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:solvify/components/generic_components/styled_button.dart';
+import 'package:solvify/components/generic_components/styled_modal.dart';
 import 'package:solvify/functions_js.dart';
 import 'package:solvify/helpers/Solver.dart';
 import 'package:solvify/styles/app_style.dart';
@@ -25,10 +26,10 @@ class _MainAppPageState extends State<MainAppPage> {
   String titleText = "Solvify";
   final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
   double _textOpacity = 1;
-  double _imageOpacity = 1;
+  double _bodyOpacity = 1;
   double _buttonOpacity = 1;
   bool _loading = false;
-  String buttonText = "Solve!";
+  String buttonText = "Solve";
   late Widget bodyContent;
 
   void setSharedState() async {
@@ -64,40 +65,90 @@ class _MainAppPageState extends State<MainAppPage> {
         style: const TextStyle(
             color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold),
       ),
-      const SizedBox(height: 25),
+      const SizedBox(height: 20),
       CircularPercentIndicator(
         backgroundColor: AppStyle.primaryBackground,
-        radius: 75.0,
+        radius: 80.0,
         lineWidth: 8.0,
         animation: true,
         percent: solver.getConfidenceAsDouble(),
         center: Text(
           solver.getConfidence(),
           style: const TextStyle(
-              fontWeight: FontWeight.bold, fontSize: 18.0, color: Colors.white),
+            fontWeight: FontWeight.bold,
+            fontSize: 16.0,
+            color: Colors.white,
+          ),
         ),
-        footer: const Column(
+        footer: Column(
           children: [
-            SizedBox(height: 20),
-            Text(
-              "Confidence Rating",
-              style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 14.0,
-                  color: Colors.white),
+            const SizedBox(height: 20),
+            GestureDetector(
+              onTap: () {
+                showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return StyledModal(
+                        backgroundColor: AppStyle.secondaryBackground,
+                        title: "What is Confidence?",
+                        body:
+                            "Confidence is a percentage that represents how confident the AI is in its answer. The higher the percentage, the more confident the AI is in its answer. Please note that the AI is not always correct, so please use your best judgement when using the answer provided.",
+                        onTap: () {
+                          Navigator.pop(context);
+                        },
+                      );
+                    });
+              },
+              child: Text(
+                "Confidence*",
+                style: TextStyle(
+                    fontWeight: FontWeight.w100,
+                    fontSize: 12.0,
+                    color: AppStyle.tertiaryColor),
+              ),
             ),
           ],
         ),
         circularStrokeCap: CircularStrokeCap.round,
-        progressColor: AppStyle.primaryAccent,
+        progressColor: AppStyle.primarySuccess,
       ),
     ]);
   }
 
-  void setLoadingAndChangeAssets() {
+  Widget getErrorBody() {
+    String text;
+    if (solver.getAnswer() == "ERROR") {
+      text =
+          "Sorry we could not find an answer to your question. Please try a different question.";
+    } else {
+      text =
+          "Sorry we could not find a question in the current page. Please try a different question.";
+    }
+    return Column(
+      children: [
+        Text(
+          textAlign: TextAlign.center,
+          text,
+          style: const TextStyle(
+              color: Colors.white, fontSize: 14, fontWeight: FontWeight.bold),
+        ),
+        const SizedBox(height: 20),
+        SizedBox(
+          height: 125,
+          child: Image(
+            key: ValueKey<AssetImage>(logo),
+            image: const AssetImage('assets/gifs/error.gif'),
+            fit: BoxFit.fill,
+          ),
+        )
+      ],
+    );
+  }
+
+  void setLoadingAndChangeAssets() async {
     if (_loading == false) {
       setState(() => _textOpacity = 0);
-      setState(() => _imageOpacity = 0);
+      setState(() => _bodyOpacity = 0);
       setState(() => _buttonOpacity = 0);
 
       Future.delayed(
@@ -107,7 +158,7 @@ class _MainAppPageState extends State<MainAppPage> {
                 bodyContent = getImage();
                 titleText = "Loading...";
                 _textOpacity = 1;
-                _imageOpacity = 1;
+                _bodyOpacity = 1;
                 _loading = true;
               }));
     }
@@ -118,11 +169,28 @@ class _MainAppPageState extends State<MainAppPage> {
       logo = const AssetImage('assets/gifs/idle.gif');
       titleText = "Solvify";
       _textOpacity = 1;
-      _imageOpacity = 1;
+      _bodyOpacity = 1;
       _buttonOpacity = 1;
       _loading = false;
-      buttonText = "Solve Again!";
-      bodyContent = getBody();
+      buttonText = "Solve Again";
+      if (solver.getAnswer() == "ERROR") {
+        bodyContent = getErrorBody();
+      } else {
+        bodyContent = getBody();
+      }
+    });
+  }
+
+  void updateBodyToError() {
+    setState(() {
+      logo = const AssetImage('assets/gifs/idle.gif');
+      titleText = "Solvify";
+      _textOpacity = 1;
+      _bodyOpacity = 1;
+      _buttonOpacity = 1;
+      _loading = false;
+      buttonText = "Try Again";
+      bodyContent = getErrorBody();
     });
   }
 
@@ -178,7 +246,7 @@ class _MainAppPageState extends State<MainAppPage> {
               child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const SizedBox(height: 50),
+              const SizedBox(height: 25),
               AnimatedOpacity(
                 duration: const Duration(milliseconds: 250),
                 opacity: _textOpacity,
@@ -186,13 +254,13 @@ class _MainAppPageState extends State<MainAppPage> {
                   titleText,
                   style: TextStyle(
                       color: AppStyle.primaryAccent,
-                      fontSize: 24,
+                      fontSize: 32,
                       fontWeight: FontWeight.bold),
                 ),
               ),
               Expanded(child: Container()),
               AnimatedOpacity(
-                  opacity: _imageOpacity,
+                  opacity: _bodyOpacity,
                   duration: const Duration(milliseconds: 250),
                   child: bodyContent),
               Expanded(child: Container()),
@@ -202,22 +270,27 @@ class _MainAppPageState extends State<MainAppPage> {
                 child: StyledButton(
                     onTap: () async {
                       if (_loading == false) {
+                        // NEEDS CHANGING DELAY IS RUINING FLOW.
                         setLoadingAndChangeAssets();
                         await scrape();
                         await parse();
-                        await answer();
-                        Future.delayed(
-                            const Duration(milliseconds: 100),
-                            () => setState(() {
-                                  finishLoadUpdateBody();
-                                }));
+                        if (solver.getQuestion() == "ERROR") {
+                          updateBodyToError();
+                        } else {
+                          await answer();
+                          Future.delayed(
+                              const Duration(milliseconds: 100),
+                              () => setState(() {
+                                    finishLoadUpdateBody();
+                                  }));
+                        }
                       }
                     },
                     buttonColor: AppStyle.primaryAccent,
                     buttonText: buttonText,
                     buttonTextColor: Colors.white),
               ),
-              const SizedBox(height: 50),
+              const SizedBox(height: 25),
             ],
           )),
         ));
