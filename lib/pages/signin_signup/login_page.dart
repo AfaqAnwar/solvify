@@ -132,7 +132,7 @@ class _LoginPageState extends State<LoginPage> {
     Navigator.pushReplacement(
         context,
         PageTransition(
-            child: const RegisterPage(), type: PageTransitionType.rightToLeft));
+            child: const RegisterPage(), type: PageTransitionType.fade));
   }
 
   @override

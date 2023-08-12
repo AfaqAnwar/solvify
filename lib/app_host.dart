@@ -4,7 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:solvify/firebase_js.dart';
+import 'package:solvify/pages/app_pages/info_page.dart';
 import 'package:solvify/pages/app_pages/main_app_page.dart';
+import 'package:solvify/pages/app_pages/profile_page.dart';
+import 'package:solvify/pages/app_pages/settings_page.dart';
 import 'package:solvify/pages/registration/onboarding/register_onboard_host.dart';
 import 'package:solvify/pages/registration/register_page.dart';
 import 'package:solvify/pages/signin_signup/login_page.dart';
@@ -50,7 +53,30 @@ class _AppHostState extends State<AppHost> {
           break;
         case "app":
           if (state["sessionActive"] == true) {
-            pageToDisplay = const MainAppPage();
+            String? question = prefs.getString("currentQuestion");
+            String? answer = prefs.getString("currentAnswer");
+            String? confidence = prefs.getString("currentConfidence");
+            if (question != null) {
+              pageToDisplay = MainAppPage(
+                  question: question, answer: answer, confidence: confidence);
+            } else {
+              pageToDisplay = const MainAppPage();
+            }
+          }
+          break;
+        case "info":
+          if (state["sessionActive"] == true) {
+            pageToDisplay = const InfoPage();
+          }
+          break;
+        case "profile":
+          if (state["sessionActive"] == true) {
+            pageToDisplay = const ProfilePage();
+          }
+          break;
+        case "settings":
+          if (state["sessionActive"] == true) {
+            pageToDisplay = const SettingsPage();
           }
           break;
         case "register_onboard_0":
@@ -58,6 +84,8 @@ class _AppHostState extends State<AppHost> {
             pageToDisplay = const RegisterOnboardHost();
           }
           break;
+        default:
+          pageToDisplay = const LoginPage();
       }
       Navigator.pushReplacement(context,
           PageTransition(child: pageToDisplay, type: PageTransitionType.fade));

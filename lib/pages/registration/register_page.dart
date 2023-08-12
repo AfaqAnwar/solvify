@@ -138,7 +138,7 @@ class _RegisterPageState extends State<RegisterPage> {
     Navigator.pushReplacement(
         context,
         PageTransition(
-            child: const LoginPage(), type: PageTransitionType.leftToRight));
+            child: const LoginPage(), type: PageTransitionType.fade));
   }
 
   @override

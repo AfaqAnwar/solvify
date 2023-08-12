@@ -5,6 +5,7 @@ import 'package:dart_openai/dart_openai.dart';
 import 'package:flutter/material.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:solvify/components/app_components/custom_scaffold.dart';
 import 'package:solvify/components/generic_components/styled_button.dart';
 import 'package:solvify/components/generic_components/styled_modal.dart';
 import 'package:solvify/functions_js.dart';
@@ -14,7 +15,10 @@ import 'package:solvify/styles/app_style.dart';
 import 'dart:js' as js;
 
 class MainAppPage extends StatefulWidget {
-  const MainAppPage({super.key});
+  final String? question;
+  final String? answer;
+  final String? confidence;
+  const MainAppPage({super.key, this.question, this.answer, this.confidence});
 
   @override
   State<MainAppPage> createState() => _MainAppPageState();
@@ -31,6 +35,8 @@ class _MainAppPageState extends State<MainAppPage> {
   bool _loading = false;
   String buttonText = "Solve";
   late Widget bodyContent;
+  bool disabled = false;
+  bool hideDrawer = false;
 
   void setSharedState() async {
     final SharedPreferences prefs = await _prefs;
@@ -43,7 +49,18 @@ class _MainAppPageState extends State<MainAppPage> {
   void initState() {
     super.initState();
     setSharedState();
-    bodyContent = getImage();
+    if (widget.question == null) {
+      bodyContent = getImage();
+    } else {
+      setState(() {
+        solver.setQuestion(widget.question!);
+        solver.setAnswer(widget.answer!);
+        solver.setConfidence(widget.confidence!);
+        buttonText = "Solve Again";
+      });
+
+      bodyContent = getBody();
+    }
   }
 
   Widget getImage() {
@@ -154,6 +171,7 @@ class _MainAppPageState extends State<MainAppPage> {
       Future.delayed(
           const Duration(milliseconds: 500),
           () => setState(() {
+                hideDrawer = true;
                 logo = const AssetImage('assets/gifs/load.gif');
                 bodyContent = getImage();
                 titleText = "Loading...";
@@ -164,8 +182,10 @@ class _MainAppPageState extends State<MainAppPage> {
     }
   }
 
-  void finishLoadUpdateBody() {
+  void finishLoadUpdateBody() async {
+    final SharedPreferences prefs = await _prefs;
     setState(() {
+      hideDrawer = false;
       logo = const AssetImage('assets/gifs/idle.gif');
       titleText = "Solvify";
       _textOpacity = 1;
@@ -177,6 +197,10 @@ class _MainAppPageState extends State<MainAppPage> {
         bodyContent = getErrorBody();
       } else {
         bodyContent = getBody();
+
+        prefs.setString("currentQuestion", solver.getQuestion());
+        prefs.setString("currentAnswer", solver.getAnswer());
+        prefs.setString("currentConfidence", solver.getConfidence());
       }
     });
   }
@@ -239,9 +263,9 @@ class _MainAppPageState extends State<MainAppPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        backgroundColor: AppStyle.primaryBackground,
-        body: SafeArea(
+    return CustomScaffold(
+        hideDrawer: hideDrawer,
+        child: SafeArea(
           child: Center(
               child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -269,7 +293,7 @@ class _MainAppPageState extends State<MainAppPage> {
                 opacity: _buttonOpacity,
                 child: StyledButton(
                     onTap: () async {
-                      if (_loading == false) {
+                      if (_loading == false || disabled == true) {
                         // NEEDS CHANGING DELAY IS RUINING FLOW.
                         setLoadingAndChangeAssets();
                         await scrape();
