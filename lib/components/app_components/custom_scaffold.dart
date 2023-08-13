@@ -11,6 +11,7 @@ class CustomScaffold extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      extendBodyBehindAppBar: true,
       appBar: AppBar(
         automaticallyImplyLeading: hideDrawer ? false : true,
         backgroundColor: AppStyle.primaryBackground,

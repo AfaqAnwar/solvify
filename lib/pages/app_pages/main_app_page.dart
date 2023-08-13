@@ -81,7 +81,7 @@ class _MainAppPageState extends State<MainAppPage> {
         textAlign: TextAlign.center,
         solver.getAnswer(),
         style: const TextStyle(
-            color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold),
+            color: Colors.white, fontSize: 24, fontWeight: FontWeight.w900),
       ),
       const SizedBox(height: 20),
       CircularPercentIndicator(
@@ -93,15 +93,17 @@ class _MainAppPageState extends State<MainAppPage> {
         center: Text(
           solver.getConfidence(),
           style: const TextStyle(
-            fontWeight: FontWeight.bold,
-            fontSize: 16.0,
+            fontWeight: FontWeight.w700,
+            fontSize: 18.0,
             color: Colors.white,
           ),
         ),
         footer: Column(
           children: [
             const SizedBox(height: 20),
-            GestureDetector(
+            InkResponse(
+              highlightColor: Colors.transparent,
+              splashFactory: NoSplash.splashFactory,
               onTap: () {
                 showDialog(
                     context: context,
@@ -118,10 +120,10 @@ class _MainAppPageState extends State<MainAppPage> {
                     });
               },
               child: Text(
-                "Confidence*",
+                "Confidence",
                 style: TextStyle(
-                    fontWeight: FontWeight.w100,
-                    fontSize: 12.0,
+                    fontWeight: FontWeight.w900,
+                    fontSize: 10.0,
                     color: AppStyle.tertiaryColor),
               ),
             ),
@@ -271,7 +273,6 @@ class _MainAppPageState extends State<MainAppPage> {
               child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const SizedBox(height: 25),
               AnimatedOpacity(
                 duration: const Duration(milliseconds: 250),
                 opacity: _textOpacity,

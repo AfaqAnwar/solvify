@@ -185,8 +185,13 @@ class _LoginPageState extends State<LoginPage> {
                   padding: const EdgeInsets.symmetric(horizontal: 25),
                   child:
                       Row(mainAxisAlignment: MainAxisAlignment.end, children: [
-                    Text("Forgot Password?",
-                        style: TextStyle(color: AppStyle.primaryAccent)),
+                    InkResponse(
+                      highlightColor: Colors.transparent,
+                      splashFactory: NoSplash.splashFactory,
+                      onTap: () {},
+                      child: Text("Forgot Password?",
+                          style: TextStyle(color: AppStyle.primaryAccent)),
+                    ),
                   ]),
                 ),
                 const SizedBox(
@@ -207,7 +212,9 @@ class _LoginPageState extends State<LoginPage> {
                     Text("Not a member?",
                         style: TextStyle(color: Colors.grey.shade700)),
                     const SizedBox(width: 4),
-                    GestureDetector(
+                    InkResponse(
+                      highlightColor: Colors.transparent,
+                      splashFactory: NoSplash.splashFactory,
                       onTap: goToRegister,
                       child: Text(
                         "Register Now!",

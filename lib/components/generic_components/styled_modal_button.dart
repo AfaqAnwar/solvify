@@ -15,7 +15,9 @@ class StyledModalButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
+    return InkResponse(
+      highlightColor: Colors.transparent,
+      splashFactory: NoSplash.splashFactory,
       onTap: onTap,
       child: Container(
         padding: const EdgeInsets.all(10),
