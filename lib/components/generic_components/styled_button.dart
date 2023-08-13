@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class StyledButton extends StatelessWidget {
   final Function()? onTap;
@@ -27,7 +28,7 @@ class StyledButton extends StatelessWidget {
           buttonText,
           style: TextStyle(
               color: buttonTextColor,
-              fontWeight: FontWeight.bold,
+              fontWeight: FontWeight.w900,
               fontSize: 16),
         )),
       ),

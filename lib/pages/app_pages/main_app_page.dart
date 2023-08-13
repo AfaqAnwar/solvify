@@ -3,6 +3,7 @@ import 'dart:js_util';
 
 import 'package:dart_openai/dart_openai.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:solvify/components/app_components/custom_scaffold.dart';
@@ -27,7 +28,7 @@ class MainAppPage extends StatefulWidget {
 class _MainAppPageState extends State<MainAppPage> {
   Solver solver = Solver();
   AssetImage logo = const AssetImage('assets/gifs/idle.gif');
-  String titleText = "Solvify";
+  String titleText = "SOLVIFY";
   final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
   double _textOpacity = 1;
   double _bodyOpacity = 1;
@@ -174,7 +175,7 @@ class _MainAppPageState extends State<MainAppPage> {
                 hideDrawer = true;
                 logo = const AssetImage('assets/gifs/load.gif');
                 bodyContent = getImage();
-                titleText = "Loading...";
+                titleText = "LOADING";
                 _textOpacity = 1;
                 _bodyOpacity = 1;
                 _loading = true;
@@ -187,7 +188,7 @@ class _MainAppPageState extends State<MainAppPage> {
     setState(() {
       hideDrawer = false;
       logo = const AssetImage('assets/gifs/idle.gif');
-      titleText = "Solvify";
+      titleText = "SOLVIFY";
       _textOpacity = 1;
       _bodyOpacity = 1;
       _buttonOpacity = 1;
@@ -208,7 +209,7 @@ class _MainAppPageState extends State<MainAppPage> {
   void updateBodyToError() {
     setState(() {
       logo = const AssetImage('assets/gifs/idle.gif');
-      titleText = "Solvify";
+      titleText = "SOLVIFY";
       _textOpacity = 1;
       _bodyOpacity = 1;
       _buttonOpacity = 1;
@@ -277,9 +278,10 @@ class _MainAppPageState extends State<MainAppPage> {
                 child: Text(
                   titleText,
                   style: TextStyle(
+                      fontFamily: GoogleFonts.karla().fontFamily,
                       color: AppStyle.primaryAccent,
-                      fontSize: 32,
-                      fontWeight: FontWeight.bold),
+                      fontSize: 36,
+                      fontWeight: FontWeight.w800),
                 ),
               ),
               Expanded(child: Container()),
