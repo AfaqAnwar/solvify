@@ -17,7 +17,7 @@ class CustomScaffold extends StatelessWidget {
         backgroundColor: AppStyle.primaryBackground,
         iconTheme: IconThemeData(color: AppStyle.primaryAccent),
       ),
-      drawer: const CustomerDrawer(),
+      drawer: const TooltipVisibility(visible: false, child: CustomerDrawer()),
       backgroundColor: AppStyle.primaryBackground,
       body: child,
     );

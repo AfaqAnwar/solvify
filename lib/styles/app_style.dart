@@ -52,4 +52,7 @@ class AppStyle {
   // Primary Green Success Indicator
   static Color primarySuccess =
       const Color.fromARGB(255, 1, 182, 54); // pure green
+
+  // Primary Red Error Indicator
+  static Color primaryError = const Color.fromARGB(255, 255, 0, 0); // pure red
 }

@@ -1,6 +1,7 @@
 // ignore: avoid_web_libraries_in_flutter
 import 'dart:js_util';
 
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:dart_openai/dart_openai.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -33,6 +34,7 @@ class _MainAppPageState extends State<MainAppPage> {
   double _textOpacity = 1;
   double _bodyOpacity = 1;
   double _buttonOpacity = 1;
+  double _subtitleOpacity = 0;
   bool _loading = false;
   String buttonText = "Solve";
   late Widget bodyContent;
@@ -57,6 +59,7 @@ class _MainAppPageState extends State<MainAppPage> {
         solver.setQuestion(widget.question!);
         solver.setAnswer(widget.answer!);
         solver.setConfidence(widget.confidence!);
+        _subtitleOpacity = 1;
         buttonText = "Solve Again";
       });
 
@@ -75,13 +78,25 @@ class _MainAppPageState extends State<MainAppPage> {
     );
   }
 
+  Color getConfidenceColor() {
+    if (solver.getConfidenceAsDouble() > 0.8) {
+      return AppStyle.primarySuccess;
+    } else if (solver.getConfidenceAsDouble() > 0.5) {
+      return AppStyle.tertiaryColor;
+    } else {
+      return AppStyle.primaryError;
+    }
+  }
+
   Widget getBody() {
     return Column(children: [
-      Text(
+      AutoSizeText(
+        maxLines: 4,
+        overflow: TextOverflow.clip,
         textAlign: TextAlign.center,
         solver.getAnswer(),
         style: const TextStyle(
-            color: Colors.white, fontSize: 24, fontWeight: FontWeight.w900),
+            color: Colors.white, fontSize: 22, fontWeight: FontWeight.w900),
       ),
       const SizedBox(height: 20),
       CircularPercentIndicator(
@@ -94,7 +109,7 @@ class _MainAppPageState extends State<MainAppPage> {
           solver.getConfidence(),
           style: const TextStyle(
             fontWeight: FontWeight.w700,
-            fontSize: 18.0,
+            fontSize: 16.0,
             color: Colors.white,
           ),
         ),
@@ -130,7 +145,7 @@ class _MainAppPageState extends State<MainAppPage> {
           ],
         ),
         circularStrokeCap: CircularStrokeCap.round,
-        progressColor: AppStyle.primarySuccess,
+        progressColor: getConfidenceColor(),
       ),
     ]);
   }
@@ -170,6 +185,7 @@ class _MainAppPageState extends State<MainAppPage> {
       setState(() => _textOpacity = 0);
       setState(() => _bodyOpacity = 0);
       setState(() => _buttonOpacity = 0);
+      setState(() => _subtitleOpacity = 0);
 
       Future.delayed(
           const Duration(milliseconds: 500),
@@ -180,6 +196,7 @@ class _MainAppPageState extends State<MainAppPage> {
                 titleText = "LOADING";
                 _textOpacity = 1;
                 _bodyOpacity = 1;
+                _subtitleOpacity = 0;
                 _loading = true;
               }));
     }
@@ -194,6 +211,7 @@ class _MainAppPageState extends State<MainAppPage> {
       _textOpacity = 1;
       _bodyOpacity = 1;
       _buttonOpacity = 1;
+      _subtitleOpacity = 1;
       _loading = false;
       buttonText = "Solve Again";
       if (solver.getAnswer() == "ERROR") {
@@ -215,6 +233,7 @@ class _MainAppPageState extends State<MainAppPage> {
       _textOpacity = 1;
       _bodyOpacity = 1;
       _buttonOpacity = 1;
+      _subtitleOpacity = 0;
       _loading = false;
       buttonText = "Try Again";
       bodyContent = getErrorBody();
@@ -255,6 +274,10 @@ class _MainAppPageState extends State<MainAppPage> {
             content:
                 "You are a highly capable advanced homework helping specialist. You specialize in finding answers to any questions I give you. I also need a confidence rating so on a new line just put a percentage of how confident you are in your answer. Please format it as 'Confidence: ' with the rating followed afterwards so I can parse it easily. Please provide the CORRECT ANSWER(S) ONLY and the confidence percentage. Do not repeat the question or provide any explanation. In addition, if it is a fill in the blank question do not repeat the entire statement or phrase, just provide the missing word(s). Please also be mindful that some questions may have multiple answers, if this is the case list the answers out line by line otherwise keep the answer on one line. If you cannot find the answer to a question just reply with a question mark. If any errors occur please say ERROR.",
             role: OpenAIChatMessageRole.system),
+        const OpenAIChatCompletionChoiceMessageModel(
+            content:
+                "Please do not give an answer unless you have double checked that the answer is 100% correct. Only then should you provide the final answer ONLY. If any errors occur please say ERROR.",
+            role: OpenAIChatMessageRole.system),
         OpenAIChatCompletionChoiceMessageModel(
             content: solver.getQuestion(), role: OpenAIChatMessageRole.user),
       ],
@@ -268,58 +291,76 @@ class _MainAppPageState extends State<MainAppPage> {
   Widget build(BuildContext context) {
     return CustomScaffold(
         hideDrawer: hideDrawer,
-        child: SafeArea(
-          child: Center(
+        child: Center(
+          child: SizedBox(
+            width: MediaQuery.of(context).size.width,
+            height: MediaQuery.of(context).size.height,
+            child: SafeArea(
               child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              AnimatedOpacity(
-                duration: const Duration(milliseconds: 250),
-                opacity: _textOpacity,
-                child: Text(
-                  titleText,
-                  style: TextStyle(
-                      fontFamily: GoogleFonts.karla().fontFamily,
-                      color: AppStyle.primaryAccent,
-                      fontSize: 36,
-                      fontWeight: FontWeight.w800),
-                ),
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  AnimatedOpacity(
+                    duration: const Duration(milliseconds: 250),
+                    opacity: _textOpacity,
+                    child: Text(
+                      titleText,
+                      style: TextStyle(
+                          fontFamily: GoogleFonts.karla().fontFamily,
+                          color: AppStyle.primaryAccent,
+                          fontSize: 36,
+                          fontWeight: FontWeight.w800),
+                    ),
+                  ),
+                  const SizedBox(height: 5),
+                  AnimatedOpacity(
+                    duration: const Duration(milliseconds: 250),
+                    opacity: _subtitleOpacity,
+                    child: Text(
+                      "Answers",
+                      style: TextStyle(
+                          fontFamily: GoogleFonts.karla().fontFamily,
+                          color: AppStyle.primaryAccent,
+                          fontSize: 18,
+                          fontWeight: FontWeight.w600),
+                    ),
+                  ),
+                  Expanded(child: Container()),
+                  AnimatedOpacity(
+                      opacity: _bodyOpacity,
+                      duration: const Duration(milliseconds: 250),
+                      child: bodyContent),
+                  Expanded(child: Container()),
+                  AnimatedOpacity(
+                    duration: const Duration(milliseconds: 250),
+                    opacity: _buttonOpacity,
+                    child: StyledButton(
+                        onTap: () async {
+                          if (_loading == false || disabled == true) {
+                            // NEEDS CHANGING DELAY IS RUINING FLOW.
+                            setLoadingAndChangeAssets();
+                            await scrape();
+                            await parse();
+                            if (solver.getQuestion() == "ERROR") {
+                              updateBodyToError();
+                            } else {
+                              await answer();
+                              Future.delayed(
+                                  const Duration(milliseconds: 100),
+                                  () => setState(() {
+                                        finishLoadUpdateBody();
+                                      }));
+                            }
+                          }
+                        },
+                        buttonColor: AppStyle.primaryAccent,
+                        buttonText: buttonText,
+                        buttonTextColor: Colors.white),
+                  ),
+                  const SizedBox(height: 25),
+                ],
               ),
-              Expanded(child: Container()),
-              AnimatedOpacity(
-                  opacity: _bodyOpacity,
-                  duration: const Duration(milliseconds: 250),
-                  child: bodyContent),
-              Expanded(child: Container()),
-              AnimatedOpacity(
-                duration: const Duration(milliseconds: 250),
-                opacity: _buttonOpacity,
-                child: StyledButton(
-                    onTap: () async {
-                      if (_loading == false || disabled == true) {
-                        // NEEDS CHANGING DELAY IS RUINING FLOW.
-                        setLoadingAndChangeAssets();
-                        await scrape();
-                        await parse();
-                        if (solver.getQuestion() == "ERROR") {
-                          updateBodyToError();
-                        } else {
-                          await answer();
-                          Future.delayed(
-                              const Duration(milliseconds: 100),
-                              () => setState(() {
-                                    finishLoadUpdateBody();
-                                  }));
-                        }
-                      }
-                    },
-                    buttonColor: AppStyle.primaryAccent,
-                    buttonText: buttonText,
-                    buttonTextColor: Colors.white),
-              ),
-              const SizedBox(height: 25),
-            ],
-          )),
+            ),
+          ),
         ));
   }
 }
