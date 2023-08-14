@@ -268,7 +268,7 @@ class _MainAppPageState extends State<MainAppPage> {
   Future<void> answer() async {
     OpenAIChatCompletionModel chatCompletion =
         await OpenAI.instance.chat.create(
-      model: "gpt-4",
+      model: "gpt-3.5-turbo",
       messages: [
         const OpenAIChatCompletionChoiceMessageModel(
             content:
