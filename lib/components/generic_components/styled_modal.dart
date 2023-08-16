@@ -27,9 +27,9 @@ class StyledModal extends StatelessWidget {
           child: ListBody(children: [
             Text(
               title,
-              style: const TextStyle(
+              style: TextStyle(
                 fontSize: 18,
-                color: Colors.white,
+                color: AppStyle.getTextColor(),
                 fontWeight: FontWeight.bold,
               ),
             ),
@@ -40,7 +40,8 @@ class StyledModal extends StatelessWidget {
                 ),
                 Text(
                   body,
-                  style: const TextStyle(color: Colors.white, fontSize: 14),
+                  style:
+                      TextStyle(color: AppStyle.getTextColor(), fontSize: 14),
                 ),
               ],
             ),
@@ -51,7 +52,7 @@ class StyledModal extends StatelessWidget {
                 onTap: () {
                   onTap!();
                 },
-                buttonColor: AppStyle.primaryDarkAccent,
+                buttonColor: AppStyle.getAccent(),
                 buttonText: "Okay",
                 buttonTextColor: Colors.white)
           ]),

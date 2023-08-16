@@ -15,23 +15,24 @@ class StyledButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return InkResponse(
-      highlightColor: Colors.transparent,
-      splashFactory: NoSplash.splashFactory,
-      onTap: onTap,
-      child: Container(
-        padding: const EdgeInsets.all(15),
-        margin: const EdgeInsets.symmetric(horizontal: 25),
-        decoration: BoxDecoration(
-            color: buttonColor, borderRadius: BorderRadius.circular(8)),
-        child: Center(
-            child: Text(
-          buttonText,
-          style: TextStyle(
-              color: buttonTextColor,
-              fontWeight: FontWeight.w900,
-              fontSize: 16),
-        )),
+    return MouseRegion(
+      cursor: SystemMouseCursors.click,
+      child: GestureDetector(
+        onTap: onTap,
+        child: Container(
+          padding: const EdgeInsets.all(15),
+          margin: const EdgeInsets.symmetric(horizontal: 25),
+          decoration: BoxDecoration(
+              color: buttonColor, borderRadius: BorderRadius.circular(8)),
+          child: Center(
+              child: Text(
+            buttonText,
+            style: TextStyle(
+                color: buttonTextColor,
+                fontWeight: FontWeight.w900,
+                fontSize: 16),
+          )),
+        ),
       ),
     );
   }

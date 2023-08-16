@@ -23,32 +23,37 @@ class CustomerDrawer extends StatelessWidget {
             ListTile(
               minVerticalPadding: 50,
               title: const Icon(Icons.home, size: 20),
-              iconColor: Colors.white,
+              iconColor: AppStyle.getIconColor(),
               onTap: () async {
                 final SharedPreferences prefs =
                     await SharedPreferences.getInstance();
 
-                String? question = prefs.getString("currentQuestion");
-                String? answer = prefs.getString("currentAnswer");
-                String? confidence = prefs.getString("currentConfidence");
-
-                if (question != null) {
+                if (prefs.getString("currentPage") == "app") {
                   // ignore: use_build_context_synchronously
-                  Navigator.pushReplacement(
-                      context,
-                      PageTransition(
-                          child: MainAppPage(
-                              question: question,
-                              answer: answer,
-                              confidence: confidence),
-                          type: PageTransitionType.fade));
+                  Navigator.of(context).pop();
                 } else {
-                  // ignore: use_build_context_synchronously
-                  Navigator.pushReplacement(
-                      context,
-                      PageTransition(
-                          child: const MainAppPage(),
-                          type: PageTransitionType.fade));
+                  String? question = prefs.getString("currentQuestion");
+                  String? answer = prefs.getString("currentAnswer");
+                  String? confidence = prefs.getString("currentConfidence");
+
+                  if (question != null) {
+                    // ignore: use_build_context_synchronously
+                    Navigator.pushReplacement(
+                        context,
+                        PageTransition(
+                            child: MainAppPage(
+                                question: question,
+                                answer: answer,
+                                confidence: confidence),
+                            type: PageTransitionType.fade));
+                  } else {
+                    // ignore: use_build_context_synchronously
+                    Navigator.pushReplacement(
+                        context,
+                        PageTransition(
+                            child: const MainAppPage(),
+                            type: PageTransitionType.fade));
+                  }
                 }
               },
               splashColor: Colors.transparent,
@@ -57,13 +62,22 @@ class CustomerDrawer extends StatelessWidget {
             ListTile(
               minVerticalPadding: 50,
               title: const Icon(Icons.account_circle, size: 20),
-              iconColor: Colors.white,
-              onTap: () {
-                Navigator.pushReplacement(
-                    context,
-                    PageTransition(
-                        child: const ProfilePage(),
-                        type: PageTransitionType.fade));
+              iconColor: AppStyle.getIconColor(),
+              onTap: () async {
+                final SharedPreferences prefs =
+                    await SharedPreferences.getInstance();
+
+                if (prefs.getString("currentPage") == "profile") {
+                  // ignore: use_build_context_synchronously
+                  Navigator.of(context).pop();
+                } else {
+                  // ignore: use_build_context_synchronously
+                  Navigator.pushReplacement(
+                      context,
+                      PageTransition(
+                          child: const ProfilePage(),
+                          type: PageTransitionType.fade));
+                }
               },
               splashColor: Colors.transparent,
               hoverColor: AppStyle.primaryAccent,
@@ -71,13 +85,22 @@ class CustomerDrawer extends StatelessWidget {
             ListTile(
               minVerticalPadding: 50,
               title: const Icon(Icons.info, size: 20),
-              iconColor: Colors.white,
-              onTap: () {
-                Navigator.pushReplacement(
-                    context,
-                    PageTransition(
-                        child: const InfoPage(),
-                        type: PageTransitionType.fade));
+              iconColor: AppStyle.getIconColor(),
+              onTap: () async {
+                final SharedPreferences prefs =
+                    await SharedPreferences.getInstance();
+
+                if (prefs.getString("currentPage") == "info") {
+                  // ignore: use_build_context_synchronously
+                  Navigator.of(context).pop();
+                } else {
+                  // ignore: use_build_context_synchronously
+                  Navigator.pushReplacement(
+                      context,
+                      PageTransition(
+                          child: const InfoPage(),
+                          type: PageTransitionType.fade));
+                }
               },
               splashColor: Colors.transparent,
               hoverColor: AppStyle.primaryAccent,
@@ -86,13 +109,22 @@ class CustomerDrawer extends StatelessWidget {
             ListTile(
               minVerticalPadding: 50,
               title: const Icon(Icons.settings, size: 20),
-              iconColor: Colors.white,
-              onTap: () {
-                Navigator.pushReplacement(
-                    context,
-                    PageTransition(
-                        child: const SettingsPage(),
-                        type: PageTransitionType.fade));
+              iconColor: AppStyle.getIconColor(),
+              onTap: () async {
+                final SharedPreferences prefs =
+                    await SharedPreferences.getInstance();
+
+                if (prefs.getString("currentPage") == "settings") {
+                  // ignore: use_build_context_synchronously
+                  Navigator.of(context).pop();
+                } else {
+                  // ignore: use_build_context_synchronously
+                  Navigator.pushReplacement(
+                      context,
+                      PageTransition(
+                          child: const SettingsPage(),
+                          type: PageTransitionType.fade));
+                }
               },
               splashColor: Colors.transparent,
               hoverColor: AppStyle.primaryAccent,

@@ -95,8 +95,10 @@ class _MainAppPageState extends State<MainAppPage> {
         overflow: TextOverflow.clip,
         textAlign: TextAlign.center,
         solver.getAnswer(),
-        style: const TextStyle(
-            color: Colors.white, fontSize: 22, fontWeight: FontWeight.w900),
+        style: TextStyle(
+            color: AppStyle.getTextColor(),
+            fontSize: 22,
+            fontWeight: FontWeight.w900),
       ),
       const SizedBox(height: 20),
       CircularPercentIndicator(
@@ -107,39 +109,40 @@ class _MainAppPageState extends State<MainAppPage> {
         percent: solver.getConfidenceAsDouble(),
         center: Text(
           solver.getConfidence(),
-          style: const TextStyle(
+          style: TextStyle(
             fontWeight: FontWeight.w700,
             fontSize: 16.0,
-            color: Colors.white,
+            color: AppStyle.getTextColor(),
           ),
         ),
         footer: Column(
           children: [
             const SizedBox(height: 20),
-            InkResponse(
-              highlightColor: Colors.transparent,
-              splashFactory: NoSplash.splashFactory,
-              onTap: () {
-                showDialog(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return StyledModal(
-                        backgroundColor: AppStyle.secondaryBackground,
-                        title: "What is Confidence?",
-                        body:
-                            "Confidence is a percentage that represents how confident the AI is in its answer. The higher the percentage, the more confident the AI is in its answer. Please note that the AI is not always correct, so please use your best judgement when using the answer provided.",
-                        onTap: () {
-                          Navigator.pop(context);
-                        },
-                      );
-                    });
-              },
-              child: Text(
-                "Confidence",
-                style: TextStyle(
-                    fontWeight: FontWeight.w900,
-                    fontSize: 10.0,
-                    color: AppStyle.tertiaryColor),
+            MouseRegion(
+              cursor: SystemMouseCursors.click,
+              child: GestureDetector(
+                onTap: () {
+                  showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return StyledModal(
+                          backgroundColor: AppStyle.secondaryBackground,
+                          title: "What is Confidence?",
+                          body:
+                              "Confidence is a percentage that represents how confident the AI is in its answer. The higher the percentage, the more confident the AI is in its answer. Please note that the AI is not always correct, so please use your best judgement when using the answer provided.",
+                          onTap: () {
+                            Navigator.pop(context);
+                          },
+                        );
+                      });
+                },
+                child: Text(
+                  "Confidence",
+                  style: TextStyle(
+                      fontWeight: FontWeight.w900,
+                      fontSize: 10.0,
+                      color: AppStyle.tertiaryColor),
+                ),
               ),
             ),
           ],
@@ -164,8 +167,10 @@ class _MainAppPageState extends State<MainAppPage> {
         Text(
           textAlign: TextAlign.center,
           text,
-          style: const TextStyle(
-              color: Colors.white, fontSize: 14, fontWeight: FontWeight.bold),
+          style: TextStyle(
+              color: AppStyle.getTextColor(),
+              fontSize: 14,
+              fontWeight: FontWeight.bold),
         ),
         const SizedBox(height: 20),
         SizedBox(

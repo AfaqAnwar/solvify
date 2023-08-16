@@ -24,22 +24,43 @@ class _AppHostState extends State<AppHost> {
   @override
   void initState() {
     super.initState();
+    setDarkMode();
     pushPage();
+  }
+
+  Future setDarkMode() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? darkMode = prefs.getString("darkMode");
+
+    if (darkMode == "true" || darkMode == null) {
+      AppStyle.isDarkMode = true;
+      AppStyle.setToDarkMode();
+    } else {
+      AppStyle.isDarkMode = false;
+      AppStyle.setToLightMode();
+    }
+
+    return true;
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        backgroundColor: AppStyle.primaryBackground,
-        body: Center(
-            child: CircularProgressIndicator(
-          color: AppStyle.primaryAccent,
-        )));
+    return FutureBuilder(
+        future: setDarkMode(),
+        builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+          return Scaffold(
+              backgroundColor: AppStyle.primaryBackground,
+              body: Center(
+                  child: CircularProgressIndicator(
+                color: AppStyle.primaryAccent,
+              )));
+        });
   }
 
   Future pushPage() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     String? page = prefs.getString("currentPage");
+
     Widget pageToDisplay = const LoginPage();
     checkSession();
     var state = js.JsObject.fromBrowserObject(js.context['userState']);
