@@ -39,6 +39,7 @@ dependencies:
   google_fonts: ^5.1.0
   auto_size_text: ^3.0.0
   day_night_switcher: ^0.2.0+1
+  expansion_tile_group: ^1.2.2
 
   flutter:
     sdk: flutter
