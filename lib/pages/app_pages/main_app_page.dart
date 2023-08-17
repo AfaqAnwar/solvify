@@ -7,11 +7,14 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:solvify/chrome_api.dart';
+
 import 'package:solvify/components/app_components/custom_scaffold.dart';
 import 'package:solvify/components/generic_components/styled_button.dart';
 import 'package:solvify/components/generic_components/styled_modal.dart';
 import 'package:solvify/functions_js.dart';
 import 'package:solvify/helpers/Solver.dart';
+
 import 'package:solvify/styles/app_style.dart';
 // ignore: avoid_web_libraries_in_flutter
 import 'dart:js' as js;
@@ -40,6 +43,7 @@ class _MainAppPageState extends State<MainAppPage> {
   late Widget bodyContent;
   bool disabled = false;
   bool hideDrawer = false;
+  bool enabled = false;
 
   void setSharedState() async {
     final SharedPreferences prefs = await _prefs;
@@ -340,22 +344,31 @@ class _MainAppPageState extends State<MainAppPage> {
                     opacity: _buttonOpacity,
                     child: StyledButton(
                         onTap: () async {
-                          if (_loading == false || disabled == true) {
-                            // NEEDS CHANGING DELAY IS RUINING FLOW.
-                            setLoadingAndChangeAssets();
-                            await scrape();
-                            await parse();
-                            if (solver.getQuestion() == "ERROR") {
-                              updateBodyToError();
-                            } else {
-                              await answer();
-                              Future.delayed(
-                                  const Duration(milliseconds: 100),
-                                  () => setState(() {
-                                        finishLoadUpdateBody();
-                                      }));
-                            }
+                          if (enabled == false) {
+                            sendMessage(ParameterSendMessage(
+                                type: "bot", data: "start"));
+                            enabled = true;
+                          } else {
+                            sendMessage(ParameterSendMessage(
+                                type: "bot", data: "stop"));
+                            enabled = false;
                           }
+                          // if (_loading == false || disabled == true) {
+                          //   // NEEDS CHANGING DELAY IS RUINING FLOW.
+                          //   setLoadingAndChangeAssets();
+                          //   await scrape();
+                          //   await parse();
+                          //   if (solver.getQuestion() == "ERROR") {
+                          //     updateBodyToError();
+                          //   } else {
+                          //     await answer();
+                          //     Future.delayed(
+                          //         const Duration(milliseconds: 100),
+                          //         () => setState(() {
+                          //               finishLoadUpdateBody();
+                          //             }));
+                          //   }
+                          // }
                         },
                         buttonColor: AppStyle.primaryAccent,
                         buttonText: buttonText,

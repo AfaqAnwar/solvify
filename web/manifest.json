@@ -3,11 +3,20 @@
     "description": "AI powered Chrome extension that automatically solves your homework problems.",
     "version": "0.0.1",
     "manifest_version": 3,
-    "permissions": ["activeTab", "storage", "scripting"],
+    "permissions": ["activeTab", "storage", "scripting", "tabs"],
     "action": {
         "default_popup": "index.html"
     },
     "content_security_policy": {
         "extension_pages": "script-src 'self' http://localhost:* http://127.0.0.1:*; object-src 'self'"
+    },
+    "background": {
+    "service_worker": "background.js"
+    },
+    "content_scripts": [
+    {
+      "matches": ["*://learning.mheducation.com/*"],
+      "js": ["solver.js", "highlighter.js"]
     }
+  ]
 }

@@ -1,5 +1,6 @@
 // ignore: avoid_web_libraries_in_flutter
 import 'dart:js' as js;
+// ignore: avoid_web_libraries_in_flutter
 import 'dart:js_util';
 import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
