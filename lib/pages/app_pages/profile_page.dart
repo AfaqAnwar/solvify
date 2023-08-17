@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:solvify/components/app_components/custom_scaffold.dart';
+import 'package:solvify/components/generic_components/styled_button.dart';
+import 'package:solvify/styles/app_style.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -27,15 +30,84 @@ class _ProfilePageState extends State<ProfilePage> {
 
   @override
   Widget build(BuildContext context) {
-    return const CustomScaffold(
+    return CustomScaffold(
         hideDrawer: false,
         child: SafeArea(
           child: Center(
             child: Column(
               children: [
-                Text("Profile Page"),
+                Text(
+                  "Your Profile",
+                  style: TextStyle(
+                      fontFamily: GoogleFonts.karla().fontFamily,
+                      color: AppStyle.primaryAccent,
+                      fontSize: 24,
+                      fontWeight: FontWeight.w800),
+                ),
+                const Spacer(),
+                buildProfileTile(context,
+                    iconData: Icons.email_sharp,
+                    title: "Manage Email",
+                    onTap: () {}),
+                const SizedBox(
+                  height: 10,
+                ),
+                buildProfileTile(context,
+                    iconData: Icons.lock_sharp,
+                    title: "Manage Password",
+                    onTap: () {}),
+                const SizedBox(
+                  height: 10,
+                ),
+                buildProfileTile(context,
+                    iconData: Icons.payment_sharp,
+                    title: "Manage Subscription",
+                    onTap: () {}),
+                const Spacer(),
+                StyledButton(
+                    onTap: () {},
+                    buttonColor: AppStyle.primaryAccent,
+                    buttonText: "Sign Out",
+                    buttonTextColor: Colors.white,
+                    margin: 60),
+                const SizedBox(
+                  height: 25,
+                )
               ],
             ),
+          ),
+        ));
+  }
+
+  Widget buildProfileTile(
+    BuildContext context, {
+    required IconData iconData,
+    required String title,
+    required Function? onTap,
+  }) {
+    return ListTile(
+        splashColor: Colors.transparent,
+        focusColor: Colors.transparent,
+        mouseCursor: SystemMouseCursors.click,
+        onTap: () {
+          if (onTap != null) {
+            onTap();
+          }
+        },
+        leading: Padding(
+            padding: const EdgeInsets.symmetric(
+              horizontal: 15,
+            ),
+            child: Icon(iconData, color: AppStyle.getIconColor(), size: 20)),
+        title: Text(title,
+            style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                color: AppStyle.getTextColor(), fontWeight: FontWeight.w600)),
+        trailing: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 15),
+          child: Icon(
+            Icons.arrow_forward_ios_rounded,
+            size: 20,
+            color: AppStyle.getIconColor(),
           ),
         ));
   }

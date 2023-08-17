@@ -3,6 +3,7 @@ import 'package:im_stepper/stepper.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:solvify/components/generic_components/styled_modal.dart';
+import 'package:solvify/pages/app_pages/main_app_page.dart';
 import 'package:solvify/pages/registration/onboarding/register_onboard_first_page.dart';
 import 'package:solvify/pages/registration/onboarding/register_onboard_second_page.dart';
 import 'package:solvify/pages/registration/onboarding/register_onboard_third_page.dart';
@@ -48,6 +49,12 @@ class _RegisterOnboardHostState extends State<RegisterOnboardHost> {
       setState(() {
         currentIndex++;
       });
+    } else {
+      //TODO: Redirect to subscription page.
+      Navigator.pushReplacement(
+          context,
+          PageTransition(
+              type: PageTransitionType.fade, child: const MainAppPage()));
     }
   }
 

@@ -5,13 +5,15 @@ class StyledButton extends StatelessWidget {
   final Color buttonColor;
   final String buttonText;
   final Color buttonTextColor;
+  final double? margin;
 
   const StyledButton(
       {super.key,
       required this.onTap,
       required this.buttonColor,
       required this.buttonText,
-      required this.buttonTextColor});
+      required this.buttonTextColor,
+      this.margin});
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +23,7 @@ class StyledButton extends StatelessWidget {
         onTap: onTap,
         child: Container(
           padding: const EdgeInsets.all(15),
-          margin: const EdgeInsets.symmetric(horizontal: 25),
+          margin: EdgeInsets.symmetric(horizontal: margin ?? 25),
           decoration: BoxDecoration(
               color: buttonColor, borderRadius: BorderRadius.circular(8)),
           child: Center(

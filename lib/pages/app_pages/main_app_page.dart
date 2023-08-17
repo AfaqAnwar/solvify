@@ -316,7 +316,7 @@ class _MainAppPageState extends State<MainAppPage> {
                           fontWeight: FontWeight.w800),
                     ),
                   ),
-                  const SizedBox(height: 5),
+                  const SizedBox(height: 10),
                   AnimatedOpacity(
                     duration: const Duration(milliseconds: 250),
                     opacity: _subtitleOpacity,

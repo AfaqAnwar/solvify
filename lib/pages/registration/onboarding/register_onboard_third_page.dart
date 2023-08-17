@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:solvify/styles/app_style.dart';
 
 class RegisterOnboardThirdPage extends StatefulWidget {
   const RegisterOnboardThirdPage({super.key});
@@ -28,16 +29,16 @@ class _RegisterOnboardThirdPageState extends State<RegisterOnboardThirdPage> {
 
   @override
   Widget build(BuildContext context) {
-    return const Center(
+    return Center(
       child: Column(children: [
-        SizedBox(
+        const SizedBox(
           height: 100,
           child: Image(
             image: AssetImage('/assets/gifs/answer.gif'),
             fit: BoxFit.fill,
           ),
         ),
-        SizedBox(
+        const SizedBox(
           height: 40,
         ),
         Text("Finally we send you the solutions!",
@@ -45,7 +46,7 @@ class _RegisterOnboardThirdPageState extends State<RegisterOnboardThirdPage> {
             style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.bold,
-                color: Colors.white)),
+                color: AppStyle.getTextColor())),
       ]),
     );
   }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:solvify/styles/app_style.dart';
 
 class RegisterOnboardFirstPage extends StatefulWidget {
   const RegisterOnboardFirstPage({super.key});
@@ -28,16 +29,16 @@ class _RegisterOnboardFirstPageState extends State<RegisterOnboardFirstPage> {
 
   @override
   Widget build(BuildContext context) {
-    return const Center(
+    return Center(
       child: Column(children: [
-        SizedBox(
+        const SizedBox(
           height: 100,
           child: Image(
             image: AssetImage('/assets/gifs/scan.gif'),
             fit: BoxFit.fill,
           ),
         ),
-        SizedBox(
+        const SizedBox(
           height: 40,
         ),
         Text("First we scan your assignment to find all questions!",
@@ -45,7 +46,7 @@ class _RegisterOnboardFirstPageState extends State<RegisterOnboardFirstPage> {
             style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.bold,
-                color: Colors.white)),
+                color: AppStyle.getTextColor())),
       ]),
     );
   }

@@ -185,12 +185,13 @@ class _LoginPageState extends State<LoginPage> {
                   padding: const EdgeInsets.symmetric(horizontal: 25),
                   child:
                       Row(mainAxisAlignment: MainAxisAlignment.end, children: [
-                    InkResponse(
-                      highlightColor: Colors.transparent,
-                      splashFactory: NoSplash.splashFactory,
-                      onTap: () {},
-                      child: Text("Forgot Password?",
-                          style: TextStyle(color: AppStyle.primaryAccent)),
+                    MouseRegion(
+                      cursor: SystemMouseCursors.click,
+                      child: GestureDetector(
+                        onTap: () {},
+                        child: Text("Forgot Password?",
+                            style: TextStyle(color: AppStyle.primaryAccent)),
+                      ),
                     ),
                   ]),
                 ),
@@ -212,15 +213,16 @@ class _LoginPageState extends State<LoginPage> {
                     Text("Not a member?",
                         style: TextStyle(color: Colors.grey.shade700)),
                     const SizedBox(width: 4),
-                    InkResponse(
-                      highlightColor: Colors.transparent,
-                      splashFactory: NoSplash.splashFactory,
-                      onTap: goToRegister,
-                      child: Text(
-                        "Register Now!",
-                        style: TextStyle(
-                            color: AppStyle.primaryAccent,
-                            fontWeight: FontWeight.bold),
+                    MouseRegion(
+                      cursor: SystemMouseCursors.click,
+                      child: GestureDetector(
+                        onTap: goToRegister,
+                        child: Text(
+                          "Register Now!",
+                          style: TextStyle(
+                              color: AppStyle.primaryAccent,
+                              fontWeight: FontWeight.bold),
+                        ),
                       ),
                     ),
                   ],

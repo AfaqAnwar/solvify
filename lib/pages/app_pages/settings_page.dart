@@ -48,11 +48,11 @@ class _SettingsPageState extends State<SettingsPage> {
                   style: TextStyle(
                       fontFamily: GoogleFonts.karla().fontFamily,
                       color: AppStyle.primaryAccent,
-                      fontSize: 36,
+                      fontSize: 24,
                       fontWeight: FontWeight.w800),
                 ),
                 const SizedBox(
-                  height: 20,
+                  height: 10,
                 ),
                 Container(
                   margin: const EdgeInsets.only(left: 15, right: 15),
@@ -60,28 +60,30 @@ class _SettingsPageState extends State<SettingsPage> {
                     title: Text(
                       "Dark Mode",
                       style: TextStyle(
-                          fontFamily: GoogleFonts.karla().fontFamily,
                           color: AppStyle.getTextColor(),
                           fontSize: 18,
                           fontWeight: FontWeight.w800),
                     ),
-                    trailing: SizedBox(
-                      width: 60,
-                      child: DayNightSwitcher(
-                          isDarkModeEnabled: AppStyle.isDarkMode,
-                          onStateChanged: (isDarkModeEnabled) {
-                            if (isDarkModeEnabled) {
-                              setState(() {
-                                setSharedStateTheme();
-                                AppStyle.setToDarkMode();
-                              });
-                            } else {
-                              setState(() {
-                                setSharedStateTheme();
-                                AppStyle.setToLightMode();
-                              });
-                            }
-                          }),
+                    trailing: MouseRegion(
+                      cursor: SystemMouseCursors.click,
+                      child: SizedBox(
+                        width: 50,
+                        child: DayNightSwitcher(
+                            isDarkModeEnabled: AppStyle.isDarkMode,
+                            onStateChanged: (isDarkModeEnabled) {
+                              if (isDarkModeEnabled) {
+                                setState(() {
+                                  setSharedStateTheme();
+                                  AppStyle.setToDarkMode();
+                                });
+                              } else {
+                                setState(() {
+                                  setSharedStateTheme();
+                                  AppStyle.setToLightMode();
+                                });
+                              }
+                            }),
+                      ),
                     ),
                   ),
                 ),

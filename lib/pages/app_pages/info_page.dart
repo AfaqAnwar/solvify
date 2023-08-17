@@ -36,6 +36,17 @@ class _InfoPageState extends State<InfoPage> {
           child: Center(
             child: Column(
               children: [
+                Text(
+                  "FAQs",
+                  style: TextStyle(
+                      fontFamily: GoogleFonts.karla().fontFamily,
+                      color: AppStyle.primaryAccent,
+                      fontSize: 24,
+                      fontWeight: FontWeight.w800),
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
                 Container(
                     margin: const EdgeInsets.only(left: 15, right: 15),
                     child: Theme(
@@ -53,14 +64,14 @@ class _InfoPageState extends State<InfoPage> {
                               style: TextStyle(
                                   fontFamily: GoogleFonts.karla().fontFamily,
                                   color: AppStyle.primaryAccent,
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w700),
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w600),
                             ),
                             children: [
                               Text(
                                   "While Solvify aims to provide the best answers possible, it's important to note that not all answers are 100% accurate. Like any tool, it's essential to double-check results and use them as a guide rather than a definitive solution.",
                                   style: TextStyle(
-                                      fontSize: 14,
+                                      fontSize: 12,
                                       fontWeight: FontWeight.w100,
                                       color: AppStyle.getTextColor())),
                             ],
@@ -72,14 +83,14 @@ class _InfoPageState extends State<InfoPage> {
                               style: TextStyle(
                                   fontFamily: GoogleFonts.karla().fontFamily,
                                   color: AppStyle.primaryAccent,
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w700),
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w600),
                             ),
                             children: [
                               Text(
                                 "Solvify is designed to cover a broad range of subjects and topics. However, its effectiveness might vary depending on the complexity and specificity of the problem. If you find that your topic isn't covered, please provide feedback so we can continue to improve the extension.",
                                 style: TextStyle(
-                                    fontSize: 14,
+                                    fontSize: 12,
                                     fontWeight: FontWeight.w100,
                                     color: AppStyle.getTextColor()),
                               ),
@@ -92,14 +103,14 @@ class _InfoPageState extends State<InfoPage> {
                               style: TextStyle(
                                   fontFamily: GoogleFonts.karla().fontFamily,
                                   color: AppStyle.primaryAccent,
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w700),
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w600),
                             ),
                             children: [
                               Text(
                                 "We value user privacy. Solvify only scans the content of your current tab and does not store or share your data. All operations are carried out locally without transmitting any personal or sensitive information to external servers.",
                                 style: TextStyle(
-                                    fontSize: 14,
+                                    fontSize: 12,
                                     fontWeight: FontWeight.w100,
                                     color: AppStyle.getTextColor()),
                               ),
@@ -112,14 +123,14 @@ class _InfoPageState extends State<InfoPage> {
                               style: TextStyle(
                                   fontFamily: GoogleFonts.karla().fontFamily,
                                   color: AppStyle.primaryAccent,
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w700),
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w600),
                             ),
                             children: [
                               Text(
                                 "If Solvify can't provide an answer or solution to your problem, we recommend seeking alternative resources or consulting with your educators. Remember, Solvify is a tool to aid in your studies, not a replacement for traditional learning and teaching methods.",
                                 style: TextStyle(
-                                    fontSize: 14,
+                                    fontSize: 12,
                                     fontWeight: FontWeight.w100,
                                     color: AppStyle.getTextColor()),
                               ),
@@ -132,14 +143,14 @@ class _InfoPageState extends State<InfoPage> {
                               style: TextStyle(
                                   fontFamily: GoogleFonts.karla().fontFamily,
                                   color: AppStyle.primaryAccent,
-                                  fontSize: 16,
+                                  fontSize: 14,
                                   fontWeight: FontWeight.w700),
                             ),
                             children: [
                               Text(
                                 "Using Solvify or any other tool to assist you during exams or tests without permission is considered cheating. Always adhere to your institution's guidelines and rules regarding the use of external tools and resources.",
                                 style: TextStyle(
-                                    fontSize: 14,
+                                    fontSize: 12,
                                     fontWeight: FontWeight.w100,
                                     color: AppStyle.getTextColor()),
                               ),
@@ -152,14 +163,14 @@ class _InfoPageState extends State<InfoPage> {
                               style: TextStyle(
                                   fontFamily: GoogleFonts.karla().fontFamily,
                                   color: AppStyle.primaryAccent,
-                                  fontSize: 16,
+                                  fontSize: 14,
                                   fontWeight: FontWeight.w700),
                             ),
                             children: [
                               Text(
                                 "We value user feedback and are always looking to improve Solvify. If you have suggestions or encounter any issues, please contact our support team at support@solvify.com.",
                                 style: TextStyle(
-                                    fontSize: 14,
+                                    fontSize: 12,
                                     fontWeight: FontWeight.w100,
                                     color: AppStyle.getTextColor()),
                               ),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:solvify/styles/app_style.dart';
 
 class RegisterOnboardSecondPage extends StatefulWidget {
   const RegisterOnboardSecondPage({super.key});
@@ -28,17 +29,17 @@ class _RegisterOnboardSecondPageState extends State<RegisterOnboardSecondPage> {
 
   @override
   Widget build(BuildContext context) {
-    return const Center(
+    return Center(
       child: SafeArea(
         child: Column(children: [
-          SizedBox(
+          const SizedBox(
             height: 100,
             child: Image(
               image: AssetImage('/assets/gifs/ai.gif'),
               fit: BoxFit.fill,
             ),
           ),
-          SizedBox(
+          const SizedBox(
             height: 40,
           ),
           Text("Then we hand them off to our intelligent robot to solve!",
@@ -46,7 +47,7 @@ class _RegisterOnboardSecondPageState extends State<RegisterOnboardSecondPage> {
               style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
-                  color: Colors.white)),
+                  color: AppStyle.getTextColor())),
         ]),
       ),
     );
