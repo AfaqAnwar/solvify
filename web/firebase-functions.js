@@ -5,6 +5,7 @@ import {
   setPersistence,
   inMemoryPersistence,
   signOut,
+  updateEmail,
 } from "./firebase/firebase-auth.js";
 
 window.userState = {
@@ -91,8 +92,8 @@ window.checkSession = () => {
   });
 };
 
-window.signUserOut = () => {
-  signOut(auth)
+window.signUserOut = async () => {
+  await signOut(window.auth)
     .then(() => {
       // Sign-out successful.
       window.clearState();
@@ -102,4 +103,19 @@ window.signUserOut = () => {
       const errorCode = error.code;
       window.userState.error = errorCode;
     });
+};
+
+window.updateUserEmail = async (email) => {
+  var emailUpdated = false;
+  await updateEmail(window.auth.currentUser, email)
+    .then(() => {
+      window.userState.email = email;
+      emailUpdated = true;
+    })
+    .catch((error) => {
+      const errorCode = error.code;
+      window.userState.error = errorCode;
+    });
+
+  return emailUpdated;
 };

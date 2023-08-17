@@ -17,3 +17,6 @@ external dynamic checkSession();
 
 @JS('signUserOut')
 external dynamic signUserOut();
+
+@JS('updateUserEmail')
+external dynamic updateUserEmail(String email);
