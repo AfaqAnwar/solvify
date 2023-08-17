@@ -5,13 +5,15 @@ class StyledModalButton extends StatelessWidget {
   final Color buttonColor;
   final String buttonText;
   final Color buttonTextColor;
+  final double? margin;
 
   const StyledModalButton(
       {super.key,
       required this.onTap,
       required this.buttonColor,
       required this.buttonText,
-      required this.buttonTextColor});
+      required this.buttonTextColor,
+      this.margin});
 
   @override
   Widget build(BuildContext context) {
@@ -20,8 +22,8 @@ class StyledModalButton extends StatelessWidget {
       child: GestureDetector(
         onTap: onTap,
         child: Container(
-          padding: const EdgeInsets.all(10),
-          margin: const EdgeInsets.symmetric(horizontal: 25),
+          padding: const EdgeInsets.all(20),
+          margin: EdgeInsets.symmetric(horizontal: margin ?? 25),
           decoration: BoxDecoration(
               color: buttonColor, borderRadius: BorderRadius.circular(8)),
           child: Center(

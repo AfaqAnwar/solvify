@@ -14,3 +14,6 @@ external dynamic registerUser(String email, String password);
 
 @JS('checkSession')
 external dynamic checkSession();
+
+@JS('signUserOut')
+external dynamic signUserOut();

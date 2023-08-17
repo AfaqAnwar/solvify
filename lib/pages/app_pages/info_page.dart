@@ -168,7 +168,7 @@ class _InfoPageState extends State<InfoPage> {
                             ),
                             children: [
                               Text(
-                                "We value user feedback and are always looking to improve Solvify. If you have suggestions or encounter any issues, please contact our support team at support@solvify.com.",
+                                "We value user feedback and are always looking to improve Solvify. If you have suggestions or encounter any issues, please contact our support team at support@solvify.app",
                                 style: TextStyle(
                                     fontSize: 12,
                                     fontWeight: FontWeight.w100,

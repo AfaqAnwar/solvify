@@ -3,18 +3,20 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:solvify/components/generic_components/styled_modal_button.dart';
 import 'package:solvify/styles/app_style.dart';
 
-class StyledModal extends StatelessWidget {
-  final Function()? onTap;
+class ConfirmModal extends StatelessWidget {
+  final Function()? onYesTap;
+  final Function()? onNoTap;
   final Color backgroundColor;
   final String title;
   final String body;
 
-  const StyledModal(
+  const ConfirmModal(
       {super.key,
       required this.backgroundColor,
       required this.title,
       required this.body,
-      required this.onTap});
+      required this.onYesTap,
+      required this.onNoTap});
 
   @override
   Widget build(BuildContext context) {
@@ -50,13 +52,31 @@ class StyledModal extends StatelessWidget {
             const SizedBox(
               height: 15,
             ),
-            StyledModalButton(
-                onTap: () {
-                  onTap!();
-                },
-                buttonColor: AppStyle.getAccent(),
-                buttonText: "Okay",
-                buttonTextColor: Colors.white)
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Expanded(
+                  child: StyledModalButton(
+                      margin: 5,
+                      onTap: () {
+                        onYesTap!();
+                      },
+                      buttonColor: AppStyle.tertiaryColor,
+                      buttonText: "Yes",
+                      buttonTextColor: Colors.white),
+                ),
+                Expanded(
+                  child: StyledModalButton(
+                      margin: 5,
+                      onTap: () {
+                        onNoTap!();
+                      },
+                      buttonColor: AppStyle.getAccent(),
+                      buttonText: "No",
+                      buttonTextColor: Colors.white),
+                ),
+              ],
+            )
           ]),
         ));
   }

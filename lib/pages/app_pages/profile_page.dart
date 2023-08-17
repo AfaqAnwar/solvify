@@ -1,8 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:solvify/components/app_components/custom_scaffold.dart';
+import 'package:solvify/components/generic_components/confirm_modal.dart';
 import 'package:solvify/components/generic_components/styled_button.dart';
+import 'package:solvify/firebase_js.dart';
+import 'package:solvify/pages/app_pages/profile_management_pages/manage_email.dart';
+import 'package:solvify/pages/app_pages/profile_management_pages/manage_password.dart';
+import 'package:solvify/pages/app_pages/profile_management_pages/manage_subscription.dart';
+import 'package:solvify/pages/signin_signup/login_page.dart';
 import 'package:solvify/styles/app_style.dart';
 
 class ProfilePage extends StatefulWidget {
@@ -47,25 +54,63 @@ class _ProfilePageState extends State<ProfilePage> {
                 const Spacer(),
                 buildProfileTile(context,
                     iconData: Icons.email_sharp,
-                    title: "Manage Email",
-                    onTap: () {}),
+                    title: "Manage Email", onTap: () {
+                  Navigator.push(
+                      context,
+                      PageTransition(
+                          type: PageTransitionType.rightToLeftWithFade,
+                          child: const ManageEmail()));
+                }),
                 const SizedBox(
                   height: 10,
                 ),
                 buildProfileTile(context,
                     iconData: Icons.lock_sharp,
-                    title: "Manage Password",
-                    onTap: () {}),
+                    title: "Manage Password", onTap: () {
+                  Navigator.push(
+                      context,
+                      PageTransition(
+                          type: PageTransitionType.rightToLeftWithFade,
+                          child: const ManagePassword()));
+                }),
                 const SizedBox(
                   height: 10,
                 ),
                 buildProfileTile(context,
                     iconData: Icons.payment_sharp,
-                    title: "Manage Subscription",
-                    onTap: () {}),
+                    title: "Manage Subscription", onTap: () {
+                  Navigator.push(
+                      context,
+                      PageTransition(
+                          type: PageTransitionType.rightToLeftWithFade,
+                          child: const ManageSubscription()));
+                }),
                 const Spacer(),
                 StyledButton(
-                    onTap: () {},
+                    onTap: () {
+                      showDialog(
+                          context: context,
+                          builder: (context) => ConfirmModal(
+                                backgroundColor: AppStyle.secondaryBackground,
+                                title: 'Sign Out',
+                                body: 'Are you sure you want to sign out?',
+                                onYesTap: () async {
+                                  await signUserOut();
+                                  Future.delayed(
+                                      const Duration(milliseconds: 500), () {
+                                    Navigator.pop(context);
+                                    Navigator.pushReplacement(
+                                        context,
+                                        PageTransition(
+                                            child: const LoginPage(),
+                                            type: PageTransitionType.fade));
+                                  });
+                                },
+                                onNoTap: () {
+                                  Navigator.pop(context);
+                                },
+                              ));
+                    },
                     buttonColor: AppStyle.primaryAccent,
                     buttonText: "Sign Out",
                     buttonTextColor: Colors.white,

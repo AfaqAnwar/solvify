@@ -4,6 +4,7 @@ import {
   createUserWithEmailAndPassword,
   setPersistence,
   inMemoryPersistence,
+  signOut,
 } from "./firebase/firebase-auth.js";
 
 window.userState = {
@@ -74,7 +75,6 @@ function saveAuth() {
 }
 
 window.clearState = () => {
-  console.log("clearing state");
   window.userState.loggedIn = false;
   window.userState.email = "";
   window.userState.uid = "";
@@ -89,4 +89,17 @@ window.checkSession = () => {
       window.userState.sessionActive = false;
     }
   });
+};
+
+window.signUserOut = () => {
+  signOut(auth)
+    .then(() => {
+      // Sign-out successful.
+      window.clearState();
+    })
+    .catch((error) => {
+      // An error happened.
+      const errorCode = error.code;
+      window.userState.error = errorCode;
+    });
 };
