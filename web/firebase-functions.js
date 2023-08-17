@@ -83,14 +83,17 @@ window.clearState = () => {
   window.userState.error = "";
 };
 
-window.checkSession = () => {
+window.checkSession = async () => {
+  var sessionActive = false;
   window.auth.onAuthStateChanged(function (user) {
     if (user) {
       window.userState.sessionActive = true;
+      sessionActive = true;
     } else {
       window.userState.sessionActive = false;
     }
   });
+  return sessionActive;
 };
 
 window.signUserOut = async () => {

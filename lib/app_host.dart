@@ -1,5 +1,6 @@
 // ignore: avoid_web_libraries_in_flutter
 import 'dart:js' as js;
+import 'dart:js_util';
 import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -62,7 +63,12 @@ class _AppHostState extends State<AppHost> {
     String? page = prefs.getString("currentPage");
 
     Widget pageToDisplay = const LoginPage();
-    checkSession();
+    dynamic result = await promiseToFuture(updateUserPassword(checkSession()));
+
+    if (result == false) {
+      pageToDisplay = const LoginPage();
+    }
+
     var state = js.JsObject.fromBrowserObject(js.context['userState']);
     Future.delayed(const Duration(milliseconds: 500), () {
       switch (page) {
