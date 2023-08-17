@@ -1,9 +1,19 @@
 import 'package:day_night_switcher/day_night_switcher.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:solvify/components/app_components/custom_scaffold.dart';
 import 'package:solvify/styles/app_style.dart';
+import 'package:solvify/components/generic_components/confirm_modal.dart';
+import 'package:solvify/components/generic_components/styled_button.dart';
+import 'package:solvify/components/generic_components/styled_modal.dart';
+import 'package:solvify/firebase_js.dart';
+import 'package:solvify/pages/signin_signup/login_page.dart';
+// ignore: avoid_web_libraries_in_flutter
+import 'dart:js_util';
+// ignore: avoid_web_libraries_in_flutter
+import 'dart:js' as js;
 
 class SettingsPage extends StatefulWidget {
   const SettingsPage({super.key});
@@ -33,6 +43,16 @@ class _SettingsPageState extends State<SettingsPage> {
   void initState() {
     super.initState();
     setSharedState();
+  }
+
+  void displayLoad() {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return Center(
+            child: CircularProgressIndicator(color: AppStyle.primaryAccent),
+          );
+        });
   }
 
   @override
@@ -87,6 +107,66 @@ class _SettingsPageState extends State<SettingsPage> {
                     ),
                   ),
                 ),
+                const Spacer(),
+                StyledButton(
+                    onTap: () {
+                      showDialog(
+                          context: context,
+                          builder: (context) => ConfirmModal(
+                                backgroundColor: AppStyle.secondaryBackground,
+                                title: 'Sign Out',
+                                body: 'Are you sure you want to sign out?',
+                                onYesTap: () async {
+                                  displayLoad();
+                                  dynamic result =
+                                      await promiseToFuture(signUserOut());
+
+                                  var state = js.JsObject.fromBrowserObject(
+                                      js.context['userState']);
+
+                                  if (result == true) {
+                                    if (state['loggedIn'] == false) {
+                                      Future.delayed(
+                                          const Duration(milliseconds: 500),
+                                          () {
+                                        Navigator.pop(context);
+                                        Navigator.pushReplacement(
+                                            context,
+                                            PageTransition(
+                                                child: const LoginPage(),
+                                                type: PageTransitionType.fade));
+                                      });
+                                    }
+                                  } else {
+                                    Future.delayed(
+                                        const Duration(milliseconds: 500), () {
+                                      Navigator.pop(context);
+                                      showDialog(
+                                        context: context,
+                                        builder: (context) => StyledModal(
+                                            backgroundColor:
+                                                AppStyle.secondaryBackground,
+                                            title: 'Sign Out Error',
+                                            body:
+                                                'An error occurred while signing you out. Please try again later.',
+                                            onTap: () =>
+                                                Navigator.pop(context)),
+                                      );
+                                    });
+                                  }
+                                },
+                                onNoTap: () {
+                                  Navigator.pop(context);
+                                },
+                              ));
+                    },
+                    buttonColor: AppStyle.primaryAccent,
+                    buttonText: "Sign Out",
+                    buttonTextColor: Colors.white,
+                    margin: 60),
+                const SizedBox(
+                  height: 25,
+                )
               ],
             ),
           ),
