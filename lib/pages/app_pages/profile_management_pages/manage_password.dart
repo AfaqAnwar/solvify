@@ -24,8 +24,7 @@ class _ManagePasswordState extends State<ManagePassword> {
   final confirmNewPasswordController = TextEditingController();
 
   bool checkFieldsEmpty() {
-    if (currentPasswordController.text.trim().toString().isEmpty ||
-        newPasswordController.text.trim().toString().isEmpty ||
+    if (newPasswordController.text.trim().toString().isEmpty ||
         confirmNewPasswordController.text.trim().toString().isEmpty) {
       return false;
     } else {
@@ -109,7 +108,7 @@ class _ManagePasswordState extends State<ManagePassword> {
                 ),
                 InputTextField(
                   controller: confirmNewPasswordController,
-                  hintText: "New Password",
+                  hintText: "Confirm New Password",
                   obscureText: true,
                   textFieldBackgroundColor: AppStyle.secondaryBackground,
                   textFieldHintTextColor: AppStyle.getTextFieldHintColor(),
