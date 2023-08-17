@@ -28,11 +28,11 @@ class Solver {
   }
 
   void setConfidenceFromAnswer() {
-    confidence = answer.substring(answer.indexOf("Confidence: ") + 12);
+    confidence = answer.substring(answer.indexOf("Confidence: ") + 12).trim();
   }
 
   void parseAnswer() {
-    answer = answer.substring(0, answer.indexOf("Confidence: "));
+    answer = answer.substring(0, answer.indexOf("Confidence: ")).trim();
   }
 
   void setBodyText(String bodyText) {

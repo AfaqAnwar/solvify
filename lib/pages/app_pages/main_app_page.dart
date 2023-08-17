@@ -14,6 +14,7 @@ import 'package:solvify/components/generic_components/styled_button.dart';
 import 'package:solvify/components/generic_components/styled_modal.dart';
 import 'package:solvify/functions_js.dart';
 import 'package:solvify/helpers/Solver.dart';
+import 'package:solvify/options.dart';
 
 import 'package:solvify/styles/app_style.dart';
 // ignore: avoid_web_libraries_in_flutter
@@ -43,7 +44,7 @@ class _MainAppPageState extends State<MainAppPage> {
   late Widget bodyContent;
   bool disabled = false;
   bool hideDrawer = false;
-  bool enabled = false;
+  Color currentButtonColor = AppStyle.primaryAccent;
 
   void setSharedState() async {
     final SharedPreferences prefs = await _prefs;
@@ -56,18 +57,35 @@ class _MainAppPageState extends State<MainAppPage> {
   void initState() {
     super.initState();
     setSharedState();
+
     if (widget.question == null) {
       bodyContent = getImage();
     } else {
-      setState(() {
-        solver.setQuestion(widget.question!);
-        solver.setAnswer(widget.answer!);
-        solver.setConfidence(widget.confidence!);
-        _subtitleOpacity = 1;
-        buttonText = "Solve Again";
-      });
+      if (Options.mcGrawEnabled == false) {
+        setState(() {
+          solver.setQuestion(widget.question!);
+          solver.setAnswer(widget.answer!);
+          solver.setConfidence(widget.confidence!);
+          _subtitleOpacity = 1;
+          buttonText = "Solve Again";
+          bodyContent = getBody();
+        });
+      } else {
+        bodyContent = getImage();
+      }
+    }
+    checkMcGraw();
+  }
 
-      bodyContent = getBody();
+  void checkMcGraw() {
+    if (Options.getMcGrawEnabled() == true) {
+      setState(() {
+        buttonText = "Auto Solve";
+      });
+    } else {
+      setState(() {
+        buttonText = "Solve";
+      });
     }
   }
 
@@ -211,28 +229,84 @@ class _MainAppPageState extends State<MainAppPage> {
     }
   }
 
-  void finishLoadUpdateBody() async {
-    final SharedPreferences prefs = await _prefs;
-    setState(() {
-      hideDrawer = false;
-      logo = const AssetImage('assets/gifs/idle.gif');
-      titleText = "SOLVIFY";
-      _textOpacity = 1;
-      _bodyOpacity = 1;
-      _buttonOpacity = 1;
-      _subtitleOpacity = 1;
-      _loading = false;
-      buttonText = "Solve Again";
-      if (solver.getAnswer() == "ERROR") {
-        bodyContent = getErrorBody();
-      } else {
-        bodyContent = getBody();
+  void setLoadingAndChangeAssetsMcGraw() async {
+    if (_loading == false) {
+      setState(() => _textOpacity = 0);
+      setState(() => _bodyOpacity = 0);
+      setState(() => _subtitleOpacity = 0);
+      setState(() => _buttonOpacity = 0);
+      setState(() => _loading = true);
 
-        prefs.setString("currentQuestion", solver.getQuestion());
-        prefs.setString("currentAnswer", solver.getAnswer());
-        prefs.setString("currentConfidence", solver.getConfidence());
-      }
-    });
+      Future.delayed(
+          const Duration(milliseconds: 500),
+          () => setState(() {
+                hideDrawer = true;
+                logo = const AssetImage('assets/gifs/load.gif');
+                bodyContent = getImage();
+                titleText = "AUTO SOLVING...";
+                _textOpacity = 1;
+                _bodyOpacity = 1;
+                _subtitleOpacity = 0;
+                setState(() => _buttonOpacity = 1);
+                setState(() => _loading = false);
+                currentButtonColor = AppStyle.primaryError;
+                buttonText = "Stop";
+              }));
+    }
+  }
+
+  void finishLoadUpdateBodyMcGraw() async {
+    setState(() => _textOpacity = 0);
+    setState(() => _bodyOpacity = 0);
+    setState(() => _subtitleOpacity = 0);
+    setState(() => _buttonOpacity = 0);
+    setState(() => _loading = true);
+
+    Future.delayed(
+        const Duration(milliseconds: 500),
+        () => setState(() {
+              hideDrawer = false;
+              logo = const AssetImage('assets/gifs/idle.gif');
+              titleText = "SOLVIFY";
+              _textOpacity = 1;
+              _bodyOpacity = 1;
+              _buttonOpacity = 1;
+              _subtitleOpacity = 1;
+              _loading = false;
+              bodyContent = getImage();
+              currentButtonColor = AppStyle.primaryAccent;
+              buttonText = "Auto Solve";
+            }));
+  }
+
+  void finishLoadUpdateBody() async {
+    setState(() => _textOpacity = 0);
+    setState(() => _bodyOpacity = 0);
+    setState(() => _subtitleOpacity = 0);
+    setState(() => _loading = true);
+    final SharedPreferences prefs = await _prefs;
+    Future.delayed(
+        const Duration(milliseconds: 250),
+        () => setState(() {
+              hideDrawer = false;
+              logo = const AssetImage('assets/gifs/idle.gif');
+              titleText = "SOLVIFY";
+              _textOpacity = 1;
+              _bodyOpacity = 1;
+              _buttonOpacity = 1;
+              _subtitleOpacity = 1;
+              _loading = false;
+              buttonText = "Solve Again";
+              if (solver.getAnswer() == "ERROR") {
+                bodyContent = getErrorBody();
+              } else {
+                bodyContent = getBody();
+
+                prefs.setString("currentQuestion", solver.getQuestion());
+                prefs.setString("currentAnswer", solver.getAnswer());
+                prefs.setString("currentConfidence", solver.getConfidence());
+              }
+            }));
   }
 
   void updateBodyToError() {
@@ -291,7 +365,7 @@ class _MainAppPageState extends State<MainAppPage> {
             content: solver.getQuestion(), role: OpenAIChatMessageRole.user),
       ],
     );
-    solver.setAnswer(chatCompletion.choices.first.message.content);
+    solver.setAnswer(chatCompletion.choices.first.message.content.trim());
     solver.setConfidenceFromAnswer();
     solver.parseAnswer();
   }
@@ -344,33 +418,38 @@ class _MainAppPageState extends State<MainAppPage> {
                     opacity: _buttonOpacity,
                     child: StyledButton(
                         onTap: () async {
-                          if (enabled == false) {
-                            sendMessage(ParameterSendMessage(
-                                type: "bot", data: "start"));
-                            enabled = true;
+                          if (Options.getMcGrawEnabled() && _loading == false) {
+                            if (Options.getMcGrawRunning() == false) {
+                              sendMessage(ParameterSendMessage(
+                                  type: "bot", data: "start"));
+                              Options.setMcGrawRunning(true);
+                              setLoadingAndChangeAssetsMcGraw();
+                            } else {
+                              sendMessage(ParameterSendMessage(
+                                  type: "bot", data: "stop"));
+                              Options.setMcGrawRunning(false);
+                              finishLoadUpdateBodyMcGraw();
+                            }
                           } else {
-                            sendMessage(ParameterSendMessage(
-                                type: "bot", data: "stop"));
-                            enabled = false;
+                            if (_loading == false || disabled == true) {
+                              // NEEDS CHANGING DELAY IS RUINING FLOW.
+                              setLoadingAndChangeAssets();
+                              await scrape();
+                              await parse();
+                              if (solver.getQuestion() == "ERROR") {
+                                updateBodyToError();
+                              } else {
+                                await answer();
+                                Future.delayed(
+                                    const Duration(milliseconds: 100),
+                                    () => setState(() {
+                                          finishLoadUpdateBody();
+                                        }));
+                              }
+                            }
                           }
-                          // if (_loading == false || disabled == true) {
-                          //   // NEEDS CHANGING DELAY IS RUINING FLOW.
-                          //   setLoadingAndChangeAssets();
-                          //   await scrape();
-                          //   await parse();
-                          //   if (solver.getQuestion() == "ERROR") {
-                          //     updateBodyToError();
-                          //   } else {
-                          //     await answer();
-                          //     Future.delayed(
-                          //         const Duration(milliseconds: 100),
-                          //         () => setState(() {
-                          //               finishLoadUpdateBody();
-                          //             }));
-                          //   }
-                          // }
                         },
-                        buttonColor: AppStyle.primaryAccent,
+                        buttonColor: currentButtonColor,
                         buttonText: buttonText,
                         buttonTextColor: Colors.white),
                   ),

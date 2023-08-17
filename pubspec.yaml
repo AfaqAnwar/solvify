@@ -40,6 +40,7 @@ dependencies:
   auto_size_text: ^3.0.0
   day_night_switcher: ^0.2.0+1
   expansion_tile_group: ^1.2.2
+  switcher_button: ^0.0.4
 
   flutter:
     sdk: flutter

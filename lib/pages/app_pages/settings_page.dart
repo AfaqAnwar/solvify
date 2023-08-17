@@ -4,6 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:solvify/components/app_components/custom_scaffold.dart';
+import 'package:solvify/options.dart';
 import 'package:solvify/styles/app_style.dart';
 import 'package:solvify/components/generic_components/confirm_modal.dart';
 import 'package:solvify/components/generic_components/styled_button.dart';
@@ -14,6 +15,8 @@ import 'package:solvify/pages/signin_signup/login_page.dart';
 import 'dart:js_util';
 // ignore: avoid_web_libraries_in_flutter
 import 'dart:js' as js;
+
+import 'package:switcher_button/switcher_button.dart';
 
 class SettingsPage extends StatefulWidget {
   const SettingsPage({super.key});
@@ -102,6 +105,32 @@ class _SettingsPageState extends State<SettingsPage> {
                                   AppStyle.setToLightMode();
                                 });
                               }
+                            }),
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                Container(
+                  margin: const EdgeInsets.only(left: 15, right: 15),
+                  child: ListTile(
+                    title: Text(
+                      "McGraw Hill Connect Auto Solver",
+                      style: TextStyle(
+                          color: AppStyle.getTextColor(),
+                          fontSize: 18,
+                          fontWeight: FontWeight.w800),
+                    ),
+                    trailing: MouseRegion(
+                      cursor: SystemMouseCursors.click,
+                      child: SizedBox(
+                        width: 50,
+                        child: SwitcherButton(
+                            value: Options.mcGrawEnabled,
+                            onChange: (value) {
+                              Options.setMcGrawEnabled(value);
                             }),
                       ),
                     ),
