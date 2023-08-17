@@ -20,3 +20,6 @@ external dynamic signUserOut();
 
 @JS('updateUserEmail')
 external dynamic updateUserEmail(String email);
+
+@JS('updateUserPassword')
+external dynamic updateUserPassword(String password);

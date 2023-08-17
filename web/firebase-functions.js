@@ -6,6 +6,7 @@ import {
   inMemoryPersistence,
   signOut,
   updateEmail,
+  updatePassword,
 } from "./firebase/firebase-auth.js";
 
 window.userState = {
@@ -93,16 +94,19 @@ window.checkSession = () => {
 };
 
 window.signUserOut = async () => {
+  var signedOut = false;
   await signOut(window.auth)
     .then(() => {
       // Sign-out successful.
       window.clearState();
+      signedOut = true;
     })
     .catch((error) => {
       // An error happened.
       const errorCode = error.code;
       window.userState.error = errorCode;
     });
+  return signedOut;
 };
 
 window.updateUserEmail = async (email) => {
@@ -118,4 +122,18 @@ window.updateUserEmail = async (email) => {
     });
 
   return emailUpdated;
+};
+
+window.updateUserPassword = async (password) => {
+  var passwordUpdated = false;
+  await updatePassword(window.auth.currentUser, password)
+    .then(() => {
+      passwordUpdated = true;
+    })
+    .catch((error) => {
+      const errorCode = error.code;
+      window.userState.error = errorCode;
+    });
+
+  return passwordUpdated;
 };

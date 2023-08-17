@@ -32,7 +32,7 @@ class _ManageEmailState extends State<ManageEmail> {
   void displayError(String errorMessage) {
     switch (errorMessage) {
       case "empty-fields":
-        errorMessage = "Please fill out both your email and password.";
+        errorMessage = "Please fill your new password.";
         break;
       case "email-already-in-use":
         errorMessage = "This email is already in use.";
