@@ -42,6 +42,19 @@ class _SettingsPageState extends State<SettingsPage> {
     });
   }
 
+  void setSharedStateMode(bool isEnabled) async {
+    final SharedPreferences prefs = await _prefs;
+    if (isEnabled) {
+      setState(() {
+        prefs.setString("mode", "mcgraw");
+      });
+    } else {
+      setState(() {
+        prefs.setString("mode", "normal");
+      });
+    }
+  }
+
   @override
   void initState() {
     super.initState();
@@ -128,9 +141,12 @@ class _SettingsPageState extends State<SettingsPage> {
                       child: SizedBox(
                         width: 50,
                         child: SwitcherButton(
-                            value: Options.mcGrawEnabled,
+                            onColor: AppStyle.primaryAccent,
+                            offColor: AppStyle.getIconColor(),
+                            value: Options.getMcGrawEnabled(),
                             onChange: (value) {
                               Options.setMcGrawEnabled(value);
+                              setSharedStateMode(value);
                             }),
                       ),
                     ),

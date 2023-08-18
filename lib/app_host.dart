@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:solvify/firebase_js.dart';
+import 'package:solvify/options.dart';
 import 'package:solvify/pages/app_pages/info_page.dart';
 import 'package:solvify/pages/app_pages/main_app_page.dart';
 import 'package:solvify/pages/app_pages/profile_page.dart';
@@ -26,12 +27,13 @@ class _AppHostState extends State<AppHost> {
   @override
   void initState() {
     super.initState();
-    setDarkMode();
+    setSavedPreferences();
     pushPage();
   }
 
-  Future setDarkMode() async {
+  Future setSavedPreferences() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
+
     String? darkMode = prefs.getString("darkMode");
 
     if (darkMode == "true" || darkMode == null) {
@@ -42,13 +44,21 @@ class _AppHostState extends State<AppHost> {
       AppStyle.setToLightMode();
     }
 
+    String? mode = prefs.getString("mode");
+
+    if (mode == "mcgraw") {
+      Options.setMcGrawEnabled(true);
+    } else {
+      Options.setMcGrawEnabled(false);
+    }
+
     return true;
   }
 
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-        future: setDarkMode(),
+        future: setSavedPreferences(),
         builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
           return Scaffold(
               backgroundColor: AppStyle.primaryBackground,
