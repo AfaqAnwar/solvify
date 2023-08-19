@@ -20,8 +20,6 @@ class _CustomerDrawerState extends State<CustomerDrawer> {
   Color iconColorThree = AppStyle.getIconColor();
   Color iconColorFour = AppStyle.getIconColor();
 
-  void _updateIcon() {}
-
   @override
   Widget build(BuildContext context) {
     return SizedBox(

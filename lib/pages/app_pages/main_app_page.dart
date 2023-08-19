@@ -499,13 +499,12 @@ class _MainAppPageState extends State<MainAppPage> {
                                   );
                                 });
                           } else {
-                            print(disabled);
                             if (_loading == false && disabled == false) {
                               // NEEDS CHANGING DELAY IS RUINING FLOW.
                               setLoadingAndChangeAssets();
                               await scrape();
                               await parse();
-                              print(solver.getQuestion());
+
                               if (solver.getQuestion() == "ERROR") {
                                 updateBodyToError();
                               } else {

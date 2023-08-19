@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+// ignore: implementation_imports
 import 'package:flutter/src/services/mouse_cursor.dart';
 
 class StyledButton extends StatelessWidget {
