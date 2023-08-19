@@ -8,3 +8,6 @@ external dynamic scrapeHTML();
 
 @JS('checkCurrentTabURL')
 external dynamic checkCurrentTabURL();
+
+@JS('checkForMcGraw')
+external dynamic checkForMcGraw();

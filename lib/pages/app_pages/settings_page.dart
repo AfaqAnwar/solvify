@@ -4,6 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:solvify/components/app_components/custom_scaffold.dart';
+import 'package:solvify/functions_js.dart';
 import 'package:solvify/options.dart';
 import 'package:solvify/styles/app_style.dart';
 import 'package:solvify/components/generic_components/confirm_modal.dart';
@@ -27,6 +28,7 @@ class SettingsPage extends StatefulWidget {
 
 class _SettingsPageState extends State<SettingsPage> {
   final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
+  bool switchValue = Options.getMcGrawEnabled();
 
   void setSharedState() async {
     final SharedPreferences prefs = await _prefs;
@@ -69,6 +71,11 @@ class _SettingsPageState extends State<SettingsPage> {
             child: CircularProgressIndicator(color: AppStyle.primaryAccent),
           );
         });
+  }
+
+  Future checkMcgraw() async {
+    var result = await promiseToFuture(checkForMcGraw());
+    return result;
   }
 
   @override
@@ -143,10 +150,35 @@ class _SettingsPageState extends State<SettingsPage> {
                         child: SwitcherButton(
                             onColor: AppStyle.primaryAccent,
                             offColor: AppStyle.getIconColor(),
-                            value: Options.getMcGrawEnabled(),
-                            onChange: (value) {
-                              Options.setMcGrawEnabled(value);
-                              setSharedStateMode(value);
+                            value: switchValue,
+                            onChange: (value) async {
+                              switchValue = value;
+                              var result = await checkMcgraw();
+                              if (result == true && value == true) {
+                                Options.setMcGrawEnabled(value);
+                                setSharedStateMode(value);
+                              } else if (result == false && value == true) {
+                                setState(() {
+                                  switchValue = false;
+                                });
+                                Options.setMcGrawEnabled(false);
+                                setSharedStateMode(false);
+
+                                // ignore: use_build_context_synchronously
+                                showDialog(
+                                    context: context,
+                                    builder: (context) => StyledModal(
+                                          backgroundColor:
+                                              AppStyle.secondaryBackground,
+                                          title: 'McGraw Hill Connect',
+                                          body:
+                                              'You must be on a McGraw Hill Connect assignment to enable this feature. \n These usually start with "https://learning.mheducation.com/"',
+                                          onTap: () => Navigator.pop(context),
+                                        ));
+                              } else {
+                                Options.setMcGrawEnabled(value);
+                                setSharedStateMode(value);
+                              }
                             }),
                       ),
                     ),

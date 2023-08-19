@@ -461,9 +461,13 @@ class _MainAppPageState extends State<MainAppPage> {
                     child: StyledButton(
                         disable: disabled,
                         onTap: () async {
+                          var mcGrawTabActive =
+                              await promiseToFuture(checkForMcGraw());
+
                           if (Options.getMcGrawEnabled() &&
                               _loading == false &&
-                              disabled == false) {
+                              disabled == false &&
+                              mcGrawTabActive == true) {
                             if (Options.getMcGrawRunning() == false) {
                               sendMessage(ParameterSendMessage(
                                   type: "bot", data: "start"));
@@ -475,6 +479,25 @@ class _MainAppPageState extends State<MainAppPage> {
                               Options.setMcGrawRunning(false);
                               finishLoadUpdateBodyMcGraw();
                             }
+                          } else if (mcGrawTabActive == false &&
+                              _loading == false &&
+                              disabled == false &&
+                              Options.getMcGrawEnabled()) {
+                            // ignore: use_build_context_synchronously
+                            showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return StyledModal(
+                                    backgroundColor:
+                                        AppStyle.secondaryBackground,
+                                    title: "McGraw Hill Tab Not Found",
+                                    body:
+                                        "Please open a McGraw Hill tab and try again or disable McGraw Hill Connect Auto Solver in the options page.",
+                                    onTap: () {
+                                      Navigator.pop(context);
+                                    },
+                                  );
+                                });
                           } else {
                             print(disabled);
                             if (_loading == false && disabled == false) {
