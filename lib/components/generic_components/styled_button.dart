@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/src/services/mouse_cursor.dart';
 
 class StyledButton extends StatelessWidget {
   final Function()? onTap;
@@ -6,6 +7,7 @@ class StyledButton extends StatelessWidget {
   final String buttonText;
   final Color buttonTextColor;
   final double? margin;
+  final bool? disable;
 
   const StyledButton(
       {super.key,
@@ -13,12 +15,20 @@ class StyledButton extends StatelessWidget {
       required this.buttonColor,
       required this.buttonText,
       required this.buttonTextColor,
-      this.margin});
+      this.margin,
+      this.disable});
 
   @override
   Widget build(BuildContext context) {
+    SystemMouseCursor cursor;
+    if (disable != null && disable == true) {
+      cursor = SystemMouseCursors.basic;
+    } else {
+      cursor = SystemMouseCursors.click;
+    }
+
     return MouseRegion(
-      cursor: SystemMouseCursors.click,
+      cursor: cursor,
       child: GestureDetector(
         onTap: onTap,
         child: Container(

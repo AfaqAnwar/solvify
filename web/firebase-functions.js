@@ -20,61 +20,59 @@ window.userState = {
 
 window.auth = getAuth();
 
-window.signUserIn = async (email, password) => {
+window.signUserIn = (email, password) => {
   window.clearState();
-  var logged = false;
-  window.auth = await getAuth();
-  await signInWithEmailAndPassword(window.auth, email, password)
-    .then((userCredential) => {
-      // Signed in
-      const user = userCredential.user;
-      window.userState.loggedIn = true;
-      window.userState.email = user.email;
-      window.userState.uid = user.uid;
-      logged = true;
-    })
-    .catch((error) => {
-      window.userState.loggedIn = false;
-      const errorCode = error.code;
-      window.userState.error = errorCode;
-      window.userState.sessionActive = false;
-    });
-  return logged;
+  return new Promise(async (resolve, reject) => {
+    window.auth = await getAuth();
+    signInWithEmailAndPassword(window.auth, email, password)
+      .then((userCredential) => {
+        const user = userCredential.user;
+        window.userState.loggedIn = true;
+        window.userState.email = user.email;
+        window.userState.uid = user.uid;
+        resolve(true);
+      })
+      .catch((error) => {
+        window.userState.loggedIn = false;
+        window.userState.error = error.code;
+        resolve(false);
+      });
+  });
 };
 
-window.registerUser = async (email, password) => {
+window.registerUser = (email, password) => {
   window.clearState();
-  var registered = false;
-  window.auth = getAuth();
-  await createUserWithEmailAndPassword(window.auth, email, password)
-    .then((userCredential) => {
-      // Signed in
-      const user = userCredential.user;
-      window.userState.loggedIn = true;
-      window.userState.email = user.email;
-      window.userState.uid = user.uid;
-      registered = true;
-    })
-    .catch((error) => {
-      window.userState.loggedIn = false;
-      const errorCode = error.code;
-      window.userState.error = errorCode;
-      window.userState.sessionActive = false;
-    });
-  return registered;
+  return new Promise(async (resolve, reject) => {
+    window.auth = getAuth();
+    createUserWithEmailAndPassword(window.auth, email, password)
+      .then((userCredential) => {
+        const user = userCredential.user;
+        window.userState.loggedIn = true;
+        window.userState.email = user.email;
+        window.userState.uid = user.uid;
+        resolve(true);
+      })
+      .catch((error) => {
+        window.userState.loggedIn = false;
+        window.userState.error = error.code;
+        resolve(false);
+      });
+  });
 };
 
-function saveAuth() {
-  setPersistence(window.auth, inMemoryPersistence)
-    .then(() => {
-      window.userState.sessionActive = true;
-    })
-    .catch((sError) => {
-      // Handle Errors here.
-      const sessionErrorCode = sError.code;
-      window.userState.sessionError = sessionErrorCode;
-    });
-}
+window.saveAuth = () => {
+  return new Promise((resolve, reject) => {
+    setPersistence(window.auth, inMemoryPersistence)
+      .then(() => {
+        window.userState.sessionActive = true;
+        resolve(true);
+      })
+      .catch((sError) => {
+        window.userState.sessionError = sError.code;
+        resolve(false);
+      });
+  });
+};
 
 window.clearState = () => {
   window.userState.loggedIn = false;
@@ -83,60 +81,57 @@ window.clearState = () => {
   window.userState.error = "";
 };
 
-window.checkSession = async () => {
-  var sessionActive = false;
-  window.auth.onAuthStateChanged(function (user) {
-    if (user) {
-      window.userState.sessionActive = true;
-      sessionActive = true;
-    } else {
-      window.userState.sessionActive = false;
-    }
+window.checkSession = () => {
+  return new Promise((resolve, reject) => {
+    window.auth.onAuthStateChanged(function (user) {
+      if (user) {
+        window.userState.sessionActive = true;
+        resolve(true);
+      } else {
+        window.userState.sessionActive = false;
+        resolve(false);
+      }
+    });
   });
-  return sessionActive;
 };
 
-window.signUserOut = async () => {
-  var signedOut = false;
-  await signOut(window.auth)
-    .then(() => {
-      // Sign-out successful.
-      window.clearState();
-      signedOut = true;
-    })
-    .catch((error) => {
-      // An error happened.
-      const errorCode = error.code;
-      window.userState.error = errorCode;
-    });
-  return signedOut;
+window.signUserOut = () => {
+  return new Promise(async (resolve, reject) => {
+    signOut(window.auth)
+      .then(() => {
+        window.clearState();
+        resolve(true);
+      })
+      .catch((error) => {
+        window.userState.error = error.code;
+        resolve(false);
+      });
+  });
 };
 
-window.updateUserEmail = async (email) => {
-  var emailUpdated = false;
-  await updateEmail(window.auth.currentUser, email)
-    .then(() => {
-      window.userState.email = email;
-      emailUpdated = true;
-    })
-    .catch((error) => {
-      const errorCode = error.code;
-      window.userState.error = errorCode;
-    });
-
-  return emailUpdated;
+window.updateUserEmail = (email) => {
+  return new Promise(async (resolve, reject) => {
+    updateEmail(window.auth.currentUser, email)
+      .then(() => {
+        window.userState.email = email;
+        resolve(true);
+      })
+      .catch((error) => {
+        window.userState.error = error.code;
+        resolve(false);
+      });
+  });
 };
 
-window.updateUserPassword = async (password) => {
-  var passwordUpdated = false;
-  await updatePassword(window.auth.currentUser, password)
-    .then(() => {
-      passwordUpdated = true;
-    })
-    .catch((error) => {
-      const errorCode = error.code;
-      window.userState.error = errorCode;
-    });
-
-  return passwordUpdated;
+window.updateUserPassword = (password) => {
+  return new Promise(async (resolve, reject) => {
+    updatePassword(window.auth.currentUser, password)
+      .then(() => {
+        resolve(true);
+      })
+      .catch((error) => {
+        window.userState.error = error.code;
+        resolve(false);
+      });
+  });
 };

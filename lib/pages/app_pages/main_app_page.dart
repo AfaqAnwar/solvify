@@ -24,6 +24,7 @@ class MainAppPage extends StatefulWidget {
   final String? question;
   final String? answer;
   final String? confidence;
+
   const MainAppPage({super.key, this.question, this.answer, this.confidence});
 
   @override
@@ -41,10 +42,12 @@ class _MainAppPageState extends State<MainAppPage> {
   double _subtitleOpacity = 0;
   bool _loading = false;
   String buttonText = "Solve";
-  late Widget bodyContent;
+  Widget bodyContent = const SizedBox();
   bool disabled = false;
   bool hideDrawer = false;
   Color currentButtonColor = AppStyle.primaryAccent;
+  bool isValid = false;
+  int milli = 250;
 
   void setSharedState() async {
     final SharedPreferences prefs = await _prefs;
@@ -54,27 +57,62 @@ class _MainAppPageState extends State<MainAppPage> {
   }
 
   @override
-  void initState() {
+  void initState() async {
     super.initState();
     setSharedState();
 
-    if (widget.question == null) {
-      bodyContent = getImage();
-    } else {
-      if (Options.mcGrawEnabled == false) {
-        setState(() {
-          solver.setQuestion(widget.question!);
-          solver.setAnswer(widget.answer!);
-          solver.setConfidence(widget.confidence!);
-          _subtitleOpacity = 1;
-          buttonText = "Solve Again";
-          bodyContent = getBody();
-        });
-      } else {
+    isValid = await promiseToFuture(checkCurrentTabURL());
+
+    if (isValid == true) {
+      if (widget.question == null) {
         bodyContent = getImage();
+      } else {
+        if (Options.mcGrawEnabled == false) {
+          setState(() {
+            solver.setQuestion(widget.question!);
+            solver.setAnswer(widget.answer!);
+            solver.setConfidence(widget.confidence!);
+            _subtitleOpacity = 1;
+            buttonText = "Solve Again";
+            bodyContent = getBody();
+          });
+        } else {
+          bodyContent = getImage();
+        }
       }
+      checkMcGraw();
+    } else {
+      milli = 0;
+      setState(() {
+        disabled = true;
+        _buttonOpacity = 0;
+        bodyContent = getInvalidBody();
+      });
     }
-    checkMcGraw();
+  }
+
+  Widget getInvalidBody() {
+    return Column(
+      children: [
+        Text(
+          "This page is not supported by Solvify. \n Please open a supported page and try again.",
+          textAlign: TextAlign.center,
+          style: TextStyle(
+              color: AppStyle.getTextColor(),
+              fontSize: 14,
+              fontWeight: FontWeight.bold),
+        ),
+        const SizedBox(height: 20),
+        SizedBox(
+          height: 125,
+          child: Image(
+            key: ValueKey<AssetImage>(logo),
+            image: const AssetImage('assets/gifs/error.gif'),
+            fit: BoxFit.fill,
+          ),
+        )
+      ],
+    );
   }
 
   void checkMcGraw() {
@@ -286,7 +324,7 @@ class _MainAppPageState extends State<MainAppPage> {
     setState(() => _loading = true);
     final SharedPreferences prefs = await _prefs;
     Future.delayed(
-        const Duration(milliseconds: 250),
+        const Duration(milliseconds: 500),
         () => setState(() {
               hideDrawer = false;
               logo = const AssetImage('assets/gifs/idle.gif');
@@ -310,17 +348,21 @@ class _MainAppPageState extends State<MainAppPage> {
   }
 
   void updateBodyToError() {
-    setState(() {
-      logo = const AssetImage('assets/gifs/idle.gif');
-      titleText = "SOLVIFY";
-      _textOpacity = 1;
-      _bodyOpacity = 1;
-      _buttonOpacity = 1;
-      _subtitleOpacity = 0;
-      _loading = false;
-      buttonText = "Try Again";
-      bodyContent = getErrorBody();
-    });
+    setState(() => _loading = false);
+    Future.delayed(
+        const Duration(milliseconds: 500),
+        () => setState(() {
+              hideDrawer = false;
+              logo = const AssetImage('assets/gifs/idle.gif');
+              titleText = "SOLVIFY";
+              _textOpacity = 1;
+              _bodyOpacity = 1;
+              _buttonOpacity = 1;
+              _subtitleOpacity = 0;
+              _loading = false;
+              buttonText = "Try Again";
+              bodyContent = getErrorBody();
+            }));
   }
 
   Future<void> scrape() async {
@@ -414,11 +456,14 @@ class _MainAppPageState extends State<MainAppPage> {
                       child: bodyContent),
                   Expanded(child: Container()),
                   AnimatedOpacity(
-                    duration: const Duration(milliseconds: 250),
+                    duration: Duration(milliseconds: milli),
                     opacity: _buttonOpacity,
                     child: StyledButton(
+                        disable: disabled,
                         onTap: () async {
-                          if (Options.getMcGrawEnabled() && _loading == false) {
+                          if (Options.getMcGrawEnabled() &&
+                              _loading == false &&
+                              disabled == false) {
                             if (Options.getMcGrawRunning() == false) {
                               sendMessage(ParameterSendMessage(
                                   type: "bot", data: "start"));
@@ -431,11 +476,13 @@ class _MainAppPageState extends State<MainAppPage> {
                               finishLoadUpdateBodyMcGraw();
                             }
                           } else {
-                            if (_loading == false || disabled == true) {
+                            print(disabled);
+                            if (_loading == false && disabled == false) {
                               // NEEDS CHANGING DELAY IS RUINING FLOW.
                               setLoadingAndChangeAssets();
                               await scrape();
                               await parse();
+                              print(solver.getQuestion());
                               if (solver.getQuestion() == "ERROR") {
                                 updateBodyToError();
                               } else {

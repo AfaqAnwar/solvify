@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:solvify/firebase_js.dart';
+import 'package:solvify/functions_js.dart';
 import 'package:solvify/options.dart';
 import 'package:solvify/pages/app_pages/info_page.dart';
 import 'package:solvify/pages/app_pages/main_app_page.dart';
@@ -27,7 +28,6 @@ class _AppHostState extends State<AppHost> {
   @override
   void initState() {
     super.initState();
-    setSavedPreferences();
     pushPage();
   }
 
@@ -69,64 +69,83 @@ class _AppHostState extends State<AppHost> {
         });
   }
 
+  Future getSessionResult() async {
+    var result = await promiseToFuture(checkSession());
+    return result;
+  }
+
+  Future getURLResult() async {
+    var result = await promiseToFuture(checkCurrentTabURL());
+    return result;
+  }
+
   Future pushPage() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     String? page = prefs.getString("currentPage");
 
     Widget pageToDisplay = const LoginPage();
-    dynamic result = await promiseToFuture(updateUserPassword(checkSession()));
+    dynamic result = await getSessionResult();
 
     if (result == false) {
-      pageToDisplay = const LoginPage();
-    }
-
-    var state = js.JsObject.fromBrowserObject(js.context['userState']);
-    Future.delayed(const Duration(milliseconds: 500), () {
-      switch (page) {
-        case "login":
-          pageToDisplay = const LoginPage();
-          break;
-        case "register":
-          pageToDisplay = const RegisterPage();
-          break;
-        case "app":
-          if (state["sessionActive"] == true) {
-            String? question = prefs.getString("currentQuestion");
-            String? answer = prefs.getString("currentAnswer");
-            String? confidence = prefs.getString("currentConfidence");
-            if (question != null) {
-              pageToDisplay = MainAppPage(
-                  question: question, answer: answer, confidence: confidence);
-            } else {
-              pageToDisplay = const MainAppPage();
-            }
-          }
-          break;
-        case "info":
-          if (state["sessionActive"] == true) {
-            pageToDisplay = const InfoPage();
-          }
-          break;
-        case "profile":
-          if (state["sessionActive"] == true) {
-            pageToDisplay = const ProfilePage();
-          }
-          break;
-        case "settings":
-          if (state["sessionActive"] == true) {
-            pageToDisplay = const SettingsPage();
-          }
-          break;
-        case "register_onboard_0":
-          if (state["sessionActive"] == true) {
-            pageToDisplay = const RegisterOnboardHost();
-          }
-          break;
-        default:
-          pageToDisplay = const LoginPage();
-      }
+      // ignore: use_build_context_synchronously
       Navigator.pushReplacement(context,
           PageTransition(child: pageToDisplay, type: PageTransitionType.fade));
-    });
+    } else {
+      var state = js.JsObject.fromBrowserObject(js.context['userState']);
+
+      Future.delayed(const Duration(milliseconds: 500), () {
+        switch (page) {
+          case "login":
+            pageToDisplay = const LoginPage();
+            break;
+          case "register":
+            pageToDisplay = const RegisterPage();
+            break;
+          case "app":
+            if (state["sessionActive"] == true) {
+              String? question = prefs.getString("currentQuestion");
+              String? answer = prefs.getString("currentAnswer");
+              String? confidence = prefs.getString("currentConfidence");
+
+              if (question != null) {
+                pageToDisplay = MainAppPage(
+                  question: question,
+                  answer: answer,
+                  confidence: confidence,
+                );
+              } else {
+                pageToDisplay = const MainAppPage();
+              }
+            }
+            break;
+          case "info":
+            if (state["sessionActive"] == true) {
+              pageToDisplay = const InfoPage();
+            }
+            break;
+          case "profile":
+            if (state["sessionActive"] == true) {
+              pageToDisplay = const ProfilePage();
+            }
+            break;
+          case "settings":
+            if (state["sessionActive"] == true) {
+              pageToDisplay = const SettingsPage();
+            }
+            break;
+          case "register_onboard_0":
+            if (state["sessionActive"] == true) {
+              pageToDisplay = const RegisterOnboardHost();
+            }
+            break;
+          default:
+            pageToDisplay = const LoginPage();
+        }
+        Navigator.pushReplacement(
+            context,
+            PageTransition(
+                child: pageToDisplay, type: PageTransitionType.fade));
+      });
+    }
   }
 }
