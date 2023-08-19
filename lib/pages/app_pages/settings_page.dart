@@ -1,6 +1,5 @@
 import 'package:day_night_switcher/day_night_switcher.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:page_transition/page_transition.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';
@@ -89,7 +88,7 @@ class _SettingsPageState extends State<SettingsPage> {
                 Text(
                   "Settings",
                   style: TextStyle(
-                      fontFamily: GoogleFonts.karla().fontFamily,
+                      fontFamily: AppStyle.currentMainHeadingFont.fontFamily,
                       color: AppStyle.primaryAccent,
                       fontSize: 24,
                       fontWeight: FontWeight.w800),

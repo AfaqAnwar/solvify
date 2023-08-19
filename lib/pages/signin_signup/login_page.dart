@@ -221,7 +221,7 @@ class _LoginPageState extends State<LoginPage> {
                           "Register Now!",
                           style: TextStyle(
                               color: AppStyle.primaryAccent,
-                              fontWeight: FontWeight.bold),
+                              fontWeight: FontWeight.w500),
                         ),
                       ),
                     ),

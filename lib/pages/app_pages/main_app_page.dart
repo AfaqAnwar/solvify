@@ -4,7 +4,6 @@ import 'dart:js_util';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:dart_openai/dart_openai.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:solvify/chrome_api.dart';
@@ -430,10 +429,12 @@ class _MainAppPageState extends State<MainAppPage> {
                     child: Text(
                       titleText,
                       style: TextStyle(
-                          fontFamily: GoogleFonts.karla().fontFamily,
-                          color: AppStyle.primaryAccent,
-                          fontSize: 36,
-                          fontWeight: FontWeight.w800),
+                        fontFamily: AppStyle.currentMainHeadingFont.fontFamily,
+                        letterSpacing: 4,
+                        color: AppStyle.primaryAccent,
+                        fontSize: 36,
+                        fontWeight: FontWeight.w700,
+                      ),
                     ),
                   ),
                   const SizedBox(height: 10),
@@ -443,10 +444,11 @@ class _MainAppPageState extends State<MainAppPage> {
                     child: Text(
                       "Answers",
                       style: TextStyle(
-                          fontFamily: GoogleFonts.karla().fontFamily,
+                          fontFamily:
+                              AppStyle.currentMainHeadingFont.fontFamily,
                           color: AppStyle.primaryAccent,
                           fontSize: 18,
-                          fontWeight: FontWeight.w600),
+                          fontWeight: FontWeight.w900),
                     ),
                   ),
                   Expanded(child: Container()),

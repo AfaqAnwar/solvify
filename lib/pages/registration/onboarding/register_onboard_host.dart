@@ -151,8 +151,9 @@ class _RegisterOnboardHostState extends State<RegisterOnboardHost> {
           const SizedBox(height: 15),
           Text("HOW SOLVIFY WORKS",
               style: TextStyle(
+                  fontFamily: AppStyle.currentMainHeadingFont.fontFamily,
                   fontSize: 24,
-                  fontWeight: FontWeight.bold,
+                  fontWeight: FontWeight.w800,
                   color: AppStyle.primaryAccent)),
           Expanded(child: Container()),
           updateBodyContent(),

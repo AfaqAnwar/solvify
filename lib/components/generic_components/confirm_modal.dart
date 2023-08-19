@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:solvify/components/generic_components/styled_modal_button.dart';
 import 'package:solvify/styles/app_style.dart';
 
@@ -31,7 +30,7 @@ class ConfirmModal extends StatelessWidget {
             Text(
               title,
               style: TextStyle(
-                fontFamily: GoogleFonts.karla().fontFamily,
+                fontFamily: AppStyle.currentMainHeadingFont.fontFamily,
                 fontSize: 18,
                 color: AppStyle.getTextColor(),
                 fontWeight: FontWeight.bold,

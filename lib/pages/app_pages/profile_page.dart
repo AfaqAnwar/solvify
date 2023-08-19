@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:solvify/components/app_components/custom_scaffold.dart';
@@ -44,7 +43,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 Text(
                   "Your Profile",
                   style: TextStyle(
-                      fontFamily: GoogleFonts.karla().fontFamily,
+                      fontFamily: AppStyle.currentMainHeadingFont.fontFamily,
                       color: AppStyle.primaryAccent,
                       fontSize: 24,
                       fontWeight: FontWeight.w800),

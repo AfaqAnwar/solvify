@@ -3,7 +3,6 @@ import 'dart:js_util';
 // ignore: avoid_web_libraries_in_flutter
 import 'dart:js' as js;
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:solvify/components/app_components/custom_scaffold.dart';
 import 'package:solvify/components/generic_components/input_textfield.dart';
 import 'package:solvify/components/generic_components/styled_button.dart';
@@ -87,7 +86,7 @@ class _ManagePasswordState extends State<ManagePassword> {
                 Text(
                   "Manage Password",
                   style: TextStyle(
-                      fontFamily: GoogleFonts.karla().fontFamily,
+                      fontFamily: AppStyle.currentMainHeadingFont.fontFamily,
                       color: AppStyle.primaryAccent,
                       fontSize: 24,
                       fontWeight: FontWeight.w800),

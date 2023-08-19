@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class AppStyle {
+  static TextStyle currentMainHeadingFont = GoogleFonts.karla();
+
   static bool isDarkMode = true;
 
   // Primary background color for OLED dark mode
@@ -72,6 +75,8 @@ class AppStyle {
   static Color lightTextFieldHintColor = Colors.grey.shade600;
   static Color lightTextFieldTextColor = Colors.black;
 
+  static Color faqTextHeading = const Color.fromARGB(255, 250, 250, 250);
+
   static void setToLightMode() {
     primaryBackground = const Color.fromARGB(255, 255, 255, 255);
     secondaryBackground = const Color.fromARGB(255, 250, 250, 250);
@@ -87,6 +92,7 @@ class AppStyle {
     tertiaryDarkColor = const Color.fromARGB(255, 184, 134, 0);
     primarySuccess = const Color.fromARGB(255, 1, 182, 54);
     primaryError = const Color.fromARGB(255, 255, 0, 0);
+    faqTextHeading = primaryAccent;
     isDarkMode = false;
   }
 
@@ -105,6 +111,7 @@ class AppStyle {
     tertiaryDarkColor = const Color.fromARGB(255, 184, 134, 0);
     primarySuccess = const Color.fromARGB(255, 1, 182, 54);
     primaryError = const Color.fromARGB(255, 255, 0, 0);
+    faqTextHeading = const Color.fromARGB(255, 250, 250, 250);
     isDarkMode = true;
   }
 

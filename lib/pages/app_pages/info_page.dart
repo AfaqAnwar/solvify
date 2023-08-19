@@ -1,6 +1,5 @@
 import 'package:expansion_tile_group/expansion_tile_group.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:solvify/components/app_components/custom_scaffold.dart';
 import 'package:solvify/styles/app_style.dart';
@@ -39,7 +38,7 @@ class _InfoPageState extends State<InfoPage> {
                 Text(
                   "FAQs",
                   style: TextStyle(
-                      fontFamily: GoogleFonts.karla().fontFamily,
+                      fontFamily: AppStyle.currentMainHeadingFont.fontFamily,
                       color: AppStyle.primaryAccent,
                       fontSize: 24,
                       fontWeight: FontWeight.w800),
@@ -62,10 +61,11 @@ class _InfoPageState extends State<InfoPage> {
                             title: Text(
                               "How accurate is Solvify?",
                               style: TextStyle(
-                                  fontFamily: GoogleFonts.karla().fontFamily,
-                                  color: AppStyle.primaryAccent,
+                                  fontFamily: AppStyle
+                                      .currentMainHeadingFont.fontFamily,
+                                  color: AppStyle.faqTextHeading,
                                   fontSize: 14,
-                                  fontWeight: FontWeight.w600),
+                                  fontWeight: FontWeight.w400),
                             ),
                             children: [
                               Text(
@@ -81,10 +81,11 @@ class _InfoPageState extends State<InfoPage> {
                             title: Text(
                               "Does Solvify support all subjects and topics?",
                               style: TextStyle(
-                                  fontFamily: GoogleFonts.karla().fontFamily,
-                                  color: AppStyle.primaryAccent,
+                                  fontFamily: AppStyle
+                                      .currentMainHeadingFont.fontFamily,
+                                  color: AppStyle.faqTextHeading,
                                   fontSize: 14,
-                                  fontWeight: FontWeight.w600),
+                                  fontWeight: FontWeight.w400),
                             ),
                             children: [
                               Text(
@@ -101,10 +102,11 @@ class _InfoPageState extends State<InfoPage> {
                             title: Text(
                               "How does Solvify ensure my data privacy?",
                               style: TextStyle(
-                                  fontFamily: GoogleFonts.karla().fontFamily,
-                                  color: AppStyle.primaryAccent,
+                                  fontFamily: AppStyle
+                                      .currentMainHeadingFont.fontFamily,
+                                  color: AppStyle.faqTextHeading,
                                   fontSize: 14,
-                                  fontWeight: FontWeight.w600),
+                                  fontWeight: FontWeight.w400),
                             ),
                             children: [
                               Text(
@@ -121,10 +123,11 @@ class _InfoPageState extends State<InfoPage> {
                             title: Text(
                               "What if Solvify can't solve my problem?",
                               style: TextStyle(
-                                  fontFamily: GoogleFonts.karla().fontFamily,
-                                  color: AppStyle.primaryAccent,
+                                  fontFamily: AppStyle
+                                      .currentMainHeadingFont.fontFamily,
+                                  color: AppStyle.faqTextHeading,
                                   fontSize: 14,
-                                  fontWeight: FontWeight.w600),
+                                  fontWeight: FontWeight.w400),
                             ),
                             children: [
                               Text(
@@ -141,8 +144,9 @@ class _InfoPageState extends State<InfoPage> {
                             title: Text(
                               "Can I use Solvify during exams or tests?",
                               style: TextStyle(
-                                  fontFamily: GoogleFonts.karla().fontFamily,
-                                  color: AppStyle.primaryAccent,
+                                  fontFamily: AppStyle
+                                      .currentMainHeadingFont.fontFamily,
+                                  color: AppStyle.faqTextHeading,
                                   fontSize: 14,
                                   fontWeight: FontWeight.w700),
                             ),
@@ -161,8 +165,9 @@ class _InfoPageState extends State<InfoPage> {
                             title: Text(
                               "How can I provide feedback or report issues with Solvify?",
                               style: TextStyle(
-                                  fontFamily: GoogleFonts.karla().fontFamily,
-                                  color: AppStyle.primaryAccent,
+                                  fontFamily: AppStyle
+                                      .currentMainHeadingFont.fontFamily,
+                                  color: AppStyle.faqTextHeading,
                                   fontSize: 14,
                                   fontWeight: FontWeight.w700),
                             ),

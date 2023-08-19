@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:solvify/components/app_components/custom_scaffold.dart';
 import 'package:solvify/styles/app_style.dart';
 
@@ -23,7 +22,7 @@ class _ManageSubscription extends State<ManageSubscription> {
                 Text(
                   "Manage Subscription",
                   style: TextStyle(
-                      fontFamily: GoogleFonts.karla().fontFamily,
+                      fontFamily: AppStyle.currentMainHeadingFont.fontFamily,
                       color: AppStyle.primaryAccent,
                       fontSize: 24,
                       fontWeight: FontWeight.w800),
