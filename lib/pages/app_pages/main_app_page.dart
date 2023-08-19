@@ -32,7 +32,7 @@ class MainAppPage extends StatefulWidget {
 
 class _MainAppPageState extends State<MainAppPage> {
   Solver solver = Solver();
-  AssetImage logo = const AssetImage('assets/gifs/idle.gif');
+  AssetImage logo = AssetImage(AppStyle.getIdleGif());
   String titleText = "SOLVIFY";
   final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
   double _textOpacity = 1;
@@ -94,19 +94,19 @@ class _MainAppPageState extends State<MainAppPage> {
     return Column(
       children: [
         Text(
-          "This page is not supported by Solvify. \n Please open a supported page and try again.",
+          "This page is not supported by Solvify. \n Please open a supported page.",
           textAlign: TextAlign.center,
           style: TextStyle(
               color: AppStyle.getTextColor(),
-              fontSize: 14,
-              fontWeight: FontWeight.bold),
+              fontSize: 16,
+              fontWeight: FontWeight.w800),
         ),
         const SizedBox(height: 20),
         SizedBox(
           height: 125,
           child: Image(
             key: ValueKey<AssetImage>(logo),
-            image: const AssetImage('assets/gifs/error.gif'),
+            image: AssetImage(AppStyle.getErrorGif()),
             fit: BoxFit.fill,
           ),
         )
@@ -215,11 +215,9 @@ class _MainAppPageState extends State<MainAppPage> {
   Widget getErrorBody() {
     String text;
     if (solver.getAnswer() == "ERROR") {
-      text =
-          "Sorry we could not find an answer to your question. Please try a different question.";
+      text = "Sorry we could not find an answer to your question.";
     } else {
-      text =
-          "Sorry we could not find a question in the current page. Please try a different question.";
+      text = "Sorry we could not find a question in the current page.";
     }
     return Column(
       children: [
@@ -228,15 +226,15 @@ class _MainAppPageState extends State<MainAppPage> {
           text,
           style: TextStyle(
               color: AppStyle.getTextColor(),
-              fontSize: 14,
-              fontWeight: FontWeight.bold),
+              fontSize: 16,
+              fontWeight: FontWeight.w800),
         ),
         const SizedBox(height: 20),
         SizedBox(
           height: 125,
           child: Image(
             key: ValueKey<AssetImage>(logo),
-            image: const AssetImage('assets/gifs/error.gif'),
+            image: AssetImage(AppStyle.getErrorGif()),
             fit: BoxFit.fill,
           ),
         )
@@ -255,7 +253,7 @@ class _MainAppPageState extends State<MainAppPage> {
           const Duration(milliseconds: 500),
           () => setState(() {
                 hideDrawer = true;
-                logo = const AssetImage('assets/gifs/load.gif');
+                logo = AssetImage(AppStyle.getLoadingGif());
                 bodyContent = getImage();
                 titleText = "LOADING";
                 _textOpacity = 1;
@@ -278,7 +276,7 @@ class _MainAppPageState extends State<MainAppPage> {
           const Duration(milliseconds: 500),
           () => setState(() {
                 hideDrawer = true;
-                logo = const AssetImage('assets/gifs/load.gif');
+                logo = AssetImage(AppStyle.getLoadingGif());
                 bodyContent = getImage();
                 titleText = "AUTO SOLVING...";
                 _textOpacity = 1;
@@ -303,7 +301,7 @@ class _MainAppPageState extends State<MainAppPage> {
         const Duration(milliseconds: 500),
         () => setState(() {
               hideDrawer = false;
-              logo = const AssetImage('assets/gifs/idle.gif');
+              logo = AssetImage(AppStyle.getIdleGif());
               titleText = "SOLVIFY";
               _textOpacity = 1;
               _bodyOpacity = 1;
@@ -326,7 +324,7 @@ class _MainAppPageState extends State<MainAppPage> {
         const Duration(milliseconds: 500),
         () => setState(() {
               hideDrawer = false;
-              logo = const AssetImage('assets/gifs/idle.gif');
+              logo = AssetImage(AppStyle.getIdleGif());
               titleText = "SOLVIFY";
               _textOpacity = 1;
               _bodyOpacity = 1;
@@ -352,7 +350,7 @@ class _MainAppPageState extends State<MainAppPage> {
         const Duration(milliseconds: 500),
         () => setState(() {
               hideDrawer = false;
-              logo = const AssetImage('assets/gifs/idle.gif');
+              logo = AssetImage(AppStyle.getIdleGif());
               titleText = "SOLVIFY";
               _textOpacity = 1;
               _bodyOpacity = 1;
@@ -396,11 +394,11 @@ class _MainAppPageState extends State<MainAppPage> {
       messages: [
         const OpenAIChatCompletionChoiceMessageModel(
             content:
-                "You are a highly capable advanced homework helping specialist. You specialize in finding answers to any questions I give you. I also need a confidence rating so on a new line just put a percentage of how confident you are in your answer. Please format it as 'Confidence: ' with the rating followed afterwards so I can parse it easily. Please provide the CORRECT ANSWER(S) ONLY and the confidence percentage. Do not repeat the question or provide any explanation. In addition, if it is a fill in the blank question do not repeat the entire statement or phrase, just provide the missing word(s). Please also be mindful that some questions may have multiple answers, if this is the case list the answers out line by line otherwise keep the answer on one line. If you cannot find the answer to a question just reply with a question mark. If any errors occur please say ERROR.",
+                "You are a highly capable advanced homework helping specialist. You specialize in finding answers to any questions I give you. I also need a confidence rating so on a new line just put a percentage of how confident you are in your answer. Please make sure this confidence rating is an actual rating and not just 100% all the time. Please format it as 'Confidence: ' with the rating followed afterwards so I can parse it easily. Please provide the CORRECT ANSWER(S) ONLY and the confidence percentage. Do not repeat the question or provide any explanation. In addition, if it is a fill in the blank question do not repeat the entire statement or phrase, just provide the missing word(s). Please also be mindful that some questions may have multiple answers, if this is the case list the answers out line by line otherwise keep the answer on one line. If you cannot find the answer to a question just reply with a question mark. If any errors occur please say ERROR.",
             role: OpenAIChatMessageRole.system),
         const OpenAIChatCompletionChoiceMessageModel(
             content:
-                "Please do not give an answer unless you have double checked that the answer is 100% correct. Only then should you provide the final answer ONLY. If any errors occur please say ERROR.",
+                "Please do not give an answer unless you have double checked that the answer is 100% correct. Only then should you provide the final answer ONLY. If you are not confident in the answer please say ERROR, in addition If any errors occur please also say ERROR.",
             role: OpenAIChatMessageRole.system),
         OpenAIChatCompletionChoiceMessageModel(
             content: solver.getQuestion(), role: OpenAIChatMessageRole.user),

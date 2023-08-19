@@ -74,9 +74,12 @@ flutter:
     - assets/gifs/scan.gif
     - assets/gifs/ai.gif
     - assets/gifs/answer.gif
-    - assets/gifs/idle.gif
-    - assets/gifs/load.gif
-    - assets/gifs/error.gif
+    - assets/gifs/idle_light.gif
+    - assets/gifs/idle_dark.gif
+    - assets/gifs/load_light.gif
+    - assets/gifs/load_dark.gif
+    - assets/gifs/error_light.gif
+    - assets/gifs/error_dark.gif
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

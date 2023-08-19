@@ -150,4 +150,28 @@ class AppStyle {
   static Color getAccent() {
     return primaryAccent;
   }
+
+  static String getIdleGif() {
+    if (isDarkMode) {
+      return "assets/gifs/idle_dark.gif";
+    } else {
+      return "assets/gifs/idle_light.gif";
+    }
+  }
+
+  static String getLoadingGif() {
+    if (isDarkMode) {
+      return "assets/gifs/load_dark.gif";
+    } else {
+      return "assets/gifs/load_light.gif";
+    }
+  }
+
+  static String getErrorGif() {
+    if (isDarkMode) {
+      return "assets/gifs/error_dark.gif";
+    } else {
+      return "assets/gifs/error_light.gif";
+    }
+  }
 }
