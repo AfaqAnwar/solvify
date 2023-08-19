@@ -215,9 +215,9 @@ class _MainAppPageState extends State<MainAppPage> {
   Widget getErrorBody() {
     String text;
     if (solver.getAnswer() == "ERROR") {
-      text = "Sorry we could not find an answer to your question.";
+      text = "Sorry, we could not find an answer to your question.";
     } else {
-      text = "Sorry we could not find a question in the current page.";
+      text = "Sorry, we could not find a question on the current page.";
     }
     return Column(
       children: [
