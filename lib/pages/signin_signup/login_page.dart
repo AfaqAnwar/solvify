@@ -190,7 +190,7 @@ class _LoginPageState extends State<LoginPage> {
                       child: GestureDetector(
                         onTap: () {},
                         child: Text("Forgot Password?",
-                            style: TextStyle(color: AppStyle.primaryAccent)),
+                            style: TextStyle(color: AppStyle.faqTextHeading)),
                       ),
                     ),
                   ]),
@@ -220,7 +220,7 @@ class _LoginPageState extends State<LoginPage> {
                         child: Text(
                           "Register Now!",
                           style: TextStyle(
-                              color: AppStyle.primaryAccent,
+                              color: AppStyle.faqTextHeading,
                               fontWeight: FontWeight.w500),
                         ),
                       ),

@@ -32,7 +32,7 @@ class ConfirmModal extends StatelessWidget {
               style: TextStyle(
                 fontFamily: AppStyle.currentMainHeadingFont.fontFamily,
                 fontSize: 18,
-                color: AppStyle.getTextColor(),
+                color: AppStyle.faqTextHeading,
                 fontWeight: FontWeight.bold,
               ),
             ),

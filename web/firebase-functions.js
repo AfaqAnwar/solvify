@@ -86,9 +86,11 @@ window.checkSession = () => {
     window.auth.onAuthStateChanged(function (user) {
       if (user) {
         window.userState.sessionActive = true;
+        console.log("User is signed in.");
         resolve(true);
       } else {
         window.userState.sessionActive = false;
+        console.log("No user is signed in.");
         resolve(false);
       }
     });
