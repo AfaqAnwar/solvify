@@ -141,10 +141,6 @@ class AppStyle {
   }
 
   static Color getAccent() {
-    if (isDarkMode) {
-      return primaryDarkAccent;
-    } else {
-      return primaryAccent;
-    }
+    return primaryAccent;
   }
 }

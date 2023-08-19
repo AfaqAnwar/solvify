@@ -2,8 +2,10 @@ import 'package:day_night_switcher/day_night_switcher.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:page_transition/page_transition.dart';
+
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:solvify/components/app_components/custom_scaffold.dart';
+import 'package:solvify/components/app_components/switch_button.dart';
 import 'package:solvify/functions_js.dart';
 import 'package:solvify/options.dart';
 import 'package:solvify/styles/app_style.dart';
@@ -16,8 +18,6 @@ import 'package:solvify/pages/signin_signup/login_page.dart';
 import 'dart:js_util';
 // ignore: avoid_web_libraries_in_flutter
 import 'dart:js' as js;
-
-import 'package:switcher_button/switcher_button.dart';
 
 class SettingsPage extends StatefulWidget {
   const SettingsPage({super.key});
@@ -147,39 +147,44 @@ class _SettingsPageState extends State<SettingsPage> {
                       cursor: SystemMouseCursors.click,
                       child: SizedBox(
                         width: 50,
-                        child: SwitcherButton(
-                            onColor: AppStyle.primaryAccent,
-                            offColor: AppStyle.getIconColor(),
-                            value: switchValue,
-                            onChange: (value) async {
-                              switchValue = value;
-                              var result = await checkMcgraw();
-                              if (result == true && value == true) {
+                        child: SwitchButton(
+                          backgroundColor: AppStyle.getTextColor(),
+                          activeColor: AppStyle.getAccent(),
+                          value: switchValue,
+                          onToggle: (value) async {
+                            switchValue = value;
+                            var result = await checkMcgraw();
+                            if (result == true && value == true) {
+                              setState(() {
                                 Options.setMcGrawEnabled(value);
                                 setSharedStateMode(value);
-                              } else if (result == false && value == true) {
-                                setState(() {
-                                  switchValue = false;
-                                });
+                              });
+                            } else if (result == false && value == true) {
+                              setState(() {
+                                switchValue = false;
                                 Options.setMcGrawEnabled(false);
                                 setSharedStateMode(false);
+                              });
 
-                                // ignore: use_build_context_synchronously
-                                showDialog(
-                                    context: context,
-                                    builder: (context) => StyledModal(
-                                          backgroundColor:
-                                              AppStyle.secondaryBackground,
-                                          title: 'McGraw Hill Connect',
-                                          body:
-                                              'You must be on a McGraw Hill Connect assignment to enable this feature. \n These usually start with "https://learning.mheducation.com/"',
-                                          onTap: () => Navigator.pop(context),
-                                        ));
-                              } else {
+                              // ignore: use_build_context_synchronously
+                              showDialog(
+                                  context: context,
+                                  builder: (context) => StyledModal(
+                                        backgroundColor:
+                                            AppStyle.secondaryBackground,
+                                        title: 'McGraw Hill Connect Error',
+                                        body:
+                                            'You must be on a McGraw Hill Connect assignment to enable this feature.',
+                                        onTap: () => Navigator.pop(context),
+                                      ));
+                            } else {
+                              setState(() {
                                 Options.setMcGrawEnabled(value);
                                 setSharedStateMode(value);
-                              }
-                            }),
+                              });
+                            }
+                          },
+                        ),
                       ),
                     ),
                   ),
