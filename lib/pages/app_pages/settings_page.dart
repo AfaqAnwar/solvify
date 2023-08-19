@@ -137,7 +137,7 @@ class _SettingsPageState extends State<SettingsPage> {
                   margin: const EdgeInsets.only(left: 15, right: 15),
                   child: ListTile(
                     title: Text(
-                      "McGraw Hill Connect Auto Solver",
+                      "McGraw Hill Connect SmartBook Auto Solver",
                       style: TextStyle(
                           color: AppStyle.getTextColor(),
                           fontSize: 18,
@@ -172,9 +172,10 @@ class _SettingsPageState extends State<SettingsPage> {
                                   builder: (context) => StyledModal(
                                         backgroundColor:
                                             AppStyle.secondaryBackground,
-                                        title: 'McGraw Hill Connect Error',
+                                        title:
+                                            'McGraw Hill Connect SmartBook Error',
                                         body:
-                                            'You must be on a McGraw Hill Connect assignment to enable this feature.',
+                                            'You must be on a McGraw Hill Connect SmartBook assignment to enable this feature.',
                                         onTap: () => Navigator.pop(context),
                                       ));
                             } else {

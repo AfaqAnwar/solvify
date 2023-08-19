@@ -492,7 +492,7 @@ class _MainAppPageState extends State<MainAppPage> {
                                         AppStyle.secondaryBackground,
                                     title: "McGraw Hill Tab Not Found",
                                     body:
-                                        "Please open a McGraw Hill tab and try again or disable McGraw Hill Connect Auto Solver in the options page.",
+                                        "Please open a McGraw Hill Connect SmartBook assignment and try again or disable McGraw Hill Connect SmartBook Auto Solver in the settings page.",
                                     onTap: () {
                                       Navigator.pop(context);
                                     },
