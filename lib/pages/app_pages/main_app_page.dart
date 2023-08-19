@@ -98,7 +98,7 @@ class _MainAppPageState extends State<MainAppPage> {
           textAlign: TextAlign.center,
           style: TextStyle(
               color: AppStyle.getTextColor(),
-              fontSize: 16,
+              fontSize: 14,
               fontWeight: FontWeight.w800),
         ),
         const SizedBox(height: 20),
@@ -226,7 +226,7 @@ class _MainAppPageState extends State<MainAppPage> {
           text,
           style: TextStyle(
               color: AppStyle.getTextColor(),
-              fontSize: 16,
+              fontSize: 14,
               fontWeight: FontWeight.w800),
         ),
         const SizedBox(height: 20),
