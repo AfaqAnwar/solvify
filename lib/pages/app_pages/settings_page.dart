@@ -28,6 +28,7 @@ class SettingsPage extends StatefulWidget {
 class _SettingsPageState extends State<SettingsPage> {
   final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
   bool switchValue = Options.getMcGrawEnabled();
+  Color textColor = AppStyle.getTextColor();
 
   void setSharedState() async {
     final SharedPreferences prefs = await _prefs;
@@ -75,6 +76,18 @@ class _SettingsPageState extends State<SettingsPage> {
   Future checkMcgraw() async {
     var result = await promiseToFuture(checkForMcGraw());
     return result;
+  }
+
+  void setTextColorHighlight() {
+    setState(() {
+      textColor = AppStyle.getAccent();
+    });
+  }
+
+  void setTextColorNormal() {
+    setState(() {
+      textColor = AppStyle.getTextColor();
+    });
   }
 
   @override
@@ -135,12 +148,34 @@ class _SettingsPageState extends State<SettingsPage> {
                 Container(
                   margin: const EdgeInsets.only(left: 15, right: 15),
                   child: ListTile(
-                    title: Text(
-                      "McGraw Hill Connect SmartBook Auto Solver",
-                      style: TextStyle(
-                          color: AppStyle.getTextColor(),
-                          fontSize: 18,
-                          fontWeight: FontWeight.w800),
+                    title: MouseRegion(
+                      onEnter: (event) => setTextColorHighlight(),
+                      onExit: (event) => setTextColorNormal(),
+                      cursor: SystemMouseCursors.click,
+                      child: GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            showDialog(
+                                context: context,
+                                builder: (context) => StyledModal(
+                                      backgroundColor:
+                                          AppStyle.secondaryBackground,
+                                      title:
+                                          'What Is McGraw Hill Connect SmartBook Auto Solver?',
+                                      body:
+                                          'McGraw Hill Connect SmartBook Auto Solver is a feature that allows you to automatically solve McGraw Hill Connect SmartBook assignments. This feature is currently in beta and may not work properly on all assignments. If you encounter any issues, please report them to us. We are working hard to improve this feature and make it more reliable.',
+                                      onTap: () => Navigator.pop(context),
+                                    ));
+                          });
+                        },
+                        child: Text(
+                          "McGraw Hill Connect SmartBook Auto Solver",
+                          style: TextStyle(
+                              color: textColor,
+                              fontSize: 18,
+                              fontWeight: FontWeight.w800),
+                        ),
+                      ),
                     ),
                     trailing: MouseRegion(
                       cursor: SystemMouseCursors.click,

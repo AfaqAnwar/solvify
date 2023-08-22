@@ -60,7 +60,7 @@ class ConfirmModal extends StatelessWidget {
                       onTap: () {
                         onYesTap!();
                       },
-                      buttonColor: AppStyle.tertiaryColor,
+                      buttonColor: AppStyle.primaryError,
                       buttonText: "Yes",
                       buttonTextColor: Colors.white),
                 ),
