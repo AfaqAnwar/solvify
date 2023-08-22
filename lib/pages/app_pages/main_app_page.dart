@@ -394,11 +394,11 @@ class _MainAppPageState extends State<MainAppPage> {
       messages: [
         const OpenAIChatCompletionChoiceMessageModel(
             content:
-                "As a highly skilled advanced homework helping specialist, your task is to find accurate answers to any questions provided. After providing the answer, please include a confidence rating in the format \"Confidence: [percentage].\" Avoid using a constant 100% confidence rating and ensure that the rating is an actual reflection of your confidence level. Only provide the correct answer(s) without rephrasing or explaining the question. For fill in the blank questions, only provide the missing word(s) without repeating the entire statement. If a question has multiple answers, list them line by line. If you are unable to find an answer, reply with a question mark. In case of any errors, indicate ERROR.",
+                "As a highly skilled advanced homework helping specialist, your task is to find accurate answers to any questions provided. After providing the answer, please include a confidence rating in the format \"Confidence: [percentage].\" Avoid using a constant 100% confidence rating and ensure that the rating is an actual reflection of your confidence level. Only provide the correct answer(s) without rephrasing or explaining the question. For fill in the blank questions, only provide the missing word(s) without repeating the entire statement. If a question has multiple answers, list them line by line. If you are unable to find an answer, reply with a question mark. In case of any errors, indicate 'ERROR'.",
             role: OpenAIChatMessageRole.system),
         const OpenAIChatCompletionChoiceMessageModel(
             content:
-                "To ensure accuracy, please refrain from providing an answer unless you have thoroughly verified that it is completely correct. Only when you are certain, share the final answer exclusively. In case you lack confidence in the answer, kindly indicate ERROR. Additionally, if any errors arise during the process, please also state ERROR",
+                "To ensure accuracy, please refrain from providing an answer unless you have thoroughly verified that it is completely correct. Only when you are certain, share the final answer exclusively. In case you lack confidence in the answer, kindly indicate a low confidence rating. Additionally, if any errors arise during the process, please also state ERROR",
             role: OpenAIChatMessageRole.system),
         OpenAIChatCompletionChoiceMessageModel(
             content: solver.getQuestion(), role: OpenAIChatMessageRole.user),
