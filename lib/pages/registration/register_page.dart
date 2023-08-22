@@ -147,11 +147,17 @@ class _RegisterPageState extends State<RegisterPage> {
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios),
-          splashRadius: 0.1,
-          color: AppStyle.primaryAccent,
-          onPressed: goBackToLogin,
+        leading: MouseRegion(
+          cursor: SystemMouseCursors.click,
+          child: GestureDetector(
+            onTap: () {
+              goBackToLogin();
+            },
+            child: Icon(
+              Icons.arrow_back_ios,
+              color: AppStyle.primaryAccent,
+            ),
+          ),
         ),
       ),
       backgroundColor: AppStyle.primaryBackground,

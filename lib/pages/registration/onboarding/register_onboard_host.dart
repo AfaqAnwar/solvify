@@ -106,13 +106,17 @@ class _RegisterOnboardHostState extends State<RegisterOnboardHost> {
         appBar: AppBar(
           backgroundColor: AppStyle.primaryBackground,
           elevation: 0,
-          leading: IconButton(
-            icon: const Icon(Icons.arrow_back_ios),
-            splashRadius: 0.1,
-            color: AppStyle.primaryAccent,
-            onPressed: () {
-              updateIndexBackwards();
-            },
+          leading: MouseRegion(
+            cursor: SystemMouseCursors.click,
+            child: GestureDetector(
+              onTap: () {
+                updateIndexBackwards();
+              },
+              child: Icon(
+                Icons.arrow_back_ios,
+                color: AppStyle.primaryAccent,
+              ),
+            ),
           ),
         ),
         backgroundColor: AppStyle.primaryBackground,
