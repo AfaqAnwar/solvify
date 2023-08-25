@@ -130,11 +130,13 @@ class _SettingsPageState extends State<SettingsPage> {
                                 setState(() {
                                   setSharedStateTheme();
                                   AppStyle.setToDarkMode();
+                                  textColor = AppStyle.getTextColor();
                                 });
                               } else {
                                 setState(() {
                                   setSharedStateTheme();
                                   AppStyle.setToLightMode();
+                                  textColor = AppStyle.getTextColor();
                                 });
                               }
                             }),
@@ -163,7 +165,7 @@ class _SettingsPageState extends State<SettingsPage> {
                                       title:
                                           'What Is McGraw Hill Connect SmartBook Auto Solver?',
                                       body:
-                                          'McGraw Hill Connect SmartBook Auto Solver is a feature that allows you to automatically solve McGraw Hill Connect SmartBook assignments. This feature is currently in beta and may not work properly on all assignments. If you encounter any issues, please report them to us. We are working hard to improve this feature and make it more reliable.',
+                                          'McGraw Hill Connect SmartBook Auto Solver is a feature that attempts automatically solve McGraw Hill Connect SmartBook assignments. This feature learns as you go, it may select the wrong answer for the first few questions. This feature is currently in beta and may not work properly on all assignments. If you encounter any issues, please report them to us. We are working hard to improve this feature and make it more reliable.',
                                       onTap: () => Navigator.pop(context),
                                     ));
                           });
