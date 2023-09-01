@@ -3,7 +3,8 @@ import 'package:im_stepper/stepper.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:solvify/components/generic_components/styled_modal.dart';
-import 'package:solvify/pages/app_pages/main_app_page.dart';
+import 'package:solvify/pages/registration/onboarding/api_key_init.dart';
+import 'package:solvify/pages/registration/onboarding/register_onboard_api_page.dart';
 import 'package:solvify/pages/registration/onboarding/register_onboard_first_page.dart';
 import 'package:solvify/pages/registration/onboarding/register_onboard_second_page.dart';
 import 'package:solvify/pages/registration/onboarding/register_onboard_third_page.dart';
@@ -20,7 +21,7 @@ class RegisterOnboardHost extends StatefulWidget {
 class _RegisterOnboardHostState extends State<RegisterOnboardHost> {
   final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
   int currentIndex = 0;
-  int totalIndex = 3;
+  int totalIndex = 4;
   String buttonText = "Next";
 
   void setSharedState() async {
@@ -50,11 +51,10 @@ class _RegisterOnboardHostState extends State<RegisterOnboardHost> {
         currentIndex++;
       });
     } else {
-      //TODO: Redirect to subscription page.
       Navigator.pushReplacement(
           context,
           PageTransition(
-              type: PageTransitionType.fade, child: const MainAppPage()));
+              type: PageTransitionType.fade, child: const ApiKeyInit()));
     }
   }
 
@@ -170,10 +170,12 @@ class _RegisterOnboardHostState extends State<RegisterOnboardHost> {
     updateButtonText();
     switch (currentIndex) {
       case 0:
-        return const RegisterOnboardFirstPage();
+        return const RegisterOnboardAPIPage();
       case 1:
-        return const RegisterOnboardSecondPage();
+        return const RegisterOnboardFirstPage();
       case 2:
+        return const RegisterOnboardSecondPage();
+      case 3:
         return const RegisterOnboardThirdPage();
       default:
         return const CircularProgressIndicator();

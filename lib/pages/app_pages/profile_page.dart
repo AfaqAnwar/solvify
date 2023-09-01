@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:solvify/components/app_components/custom_scaffold.dart';
+import 'package:solvify/pages/app_pages/profile_management_pages/manage_api_key.dart';
 
 import 'package:solvify/pages/app_pages/profile_management_pages/manage_email.dart';
 import 'package:solvify/pages/app_pages/profile_management_pages/manage_password.dart';
-import 'package:solvify/pages/app_pages/profile_management_pages/manage_subscription.dart';
 
 import 'package:solvify/styles/app_style.dart';
 
@@ -74,13 +74,13 @@ class _ProfilePageState extends State<ProfilePage> {
                   height: 10,
                 ),
                 buildProfileTile(context,
-                    iconData: Icons.payment_sharp,
+                    iconData: Icons.key_sharp,
                     title: "Manage Subscription", onTap: () {
                   Navigator.push(
                       context,
                       PageTransition(
                           type: PageTransitionType.rightToLeftWithFade,
-                          child: const ManageSubscription()));
+                          child: const ManageAPIKey()));
                 }),
                 const Spacer()
               ],

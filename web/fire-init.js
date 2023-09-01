@@ -9,4 +9,4 @@ const firebaseConfig = {
   appId: "1:3979832668:web:d58c0084dddb5403e2e599",
 };
 
-await initializeApp(firebaseConfig);
+window.appInstance = await initializeApp(firebaseConfig);

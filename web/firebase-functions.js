@@ -9,6 +9,13 @@ import {
   updatePassword,
 } from "./firebase/firebase-auth.js";
 
+import {
+  getFirestore,
+  doc,
+  setDoc,
+  getDoc,
+} from "./firebase/firebase-firestore.js";
+
 window.userState = {
   loggedIn: false,
   email: "",
@@ -16,6 +23,8 @@ window.userState = {
   error: "",
   sessionActive: false,
   sessionError: "",
+  apiKeyUpdated: false,
+  apiKey: "",
 };
 
 window.auth = getAuth();
@@ -79,6 +88,10 @@ window.clearState = () => {
   window.userState.email = "";
   window.userState.uid = "";
   window.userState.error = "";
+  window.userState.sessionActive = false;
+  window.userState.sessionError = "";
+  window.userState.apiKeyUpdated = false;
+  window.userState.apiKey = "";
 };
 
 window.checkSession = () => {
@@ -86,10 +99,14 @@ window.checkSession = () => {
     window.auth.onAuthStateChanged(function (user) {
       if (user) {
         window.userState.sessionActive = true;
+        window.userState.email = user.email;
+        window.userState.uid = user.uid;
         console.log("User is signed in.");
         resolve(true);
       } else {
         window.userState.sessionActive = false;
+        window.userState.email = "";
+        window.userState.uid = "";
         console.log("No user is signed in.");
         resolve(false);
       }
@@ -135,5 +152,38 @@ window.updateUserPassword = (password) => {
         window.userState.error = error.code;
         resolve(false);
       });
+  });
+};
+
+window.updateAPIKeyToFirestore = async (apiKey) => {
+  return new Promise(async (resolve, reject) => {
+    const db = getFirestore(window.appInstance);
+    const docRef = doc(db, "users", window.userState.uid);
+    await setDoc(docRef, { apiKey: apiKey }, { merge: true })
+      .then(() => {
+        window.userState.apiKeyUpdated = true;
+        resolve(true);
+      })
+      .catch((error) => {
+        window.userState.apiKeyUpdated = false;
+        window.userState.error = error.code;
+        resolve(false);
+      });
+  });
+};
+
+window.getAPIKeyFromFirestore = async () => {
+  return new Promise(async (resolve, reject) => {
+    const db = getFirestore(window.appInstance);
+    const docRef = doc(db, "users", window.userState.uid);
+    await getDoc(docRef).then((doc) => {
+      if (doc.exists()) {
+        window.userState.apiKey = doc.data().apiKey;
+        resolve(true);
+      } else {
+        window.userState.apiKey = "";
+        resolve(false);
+      }
+    });
   });
 };

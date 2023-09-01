@@ -23,3 +23,9 @@ external dynamic updateUserEmail(String email);
 
 @JS('updateUserPassword')
 external dynamic updateUserPassword(String password);
+
+@JS('updateAPIKeyToFirestore')
+external dynamic updateAPIKeyToFirestore(String apiKey);
+
+@JS('getAPIKeyFromFirestore')
+external dynamic getAPIKeyFromFirestore();

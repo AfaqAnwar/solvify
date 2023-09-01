@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:solvify/components/app_components/custom_scaffold.dart';
 import 'package:solvify/styles/app_style.dart';
 
-class ManageSubscription extends StatefulWidget {
-  const ManageSubscription({super.key});
+class ManageAPIKey extends StatefulWidget {
+  const ManageAPIKey({super.key});
 
   @override
-  State<ManageSubscription> createState() => _ManageSubscription();
+  State<ManageAPIKey> createState() => _ManageAPIKeyState();
 }
 
-class _ManageSubscription extends State<ManageSubscription> {
+class _ManageAPIKeyState extends State<ManageAPIKey> {
   @override
   Widget build(BuildContext context) {
     return CustomScaffold(
@@ -20,7 +20,7 @@ class _ManageSubscription extends State<ManageSubscription> {
             child: Column(
               children: [
                 Text(
-                  "Manage Subscription",
+                  "Manage API Key",
                   style: TextStyle(
                       fontFamily: AppStyle.currentMainHeadingFont.fontFamily,
                       color: AppStyle.primaryAccent,

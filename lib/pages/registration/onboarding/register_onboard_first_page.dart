@@ -41,7 +41,7 @@ class _RegisterOnboardFirstPageState extends State<RegisterOnboardFirstPage> {
         const SizedBox(
           height: 40,
         ),
-        Text("First we scan your assignment to find all questions!",
+        Text("Once you hit solve, we'll scan your page for any problems.",
             textAlign: TextAlign.center,
             style: TextStyle(
                 fontSize: 16,
