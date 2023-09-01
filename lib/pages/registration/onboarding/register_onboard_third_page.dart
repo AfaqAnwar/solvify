@@ -17,7 +17,7 @@ class _RegisterOnboardThirdPageState extends State<RegisterOnboardThirdPage> {
   void setSharedState() async {
     final SharedPreferences prefs = await _prefs;
     setState(() {
-      prefs.setString("currentPage", "register_onboard_0");
+      prefs.setString("currentPage", "register_onboard_3");
     });
   }
 
@@ -44,7 +44,7 @@ class _RegisterOnboardThirdPageState extends State<RegisterOnboardThirdPage> {
         Text("Finally we get you the solutions!",
             textAlign: TextAlign.center,
             style: TextStyle(
-                fontSize: 16,
+                fontSize: 14,
                 fontWeight: FontWeight.bold,
                 color: AppStyle.getTextColor())),
       ]),

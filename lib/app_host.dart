@@ -2,9 +2,11 @@
 import 'dart:js' as js;
 // ignore: avoid_web_libraries_in_flutter
 import 'dart:js_util';
+import 'package:dart_openai/dart_openai.dart';
 import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
 import 'package:solvify/firebase_js.dart';
 import 'package:solvify/functions_js.dart';
 import 'package:solvify/options.dart';
@@ -12,6 +14,7 @@ import 'package:solvify/pages/app_pages/info_page.dart';
 import 'package:solvify/pages/app_pages/main_app_page.dart';
 import 'package:solvify/pages/app_pages/profile_page.dart';
 import 'package:solvify/pages/app_pages/settings_page.dart';
+import 'package:solvify/pages/registration/onboarding/api_key_init.dart';
 import 'package:solvify/pages/registration/onboarding/register_onboard_host.dart';
 import 'package:solvify/pages/registration/register_page.dart';
 import 'package:solvify/pages/signin_signup/login_page.dart';
@@ -79,6 +82,39 @@ class _AppHostState extends State<AppHost> {
     return result;
   }
 
+  Future getOnboarded() async {
+    var result = await promiseToFuture(getOnboardedStatus());
+    return result;
+  }
+
+  Future getAPIKey() async {
+    var result = await promiseToFuture(getAPIKeyFromFirestore());
+    return result;
+  }
+
+  Future<bool> checkIfAPIKeyIsValid(String key) async {
+    OpenAI.apiKey = key;
+    try {
+      OpenAIChatCompletionModel chatCompletion =
+          await OpenAI.instance.chat.create(
+        model: "gpt-3.5-turbo",
+        messages: [
+          const OpenAIChatCompletionChoiceMessageModel(
+              content:
+                  "YOU ARE AN API KEY TESTER. PLEASE TYPE TRUE TO ACKNOWLEDGE THAT YOU CAN SEE THIS MESSAGE.",
+              role: OpenAIChatMessageRole.system),
+        ],
+      );
+      if (chatCompletion.choices.isNotEmpty) {
+        return true;
+      } else {
+        return false;
+      }
+    } catch (e) {
+      return false;
+    }
+  }
+
   Future pushPage() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     String? page = prefs.getString("currentPage");
@@ -93,59 +129,126 @@ class _AppHostState extends State<AppHost> {
     } else {
       var state = js.JsObject.fromBrowserObject(js.context['userState']);
 
-      Future.delayed(const Duration(milliseconds: 500), () {
-        switch (page) {
-          case "login":
-            pageToDisplay = const LoginPage();
-            break;
-          case "register":
-            pageToDisplay = const RegisterPage();
-            break;
-          case "app":
-            if (state["sessionActive"] == true) {
-              String? question = prefs.getString("currentQuestion");
-              String? answer = prefs.getString("currentAnswer");
-              String? confidence = prefs.getString("currentConfidence");
+      dynamic result = await getOnboarded();
 
-              if (question != null) {
-                pageToDisplay = MainAppPage(
-                  question: question,
-                  answer: answer,
-                  confidence: confidence,
-                );
-              } else {
-                pageToDisplay = const MainAppPage();
-              }
-            }
-            break;
-          case "info":
-            if (state["sessionActive"] == true) {
-              pageToDisplay = const InfoPage();
-            }
-            break;
-          case "profile":
-            if (state["sessionActive"] == true) {
-              pageToDisplay = const ProfilePage();
-            }
-            break;
-          case "settings":
-            if (state["sessionActive"] == true) {
-              pageToDisplay = const SettingsPage();
-            }
-            break;
-          case "register_onboard_0":
-            if (state["sessionActive"] == true) {
-              pageToDisplay = const RegisterOnboardHost();
-            }
-            break;
-          default:
-            pageToDisplay = const LoginPage();
-        }
+      if (result == false && page == "register_onboard_api_init") {
+        // ignore: use_build_context_synchronously
         Navigator.pushReplacement(
             context,
             PageTransition(
-                child: pageToDisplay, type: PageTransitionType.fade));
-      });
+                child: const ApiKeyInit(), type: PageTransitionType.fade));
+      } else {
+        Future.delayed(const Duration(milliseconds: 500), () async {
+          print(page);
+          switch (page) {
+            case "login":
+              pageToDisplay = const LoginPage();
+              break;
+            case "register":
+              pageToDisplay = const RegisterPage();
+              break;
+            case "app":
+              if (state["sessionActive"] == true) {
+                var isValid = false;
+
+                if (prefs.getString("localKey") != null) {
+                  isValid =
+                      await checkIfAPIKeyIsValid(prefs.getString("localKey")!);
+                }
+                OpenAI.apiKey = prefs.getString("localKey")!;
+
+                if (isValid == false) {
+                  await getAPIKey();
+                  isValid =
+                      await checkIfAPIKeyIsValid(state["apiKey"].toString());
+                  OpenAI.apiKey = state["apiKey"].toString();
+                }
+
+                if (isValid) {
+                  String? question = prefs.getString("currentQuestion");
+                  String? answer = prefs.getString("currentAnswer");
+                  String? confidence = prefs.getString("currentConfidence");
+
+                  if (question != null) {
+                    pageToDisplay = MainAppPage(
+                      question: question,
+                      answer: answer,
+                      confidence: confidence,
+                    );
+                  } else {
+                    pageToDisplay = const MainAppPage();
+                  }
+                } else {
+                  pageToDisplay = const ApiKeyInit(retry: true);
+                }
+              }
+              break;
+            case "info":
+              if (state["sessionActive"] == true) {
+                pageToDisplay = const InfoPage();
+              }
+              break;
+            case "profile":
+              if (state["sessionActive"] == true) {
+                pageToDisplay = const ProfilePage();
+              }
+              break;
+            case "settings":
+              if (state["sessionActive"] == true) {
+                pageToDisplay = const SettingsPage();
+              }
+              break;
+
+            case "register_onboard_host":
+              if (state["sessionActive"] == true) {
+                pageToDisplay = const RegisterOnboardHost(
+                  currentIndex: 0,
+                );
+              }
+              break;
+            case "register_onboard_api":
+              if (state["sessionActive"] == true) {
+                pageToDisplay = const RegisterOnboardHost(
+                  currentIndex: 0,
+                );
+              }
+              break;
+            case "register_onboard_1":
+              if (state["sessionActive"] == true) {
+                pageToDisplay = const RegisterOnboardHost(
+                  currentIndex: 1,
+                );
+              }
+              break;
+            case "register_onboard_2":
+              if (state["sessionActive"] == true) {
+                pageToDisplay = const RegisterOnboardHost(
+                  currentIndex: 2,
+                );
+              }
+              break;
+            case "register_onboard_3":
+              if (state["sessionActive"] == true) {
+                pageToDisplay = const RegisterOnboardHost(
+                  currentIndex: 3,
+                );
+              }
+              break;
+            case "register_onboard_api_init":
+              if (state["sessionActive"] == true) {
+                pageToDisplay = const ApiKeyInit();
+              }
+              break;
+            default:
+              pageToDisplay = const LoginPage();
+          }
+          // ignore: use_build_context_synchronously
+          Navigator.pushReplacement(
+              context,
+              PageTransition(
+                  child: pageToDisplay, type: PageTransitionType.fade));
+        });
+      }
     }
   }
 }

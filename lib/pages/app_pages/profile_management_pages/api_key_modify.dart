@@ -6,6 +6,7 @@ import 'package:dart_openai/dart_openai.dart';
 import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:solvify/components/app_components/custom_scaffold.dart';
 import 'package:solvify/components/generic_components/input_textfield.dart';
 import 'package:solvify/components/generic_components/styled_button.dart';
 import 'package:solvify/components/generic_components/styled_modal.dart';
@@ -13,47 +14,21 @@ import 'package:solvify/firebase_js.dart';
 import 'package:solvify/pages/app_pages/main_app_page.dart';
 import 'package:solvify/styles/app_style.dart';
 
-class ApiKeyInit extends StatefulWidget {
-  final bool? retry;
-
-  const ApiKeyInit({super.key, this.retry});
+class ApiKeyModify extends StatefulWidget {
+  const ApiKeyModify({
+    super.key,
+  });
 
   @override
-  State<ApiKeyInit> createState() => _ApiKeyInitState();
+  State<ApiKeyModify> createState() => _ApiKeyModifyState();
 }
 
-class _ApiKeyInitState extends State<ApiKeyInit> {
+class _ApiKeyModifyState extends State<ApiKeyModify> {
   final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
-
-  void setSharedState() async {
-    final SharedPreferences prefs = await _prefs;
-
-    setState(() {
-      prefs.setString("currentPage", "register_onboard_api_init");
-    });
-  }
 
   @override
   void initState() {
     super.initState();
-    setSharedState();
-    if (widget.retry == true) {
-      showDialog(
-          context: context,
-          builder: (context) => StyledModal(
-                backgroundColor: AppStyle.secondaryBackground,
-                title: 'API Key Error',
-                body:
-                    "Your provided API key is now invalid. Please provide a new valid API key.",
-                onTap: () => {
-                  Navigator.pushReplacement(
-                      context,
-                      PageTransition(
-                          child: const ApiKeyInit(),
-                          type: PageTransitionType.fade))
-                },
-              ));
-    }
   }
 
   final apiController = TextEditingController();
@@ -169,86 +144,84 @@ class _ApiKeyInitState extends State<ApiKeyInit> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppStyle.primaryBackground,
-      body: SafeArea(
+    return CustomScaffold(
+      hideDrawer: true,
+      iconData: Icons.arrow_back_ios_new_sharp,
+      child: SafeArea(
         child: Center(
-          child: SingleChildScrollView(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Container(
-                  padding: const EdgeInsets.all(20),
-                  child: Image.asset(
-                    "assets/icons/Solvify.png",
-                    height: 75,
-                  ),
-                ),
-                const SizedBox(
-                  height: 50,
-                ),
-                InputTextField(
-                  controller: apiController,
-                  hintText: "API Key",
-                  obscureText: false,
-                  textFieldBackgroundColor: AppStyle.secondaryBackground,
-                  textFieldHintTextColor: AppStyle.getTextFieldHintColor(),
-                  textFieldTextColor: AppStyle.getTextFieldTextColor(),
-                  textFieldBorderColor: Colors.grey.shade400,
-                  textFieldBorderFocusColor: AppStyle.primaryAccent,
-                ),
-                const SizedBox(
-                  height: 50,
-                ),
-                StyledButton(
-                  onTap: submitKey,
-                  buttonColor: AppStyle.primaryAccent,
-                  buttonText: 'Submit',
-                  buttonTextColor: Colors.white,
-                ),
-                const SizedBox(
-                  height: 50,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text("Don't have an API key?",
-                        style: TextStyle(color: Colors.grey.shade700)),
-                    const SizedBox(width: 5),
-                    MouseRegion(
-                      cursor: SystemMouseCursors.click,
-                      child: GestureDetector(
-                        onTap: () {
-                          showDialog(
-                              context: context,
-                              builder: (context) {
-                                return StyledModal(
-                                  backgroundColor: AppStyle.secondaryBackground,
-                                  title: 'API Key',
-                                  body:
-                                      "You can get an API key from OpenAI's website. You will need to sign up for an account and then you will be able to get an API key. Please click the button below to go to OpenAI's website and follow the instructions there.",
-                                  onTap: () {
-                                    js.context.callMethod('open', [
-                                      'https://platform.openai.com/account/api-keys'
-                                    ]);
-                                    Navigator.pop(context);
-                                  },
-                                  buttonText: 'Go to OpenAI',
-                                );
-                              });
-                        },
-                        child: Text(
-                          "Get One!",
-                          style: TextStyle(
-                              color: AppStyle.faqTextHeading,
-                              fontWeight: FontWeight.w500),
-                        ),
+          child: Column(
+            children: [
+              Text(
+                "Manage API Key",
+                style: TextStyle(
+                    fontFamily: AppStyle.currentMainHeadingFont.fontFamily,
+                    color: AppStyle.primaryAccent,
+                    fontSize: 24,
+                    fontWeight: FontWeight.w800),
+              ),
+              const Spacer(),
+              InputTextField(
+                controller: apiController,
+                hintText: "API Key",
+                obscureText: false,
+                textFieldBackgroundColor: AppStyle.secondaryBackground,
+                textFieldHintTextColor: AppStyle.getTextFieldHintColor(),
+                textFieldTextColor: AppStyle.getTextFieldTextColor(),
+                textFieldBorderColor: Colors.grey.shade400,
+                textFieldBorderFocusColor: AppStyle.primaryAccent,
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text("Don't have an API key?",
+                      style: TextStyle(color: Colors.grey.shade700)),
+                  const SizedBox(width: 5),
+                  MouseRegion(
+                    cursor: SystemMouseCursors.click,
+                    child: GestureDetector(
+                      onTap: () {
+                        showDialog(
+                            context: context,
+                            builder: (context) {
+                              return StyledModal(
+                                backgroundColor: AppStyle.secondaryBackground,
+                                title: 'API Key',
+                                body:
+                                    "You can get an API key from OpenAI's website. You will need to sign up for an account and then you will be able to get an API key. Please click the button below to go to OpenAI's website and follow the instructions there.",
+                                onTap: () {
+                                  js.context.callMethod('open', [
+                                    'https://platform.openai.com/account/api-keys'
+                                  ]);
+                                  Navigator.pop(context);
+                                },
+                                buttonText: 'Go to OpenAI',
+                              );
+                            });
+                      },
+                      child: Text(
+                        "Get One!",
+                        style: TextStyle(
+                            color: AppStyle.faqTextHeading,
+                            fontWeight: FontWeight.w500),
                       ),
                     ),
-                  ],
-                ),
-              ],
-            ),
+                  ),
+                ],
+              ),
+              const Spacer(),
+              StyledButton(
+                onTap: submitKey,
+                buttonColor: AppStyle.primaryAccent,
+                buttonText: 'Submit',
+                buttonTextColor: Colors.white,
+              ),
+              const SizedBox(
+                height: 25,
+              )
+            ],
           ),
         ),
       ),

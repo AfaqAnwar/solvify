@@ -29,3 +29,9 @@ external dynamic updateAPIKeyToFirestore(String apiKey);
 
 @JS('getAPIKeyFromFirestore')
 external dynamic getAPIKeyFromFirestore();
+
+@JS('getOnboardedStatus')
+external dynamic getOnboardedStatus();
+
+@JS('updateOnboardedStatus')
+external dynamic updateOnboardedStatus();

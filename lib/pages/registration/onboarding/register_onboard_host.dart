@@ -12,7 +12,8 @@ import 'package:solvify/pages/signin_signup/login_page.dart';
 import 'package:solvify/styles/app_style.dart';
 
 class RegisterOnboardHost extends StatefulWidget {
-  const RegisterOnboardHost({super.key});
+  final int? currentIndex;
+  const RegisterOnboardHost({super.key, this.currentIndex});
 
   @override
   State<RegisterOnboardHost> createState() => _RegisterOnboardHostState();
@@ -27,7 +28,7 @@ class _RegisterOnboardHostState extends State<RegisterOnboardHost> {
   void setSharedState() async {
     final SharedPreferences prefs = await _prefs;
     setState(() {
-      prefs.setString("currentPage", "register_onboard_0");
+      prefs.setString("currentPage", "register_onboard_host");
     });
   }
 
@@ -41,6 +42,9 @@ class _RegisterOnboardHostState extends State<RegisterOnboardHost> {
   @override
   void initState() {
     super.initState();
+    if (widget.currentIndex != null) {
+      currentIndex = widget.currentIndex!;
+    }
     setSharedState();
     parseCurrentIndex();
   }

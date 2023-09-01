@@ -25,6 +25,7 @@ window.userState = {
   sessionError: "",
   apiKeyUpdated: false,
   apiKey: "",
+  onboarded: false,
 };
 
 window.auth = getAuth();
@@ -92,6 +93,7 @@ window.clearState = () => {
   window.userState.sessionError = "";
   window.userState.apiKeyUpdated = false;
   window.userState.apiKey = "";
+  window.userState.onboarded = false;
 };
 
 window.checkSession = () => {
@@ -162,9 +164,11 @@ window.updateAPIKeyToFirestore = async (apiKey) => {
     await setDoc(docRef, { apiKey: apiKey }, { merge: true })
       .then(() => {
         window.userState.apiKeyUpdated = true;
+        window.userState.apiKey = apiKey;
         resolve(true);
       })
       .catch((error) => {
+        window.userState.apiKey = "";
         window.userState.apiKeyUpdated = false;
         window.userState.error = error.code;
         resolve(false);
@@ -179,9 +183,43 @@ window.getAPIKeyFromFirestore = async () => {
     await getDoc(docRef).then((doc) => {
       if (doc.exists()) {
         window.userState.apiKey = doc.data().apiKey;
+        print("API Key: " + window.userState.apiKey);
         resolve(true);
       } else {
         window.userState.apiKey = "";
+        resolve(false);
+      }
+    });
+  });
+};
+
+window.updateOnboardedStatus = async () => {
+  return new Promise(async (resolve, reject) => {
+    const db = getFirestore(window.appInstance);
+    const docRef = doc(db, "users", window.userState.uid);
+    await setDoc(docRef, { onboarded: true }, { merge: true })
+      .then(() => {
+        window.userState.onboarded = true;
+        resolve(true);
+      })
+      .catch((error) => {
+        window.userState.onboarded = false;
+        window.userState.error = error.code;
+        resolve(false);
+      });
+  });
+};
+
+window.getOnboardedStatus = async () => {
+  return new Promise(async (resolve, reject) => {
+    const db = getFirestore(window.appInstance);
+    const docRef = doc(db, "users", window.userState.uid);
+    await getDoc(docRef).then((doc) => {
+      if (doc.exists()) {
+        window.userState.onboarded = doc.data().onboarded;
+        resolve(true);
+      } else {
+        window.userState.getOnboardedStatus = false;
         resolve(false);
       }
     });

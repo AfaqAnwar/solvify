@@ -7,13 +7,15 @@ class StyledModal extends StatelessWidget {
   final Color backgroundColor;
   final String title;
   final String body;
+  final String? buttonText;
 
   const StyledModal(
       {super.key,
       required this.backgroundColor,
       required this.title,
       required this.body,
-      required this.onTap});
+      required this.onTap,
+      this.buttonText});
 
   @override
   Widget build(BuildContext context) {
@@ -54,7 +56,7 @@ class StyledModal extends StatelessWidget {
                   onTap!();
                 },
                 buttonColor: AppStyle.getAccent(),
-                buttonText: "Okay",
+                buttonText: buttonText ?? 'Okay',
                 buttonTextColor: Colors.white)
           ]),
         ));

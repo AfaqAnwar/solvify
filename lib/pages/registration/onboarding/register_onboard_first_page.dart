@@ -17,7 +17,7 @@ class _RegisterOnboardFirstPageState extends State<RegisterOnboardFirstPage> {
   void setSharedState() async {
     final SharedPreferences prefs = await _prefs;
     setState(() {
-      prefs.setString("currentPage", "register_onboard_0");
+      prefs.setString("currentPage", "register_onboard_1");
     });
   }
 
@@ -44,7 +44,7 @@ class _RegisterOnboardFirstPageState extends State<RegisterOnboardFirstPage> {
         Text("Once you hit solve, we'll scan your page for any problems.",
             textAlign: TextAlign.center,
             style: TextStyle(
-                fontSize: 16,
+                fontSize: 14,
                 fontWeight: FontWeight.bold,
                 color: AppStyle.getTextColor())),
       ]),
