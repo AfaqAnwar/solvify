@@ -144,88 +144,88 @@ class _SettingsPageState extends State<SettingsPage> {
                     ),
                   ),
                 ),
-                const SizedBox(
-                  height: 10,
-                ),
-                Container(
-                  margin: const EdgeInsets.only(left: 15, right: 15),
-                  child: ListTile(
-                    title: MouseRegion(
-                      onEnter: (event) => setTextColorHighlight(),
-                      onExit: (event) => setTextColorNormal(),
-                      cursor: SystemMouseCursors.click,
-                      child: GestureDetector(
-                        onTap: () {
-                          setState(() {
-                            showDialog(
-                                context: context,
-                                builder: (context) => StyledModal(
-                                      backgroundColor:
-                                          AppStyle.secondaryBackground,
-                                      title:
-                                          'What Is McGraw Hill Connect SmartBook Auto Solver?',
-                                      body:
-                                          'McGraw Hill Connect SmartBook Auto Solver is a feature that attempts automatically solve McGraw Hill Connect SmartBook assignments. This feature learns as you go, it may select the wrong answer for the first few questions. This feature is currently in beta and may not work properly on all assignments. If you encounter any issues, please report them to us. We are working hard to improve this feature and make it more reliable.',
-                                      onTap: () => Navigator.pop(context),
-                                    ));
-                          });
-                        },
-                        child: Text(
-                          "McGraw Hill Connect SmartBook Auto Solver",
-                          style: TextStyle(
-                              color: textColor,
-                              fontSize: 18,
-                              fontWeight: FontWeight.w800),
-                        ),
-                      ),
-                    ),
-                    trailing: MouseRegion(
-                      cursor: SystemMouseCursors.click,
-                      child: SizedBox(
-                        width: 50,
-                        child: SwitchButton(
-                          backgroundColor: AppStyle.getTextColor(),
-                          activeColor: AppStyle.getAccent(),
-                          value: switchValue,
-                          onToggle: (value) async {
-                            switchValue = value;
-                            var result = await checkMcgraw();
-                            if (result == true && value == true) {
-                              setState(() {
-                                Options.setMcGrawEnabled(value);
-                                setSharedStateMode(value);
-                              });
-                            } else if (result == false && value == true) {
-                              setState(() {
-                                switchValue = false;
-                                Options.setMcGrawEnabled(false);
-                                setSharedStateMode(false);
-                              });
+                // const SizedBox(
+                //   height: 10,
+                // ),
+                // Container(
+                //   margin: const EdgeInsets.only(left: 15, right: 15),
+                //   child: ListTile(
+                //     title: MouseRegion(
+                //       onEnter: (event) => setTextColorHighlight(),
+                //       onExit: (event) => setTextColorNormal(),
+                //       cursor: SystemMouseCursors.click,
+                //       child: GestureDetector(
+                //         onTap: () {
+                //           setState(() {
+                //             showDialog(
+                //                 context: context,
+                //                 builder: (context) => StyledModal(
+                //                       backgroundColor:
+                //                           AppStyle.secondaryBackground,
+                //                       title:
+                //                           'What Is McGraw Hill Connect SmartBook Auto Solver?',
+                //                       body:
+                //                           'McGraw Hill Connect SmartBook Auto Solver is a feature that attempts automatically solve McGraw Hill Connect SmartBook assignments. This feature learns as you go, it may select the wrong answer for the first few questions. This feature is currently in beta and may not work properly on all assignments. If you encounter any issues, please report them to us. We are working hard to improve this feature and make it more reliable.',
+                //                       onTap: () => Navigator.pop(context),
+                //                     ));
+                //           });
+                //         },
+                //         child: Text(
+                //           "McGraw Hill Connect SmartBook Auto Solver",
+                //           style: TextStyle(
+                //               color: textColor,
+                //               fontSize: 18,
+                //               fontWeight: FontWeight.w800),
+                //         ),
+                //       ),
+                //     ),
+                //     trailing: MouseRegion(
+                //       cursor: SystemMouseCursors.click,
+                //       child: SizedBox(
+                //         width: 50,
+                //         child: SwitchButton(
+                //           backgroundColor: AppStyle.getTextColor(),
+                //           activeColor: AppStyle.getAccent(),
+                //           value: switchValue,
+                //           onToggle: (value) async {
+                //             switchValue = value;
+                //             var result = await checkMcgraw();
+                //             if (result == true && value == true) {
+                //               setState(() {
+                //                 Options.setMcGrawEnabled(value);
+                //                 setSharedStateMode(value);
+                //               });
+                //             } else if (result == false && value == true) {
+                //               setState(() {
+                //                 switchValue = false;
+                //                 Options.setMcGrawEnabled(false);
+                //                 setSharedStateMode(false);
+                //               });
 
-                              // ignore: use_build_context_synchronously
-                              showDialog(
-                                  context: context,
-                                  builder: (context) => StyledModal(
-                                        backgroundColor:
-                                            AppStyle.secondaryBackground,
-                                        title:
-                                            'McGraw Hill Connect SmartBook Error',
-                                        body:
-                                            'You must be on a McGraw Hill Connect SmartBook assignment to enable this feature.',
-                                        onTap: () => Navigator.pop(context),
-                                      ));
-                            } else {
-                              setState(() {
-                                Options.setMcGrawEnabled(value);
-                                setSharedStateMode(value);
-                              });
-                            }
-                          },
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
+                //               // ignore: use_build_context_synchronously
+                //               showDialog(
+                //                   context: context,
+                //                   builder: (context) => StyledModal(
+                //                         backgroundColor:
+                //                             AppStyle.secondaryBackground,
+                //                         title:
+                //                             'McGraw Hill Connect SmartBook Error',
+                //                         body:
+                //                             'You must be on a McGraw Hill Connect SmartBook assignment to enable this feature.',
+                //                         onTap: () => Navigator.pop(context),
+                //                       ));
+                //             } else {
+                //               setState(() {
+                //                 Options.setMcGrawEnabled(value);
+                //                 setSharedStateMode(value);
+                //               });
+                //             }
+                //           },
+                //         ),
+                //       ),
+                //     ),
+                //   ),
+                // ),
                 const Spacer(),
                 StyledButton(
                     onTap: () {

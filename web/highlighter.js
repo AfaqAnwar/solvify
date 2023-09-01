@@ -63,7 +63,7 @@ function displayText(ans) {
       return;
     }
   }
-  container[0].appendChild(div);
+  // container[0].appendChild(div);
 }
 
 // Define a function to get the answer elements and store the answers
@@ -82,7 +82,7 @@ function highlighter() {
       hasAnsweredQuestion(question) &&
       document.getElementsByClassName("answer-container").length == 0
     ) {
-      highlightAnswers(question);
+      // highlightAnswers(question);
       return;
     }
   }
@@ -105,9 +105,9 @@ function highlighter() {
       return;
     }
     // currently solving it:
-    displayText([
-      "McGraw Hill Connect Smartbook Auto Solver <br> Brought to You By The Solvify Team <br> To enable this feature please go to the settings page! <br> Please note this feature is still in beta and may not work for all questions. <br> If you have any questions or concerns, please contact us at Support@Solvify.app",
-    ]);
+    // displayText([
+    //   "McGraw Hill Connect Smartbook Auto Solver <br> Brought to You By The Solvify Team <br> To enable this feature please go to the settings page! <br> Please note this feature is still in beta and may not work for all questions. <br> If you have any questions or concerns, please contact us at Support@Solvify.app",
+    // ]);
     return;
   }
 

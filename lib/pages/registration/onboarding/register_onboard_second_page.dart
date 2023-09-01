@@ -17,7 +17,7 @@ class _RegisterOnboardSecondPageState extends State<RegisterOnboardSecondPage> {
   void setSharedState() async {
     final SharedPreferences prefs = await _prefs;
     setState(() {
-      prefs.setString("currentPage", "register_onboard_1");
+      prefs.setString("currentPage", "register_onboard_2");
     });
   }
 

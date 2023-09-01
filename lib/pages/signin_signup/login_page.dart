@@ -13,6 +13,7 @@ import 'package:solvify/pages/app_pages/main_app_page.dart';
 import 'package:solvify/pages/registration/register_page.dart';
 import 'package:solvify/styles/app_style.dart';
 
+//TODO: ADD API CHECK TO LOGIN.
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
 

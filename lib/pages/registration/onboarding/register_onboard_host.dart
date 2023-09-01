@@ -11,6 +11,8 @@ import 'package:solvify/pages/registration/onboarding/register_onboard_third_pag
 import 'package:solvify/pages/signin_signup/login_page.dart';
 import 'package:solvify/styles/app_style.dart';
 
+// TODO: CLEAN DESIGN ADD SAFE SPACE TO TEXT.
+
 class RegisterOnboardHost extends StatefulWidget {
   final int? currentIndex;
   const RegisterOnboardHost({super.key, this.currentIndex});
