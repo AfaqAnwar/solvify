@@ -139,7 +139,6 @@ class _AppHostState extends State<AppHost> {
                 child: const ApiKeyInit(), type: PageTransitionType.fade));
       } else {
         Future.delayed(const Duration(milliseconds: 500), () async {
-          print(page);
           switch (page) {
             case "login":
               pageToDisplay = const LoginPage();

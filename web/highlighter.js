@@ -129,4 +129,4 @@ function highlighter() {
 }
 
 // Check page every .6 sec
-setInterval(highlighter, 600);
+// setInterval(highlighter, 600);

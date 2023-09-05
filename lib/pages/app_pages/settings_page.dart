@@ -4,7 +4,6 @@ import 'package:page_transition/page_transition.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:solvify/components/app_components/custom_scaffold.dart';
-import 'package:solvify/components/app_components/switch_button.dart';
 import 'package:solvify/functions_js.dart';
 import 'package:solvify/options.dart';
 import 'package:solvify/styles/app_style.dart';

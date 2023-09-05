@@ -81,6 +81,18 @@ class _ProfilePageState extends State<ProfilePage> {
                           type: PageTransitionType.rightToLeftWithFade,
                           child: const ApiKeyModify()));
                 }),
+                const SizedBox(
+                  height: 10,
+                ),
+                buildProfileTile(context,
+                    iconData: Icons.web_sharp,
+                    title: "Manage Support Websites", onTap: () {
+                  Navigator.push(
+                      context,
+                      PageTransition(
+                          type: PageTransitionType.rightToLeftWithFade,
+                          child: const ApiKeyModify()));
+                }),
                 const Spacer()
               ],
             ),
