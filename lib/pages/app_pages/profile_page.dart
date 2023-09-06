@@ -5,6 +5,7 @@ import 'package:solvify/components/app_components/custom_scaffold.dart';
 import 'package:solvify/pages/app_pages/profile_management_pages/api_key_modify.dart';
 import 'package:solvify/pages/app_pages/profile_management_pages/manage_email.dart';
 import 'package:solvify/pages/app_pages/profile_management_pages/manage_password.dart';
+import 'package:solvify/pages/app_pages/profile_management_pages/supported_websites.dart';
 
 import 'package:solvify/styles/app_style.dart';
 
@@ -86,12 +87,12 @@ class _ProfilePageState extends State<ProfilePage> {
                 ),
                 buildProfileTile(context,
                     iconData: Icons.web_sharp,
-                    title: "Manage Support Websites", onTap: () {
+                    title: "Manage Supported Websites", onTap: () {
                   Navigator.push(
                       context,
                       PageTransition(
                           type: PageTransitionType.rightToLeftWithFade,
-                          child: const ApiKeyModify()));
+                          child: const SupportedWebsites()));
                 }),
                 const Spacer()
               ],

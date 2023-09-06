@@ -26,6 +26,7 @@ window.userState = {
   apiKeyUpdated: false,
   apiKey: "",
   onboarded: false,
+  websites: [],
 };
 
 window.auth = getAuth();
@@ -94,6 +95,7 @@ window.clearState = () => {
   window.userState.apiKeyUpdated = false;
   window.userState.apiKey = "";
   window.userState.onboarded = false;
+  window.userState.websites = [];
 };
 
 window.checkSession = () => {
@@ -223,5 +225,38 @@ window.getOnboardedStatus = async () => {
         resolve(false);
       }
     });
+  });
+};
+
+window.getWebsitesFromFirestore = async () => {
+  return new Promise(async (resolve, reject) => {
+    const db = getFirestore(window.appInstance);
+    const docRef = doc(db, "websites", window.userState.uid);
+    await getDoc(docRef).then((doc) => {
+      if (doc.exists()) {
+        window.userState.websites = doc.data().websites;
+        resolve(true);
+      } else {
+        window.userState.websites = [];
+        resolve(false);
+      }
+    });
+  });
+};
+
+window.updateWebsites = async (list) => {
+  return new Promise(async (resolve, reject) => {
+    const db = getFirestore(window.appInstance);
+    const docRef = doc(db, "users", window.userState.uid);
+    await setDoc(docRef, { websites: list }, { merge: true })
+      .then(() => {
+        window.userState.websites = list;
+        resolve(true);
+      })
+      .catch((error) => {
+        window.userState.websites = [];
+        window.userState.error = error.code;
+        resolve(false);
+      });
   });
 };

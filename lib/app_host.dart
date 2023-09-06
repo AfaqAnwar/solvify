@@ -180,6 +180,23 @@ class _AppHostState extends State<AppHost> {
                 } else {
                   pageToDisplay = const ApiKeyInit(retry: true);
                 }
+
+                var websites = prefs.getStringList("websites");
+
+                if (websites == null || websites.isEmpty) {
+                  var result =
+                      await promiseToFuture(getWebsitesFromFirestore());
+
+                  if (result == true) {
+                    if (state["websites"] != null) {
+                      prefs.setStringList("websites", state["websites"]);
+                    }
+                  } else if (result == false ||
+                      state["websites"] == null ||
+                      state["websites"].isEmpty) {
+                    prefs.setStringList("websites", []);
+                  }
+                }
               }
               break;
             case "info":

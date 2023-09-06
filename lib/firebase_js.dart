@@ -35,3 +35,12 @@ external dynamic getOnboardedStatus();
 
 @JS('updateOnboardedStatus')
 external dynamic updateOnboardedStatus();
+
+@JS('getSupportedWebsites')
+external dynamic getSupportedWebsites();
+
+@JS('getWebsitesFromFirestore')
+external dynamic getWebsitesFromFirestore();
+
+@JS('updateWebsites')
+external dynamic updateWebsites(List<String> websites);

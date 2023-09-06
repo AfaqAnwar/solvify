@@ -6,11 +6,12 @@ class CustomScaffold extends StatelessWidget {
   final Widget? child;
   final bool hideDrawer;
   final IconData? iconData;
-  const CustomScaffold(
-      {super.key,
-      required this.child,
-      required this.hideDrawer,
-      this.iconData});
+  const CustomScaffold({
+    super.key,
+    required this.child,
+    required this.hideDrawer,
+    this.iconData,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +24,7 @@ class CustomScaffold extends StatelessWidget {
                   iconData,
                   color: AppStyle.primaryAccent,
                 ),
-                onPressed: () {
+                onPressed: () async {
                   Navigator.pop(context);
                 })
             : null,
