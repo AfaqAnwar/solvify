@@ -41,12 +41,15 @@ class _RegisterOnboardThirdPageState extends State<RegisterOnboardThirdPage> {
         const SizedBox(
           height: 40,
         ),
-        Text("Finally we get you the solutions!",
-            textAlign: TextAlign.center,
-            style: TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.bold,
-                color: AppStyle.getTextColor())),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 25),
+          child: Text("Finally we get you the solutions!",
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.bold,
+                  color: AppStyle.getTextColor())),
+        ),
       ]),
     );
   }

@@ -225,7 +225,7 @@ class _ApiKeyInitState extends State<ApiKeyInit> {
                                   backgroundColor: AppStyle.secondaryBackground,
                                   title: 'API Key',
                                   body:
-                                      "You can get an API key from OpenAI's website. You will need to sign up for an account and then you will be able to get an API key. Please click the button below to go to OpenAI's website and follow the instructions there.",
+                                      "You can get an API key from OpenAI's website. You will need to sign up for an account and then you will be able to get an API key. Please click the button below to go to OpenAI's website and follow the instructions there. PLEASE BE SURE TO ADD A PAYMENT METHOD TO YOUR OPENAI ACCOUNT!",
                                   onTap: () {
                                     js.context.callMethod('open', [
                                       'https://platform.openai.com/account/api-keys'

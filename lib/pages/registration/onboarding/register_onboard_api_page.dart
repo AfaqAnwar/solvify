@@ -40,21 +40,27 @@ class _RegisterOnBoardAPIPageState extends State<RegisterOnboardAPIPage> {
         const SizedBox(
           height: 40,
         ),
-        Text("First, you'll need to provide us your Open AI API key.",
-            textAlign: TextAlign.center,
-            style: TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.bold,
-                color: AppStyle.getTextColor())),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 25),
+          child: Text("First, you'll need to provide us your Open AI API key.",
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.bold,
+                  color: AppStyle.getTextColor())),
+        ),
         const SizedBox(
           height: 14,
         ),
-        Text("Don't worry, we'll help you get one & keep it safe!",
-            textAlign: TextAlign.center,
-            style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-                color: AppStyle.getTextColor()))
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 25),
+          child: Text("Don't worry, we'll help you get one & keep it safe!",
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.bold,
+                  color: AppStyle.getTextColor())),
+        )
       ]),
     );
   }

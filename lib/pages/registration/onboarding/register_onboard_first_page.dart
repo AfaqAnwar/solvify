@@ -41,12 +41,16 @@ class _RegisterOnboardFirstPageState extends State<RegisterOnboardFirstPage> {
         const SizedBox(
           height: 40,
         ),
-        Text("Once you hit solve, we'll scan your page for any problems.",
-            textAlign: TextAlign.center,
-            style: TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.bold,
-                color: AppStyle.getTextColor())),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 25),
+          child: Text(
+              "Once you hit solve, we'll scan your page for any problems.",
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.bold,
+                  color: AppStyle.getTextColor())),
+        ),
       ]),
     );
   }

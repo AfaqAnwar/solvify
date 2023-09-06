@@ -134,142 +134,139 @@ class _AppHostState extends State<AppHost> {
             PageTransition(
                 child: const ApiKeyInit(), type: PageTransitionType.fade));
       } else {
-        Future.delayed(const Duration(milliseconds: 500), () async {
-          switch (page) {
-            case "login":
-              pageToDisplay = const LoginPage();
-              break;
-            case "register":
-              pageToDisplay = const RegisterPage();
-              break;
-            case "app":
-              if (state["sessionActive"] == true) {
-                var isValid = false;
-                var key = prefs.getString("localKey");
+        switch (page) {
+          case "login":
+            pageToDisplay = const LoginPage();
+            break;
+          case "register":
+            pageToDisplay = const RegisterPage();
+            break;
+          case "app":
+            if (state["sessionActive"] == true) {
+              var isValid = false;
+              var key = prefs.getString("localKey");
 
-                if (key != null) {
-                  isValid = await checkIfAPIKeyIsValid(key);
+              if (key != null) {
+                isValid = await checkIfAPIKeyIsValid(key);
+              } else {
+                var result = await getAPIKey();
+
+                if (result == true) {
+                  key = state["apiKey"];
                 } else {
-                  var result = await getAPIKey();
-
-                  if (result == true) {
-                    key = state["apiKey"];
-                  } else {
-                    key = "";
-                  }
-                  isValid = await checkIfAPIKeyIsValid(key!);
+                  key = "";
                 }
+                isValid = await checkIfAPIKeyIsValid(key!);
+              }
 
-                if (isValid == false) {
-                  pageToDisplay = const ApiKeyInit(retry: true);
+              if (isValid == false) {
+                pageToDisplay = const ApiKeyInit(retry: true);
+              } else {
+                prefs.setString("localKey", key);
+                OpenAI.apiKey = key;
+                String? question = prefs.getString("currentQuestion");
+                String? answer = prefs.getString("currentAnswer");
+                String? confidence = prefs.getString("currentConfidence");
+
+                if (question != null) {
+                  pageToDisplay = MainAppPage(
+                    question: question,
+                    answer: answer,
+                    confidence: confidence,
+                  );
                 } else {
-                  prefs.setString("localKey", key);
-                  OpenAI.apiKey = key;
-                  String? question = prefs.getString("currentQuestion");
-                  String? answer = prefs.getString("currentAnswer");
-                  String? confidence = prefs.getString("currentConfidence");
-
-                  if (question != null) {
-                    pageToDisplay = MainAppPage(
-                      question: question,
-                      answer: answer,
-                      confidence: confidence,
-                    );
-                  } else {
-                    pageToDisplay = const MainAppPage();
-                  }
-                }
-
-                var websites = prefs.getStringList("websites");
-
-                if (websites == null || websites.isEmpty) {
-                  var result =
-                      await promiseToFuture(getWebsitesFromFirestore());
-
-                  if (result == true) {
-                    if (state["websites"] != null) {
-                      prefs.setStringList("websites", state["websites"]);
-                    }
-                  } else if (result == false ||
-                      state["websites"] == null ||
-                      state["websites"].isEmpty) {
-                    prefs.setStringList("websites", []);
-                  }
+                  pageToDisplay = const MainAppPage();
                 }
               }
-              break;
-            case "info":
-              if (state["sessionActive"] == true) {
-                pageToDisplay = const InfoPage();
-              }
-              break;
-            case "profile":
-              if (state["sessionActive"] == true) {
-                pageToDisplay = const ProfilePage();
-              }
-              break;
-            case "settings":
-              if (state["sessionActive"] == true) {
-                pageToDisplay = const SettingsPage();
-              }
-              break;
 
-            case "register_onboard_host":
-              if (state["sessionActive"] == true) {
-                pageToDisplay = const RegisterOnboardHost(
-                  currentIndex: 0,
-                );
+              var websites = prefs.getStringList("websites");
+
+              if (websites == null || websites.isEmpty) {
+                var result = await promiseToFuture(getWebsitesFromFirestore());
+
+                if (result == true) {
+                  if (state["websites"] != null) {
+                    prefs.setStringList("websites", state["websites"]);
+                  }
+                } else if (result == false ||
+                    state["websites"] == null ||
+                    state["websites"].isEmpty) {
+                  prefs.setStringList("websites", []);
+                }
               }
-              break;
-            case "register_onboard_api":
-              if (state["sessionActive"] == true) {
-                pageToDisplay = const RegisterOnboardHost(
-                  currentIndex: 0,
-                );
-              }
-              break;
-            case "register_onboard_websites":
-              if (state["sessionActive"] == true) {
-                pageToDisplay = const RegisterOnboardHost(
-                  currentIndex: 1,
-                );
-              }
-              break;
-            case "register_onboard_1":
-              if (state["sessionActive"] == true) {
-                pageToDisplay = const RegisterOnboardHost(
-                  currentIndex: 2,
-                );
-              }
-              break;
-            case "register_onboard_2":
-              if (state["sessionActive"] == true) {
-                pageToDisplay = const RegisterOnboardHost(
-                  currentIndex: 3,
-                );
-              }
-              break;
-            case "register_onboard_3":
-              if (state["sessionActive"] == true) {
-                pageToDisplay = const RegisterOnboardHost(
-                  currentIndex: 4,
-                );
-              }
-              break;
-            case "register_onboard_api_init":
-              if (state["sessionActive"] == true) {
-                pageToDisplay = const ApiKeyInit();
-              }
-              break;
-            default:
-              pageToDisplay = const LoginPage();
-          }
-          // ignore: use_build_context_synchronously
-          Navigator.pushReplacement(
-              context,
-              PageTransition(
-                  child: pageToDisplay, type: PageTransitionType.fade));
-        });
+            }
+            break;
+          case "info":
+            if (state["sessionActive"] == true) {
+              pageToDisplay = const InfoPage();
+            }
+            break;
+          case "profile":
+            if (state["sessionActive"] == true) {
+              pageToDisplay = const ProfilePage();
+            }
+            break;
+          case "settings":
+            if (state["sessionActive"] == true) {
+              pageToDisplay = const SettingsPage();
+            }
+            break;
+
+          case "register_onboard_host":
+            if (state["sessionActive"] == true) {
+              pageToDisplay = const RegisterOnboardHost(
+                currentIndex: 0,
+              );
+            }
+            break;
+          case "register_onboard_api":
+            if (state["sessionActive"] == true) {
+              pageToDisplay = const RegisterOnboardHost(
+                currentIndex: 0,
+              );
+            }
+            break;
+          case "register_onboard_websites":
+            if (state["sessionActive"] == true) {
+              pageToDisplay = const RegisterOnboardHost(
+                currentIndex: 1,
+              );
+            }
+            break;
+          case "register_onboard_1":
+            if (state["sessionActive"] == true) {
+              pageToDisplay = const RegisterOnboardHost(
+                currentIndex: 2,
+              );
+            }
+            break;
+          case "register_onboard_2":
+            if (state["sessionActive"] == true) {
+              pageToDisplay = const RegisterOnboardHost(
+                currentIndex: 3,
+              );
+            }
+            break;
+          case "register_onboard_3":
+            if (state["sessionActive"] == true) {
+              pageToDisplay = const RegisterOnboardHost(
+                currentIndex: 4,
+              );
+            }
+            break;
+          case "register_onboard_api_init":
+            if (state["sessionActive"] == true) {
+              pageToDisplay = const ApiKeyInit();
+            }
+            break;
+          default:
+            pageToDisplay = const LoginPage();
+        }
+        // ignore: use_build_context_synchronously
+        Navigator.pushReplacement(
+            context,
+            PageTransition(
+                child: pageToDisplay, type: PageTransitionType.fade));
       }
     }
   }

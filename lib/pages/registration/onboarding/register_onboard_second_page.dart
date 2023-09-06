@@ -42,12 +42,16 @@ class _RegisterOnboardSecondPageState extends State<RegisterOnboardSecondPage> {
           const SizedBox(
             height: 40,
           ),
-          Text("Then we hand them off to our intelligent robot to solve!",
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.bold,
-                  color: AppStyle.getTextColor())),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 25),
+            child: Text(
+                "Then we hand them off to our intelligent robot to solve!",
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.bold,
+                    color: AppStyle.getTextColor())),
+          ),
         ]),
       ),
     );

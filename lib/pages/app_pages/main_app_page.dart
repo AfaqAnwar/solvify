@@ -47,6 +47,7 @@ class _MainAppPageState extends State<MainAppPage> {
   Color currentButtonColor = AppStyle.primaryAccent;
   bool isValid = false;
   int milli = 250;
+  bool disableDrawer = false;
 
   void setSharedState() async {
     final SharedPreferences prefs = await _prefs;
@@ -256,9 +257,10 @@ class _MainAppPageState extends State<MainAppPage> {
       setState(() => _subtitleOpacity = 0);
 
       Future.delayed(
-          const Duration(milliseconds: 500),
+          const Duration(milliseconds: 250),
           () => setState(() {
                 hideDrawer = true;
+                disableDrawer = true;
                 logo = AssetImage(AppStyle.getLoadingGif());
                 bodyContent = getImage();
                 titleText = "LOADING";
@@ -279,9 +281,10 @@ class _MainAppPageState extends State<MainAppPage> {
       setState(() => _loading = true);
 
       Future.delayed(
-          const Duration(milliseconds: 500),
+          const Duration(milliseconds: 200),
           () => setState(() {
                 hideDrawer = true;
+                disableDrawer = true;
                 logo = AssetImage(AppStyle.getLoadingGif());
                 bodyContent = getImage();
                 titleText = "AUTO SOLVING...";
@@ -304,9 +307,10 @@ class _MainAppPageState extends State<MainAppPage> {
     setState(() => _loading = true);
 
     Future.delayed(
-        const Duration(milliseconds: 500),
+        const Duration(milliseconds: 200),
         () => setState(() {
               hideDrawer = false;
+              disableDrawer = false;
               logo = AssetImage(AppStyle.getIdleGif());
               titleText = "SOLVIFY";
               _textOpacity = 1;
@@ -327,9 +331,10 @@ class _MainAppPageState extends State<MainAppPage> {
     setState(() => _loading = true);
     final SharedPreferences prefs = await _prefs;
     Future.delayed(
-        const Duration(milliseconds: 500),
+        const Duration(milliseconds: 200),
         () => setState(() {
               hideDrawer = false;
+              disableDrawer = false;
               logo = AssetImage(AppStyle.getIdleGif());
               titleText = "SOLVIFY";
               _textOpacity = 1;
@@ -353,9 +358,10 @@ class _MainAppPageState extends State<MainAppPage> {
   void updateBodyToError() {
     setState(() => _loading = false);
     Future.delayed(
-        const Duration(milliseconds: 500),
+        const Duration(milliseconds: 200),
         () => setState(() {
               hideDrawer = false;
+              disableDrawer = false;
               logo = AssetImage(AppStyle.getIdleGif());
               titleText = "SOLVIFY";
               _textOpacity = 1;
@@ -418,6 +424,7 @@ class _MainAppPageState extends State<MainAppPage> {
   @override
   Widget build(BuildContext context) {
     return CustomScaffold(
+        disable: disableDrawer,
         hideDrawer: hideDrawer,
         child: Center(
           child: SizedBox(
@@ -516,7 +523,7 @@ class _MainAppPageState extends State<MainAppPage> {
                               } else {
                                 await answer();
                                 Future.delayed(
-                                    const Duration(milliseconds: 100),
+                                    const Duration(milliseconds: 50),
                                     () => setState(() {
                                           finishLoadUpdateBody();
                                         }));

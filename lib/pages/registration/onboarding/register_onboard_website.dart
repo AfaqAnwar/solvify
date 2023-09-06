@@ -41,12 +41,16 @@ class _RegisterOnboardWebsitesState extends State<RegisterOnboardWebsites> {
         const SizedBox(
           height: 40,
         ),
-        Text("Add your desired websites to your account to get started!",
-            textAlign: TextAlign.center,
-            style: TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.bold,
-                color: AppStyle.getTextColor())),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 25),
+          child: Text(
+              "Add your desired websites to your account to get started!",
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.bold,
+                  color: AppStyle.getTextColor())),
+        ),
       ]),
     );
   }
