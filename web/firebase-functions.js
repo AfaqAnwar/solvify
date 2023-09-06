@@ -105,13 +105,11 @@ window.checkSession = () => {
         window.userState.sessionActive = true;
         window.userState.email = user.email;
         window.userState.uid = user.uid;
-        console.log("User is signed in.");
         resolve(true);
       } else {
         window.userState.sessionActive = false;
         window.userState.email = "";
         window.userState.uid = "";
-        console.log("No user is signed in.");
         resolve(false);
       }
     });
@@ -167,7 +165,6 @@ window.updateAPIKeyToFirestore = async (apiKey) => {
       .then(() => {
         window.userState.apiKeyUpdated = true;
         window.userState.apiKey = apiKey;
-        console.log(window.userState.apiKey);
         resolve(true);
       })
       .catch((error) => {
@@ -236,7 +233,6 @@ window.getWebsitesFromFirestore = async () => {
     await getDoc(docRef).then((doc) => {
       if (doc.exists()) {
         window.userState.websites = doc.data().websites;
-        console.log(window.userState.websites);
         resolve(true);
       } else {
         window.userState.websites = [];

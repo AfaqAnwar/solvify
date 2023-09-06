@@ -5,8 +5,6 @@ function sendMessage(message) {
         type: "notifications",
         data: message,
       });
-
-      console.log("Message sent");
     } else {
       console.error("No active tab found");
     }

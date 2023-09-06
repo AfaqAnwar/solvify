@@ -8,6 +8,7 @@ import 'package:solvify/pages/registration/onboarding/register_onboard_api_page.
 import 'package:solvify/pages/registration/onboarding/register_onboard_first_page.dart';
 import 'package:solvify/pages/registration/onboarding/register_onboard_second_page.dart';
 import 'package:solvify/pages/registration/onboarding/register_onboard_third_page.dart';
+import 'package:solvify/pages/registration/onboarding/register_onboard_website.dart';
 import 'package:solvify/pages/signin_signup/login_page.dart';
 import 'package:solvify/styles/app_style.dart';
 
@@ -24,7 +25,7 @@ class RegisterOnboardHost extends StatefulWidget {
 class _RegisterOnboardHostState extends State<RegisterOnboardHost> {
   final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
   int currentIndex = 0;
-  int totalIndex = 4;
+  int totalIndex = 5;
   String buttonText = "Next";
 
   void setSharedState() async {
@@ -178,10 +179,12 @@ class _RegisterOnboardHostState extends State<RegisterOnboardHost> {
       case 0:
         return const RegisterOnboardAPIPage();
       case 1:
-        return const RegisterOnboardFirstPage();
+        return const RegisterOnboardWebsites();
       case 2:
-        return const RegisterOnboardSecondPage();
+        return const RegisterOnboardFirstPage();
       case 3:
+        return const RegisterOnboardSecondPage();
+      case 4:
         return const RegisterOnboardThirdPage();
       default:
         return const CircularProgressIndicator();

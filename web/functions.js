@@ -20,7 +20,6 @@ window.scrapeHTML = () => {
       window.clientVariables.html = result;
       resolve(true);
     } catch (e) {
-      console.log(e);
       resolve(false); // Resolve with false upon failure
     }
   });

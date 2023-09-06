@@ -12,7 +12,6 @@ function storeAnswers(question, answers) {
       const tempAnswerMap = result.responseMap || {};
       tempAnswerMap[question] = answers;
       chrome.storage.local.set({ responseMap: tempAnswerMap }, () => {
-        console.log("Data updated in local storage:", tempAnswerMap);
         answerMap = tempAnswerMap; // Update the answerMap in the content script
       });
     });
@@ -45,7 +44,7 @@ function displayText(ans) {
   if (check) {
     return;
   }
-  console.log("H: Displaying answer:", ans);
+
   var div = document.createElement("div");
   div.innerHTML = `<div><p style="font-weight: bold; margin-left: 1rem;">Solvify McGraw-Hill Connect SmartBook Solver</p></div><div style="margin-left: 1rem;"><p style="color: #6600FF;">${ans.join(
     "<br>"
@@ -59,7 +58,6 @@ function displayText(ans) {
   if (container.length === 0) {
     container = document.querySelectorAll(".dlc_question");
     if (container.length === 0) {
-      console.log("H: No container");
       return;
     }
   }

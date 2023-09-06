@@ -95,7 +95,7 @@ class _MainAppPageState extends State<MainAppPage> {
     return Column(
       children: [
         Text(
-          "This page is not supported by Solvify. \n Please open a supported page.",
+          "This page is not supported by Solvify. \n Please open a supported page or add this page to the list of supported websites.",
           textAlign: TextAlign.center,
           style: TextStyle(
               color: AppStyle.getTextColor(),

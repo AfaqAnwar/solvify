@@ -228,24 +228,31 @@ class _AppHostState extends State<AppHost> {
                 );
               }
               break;
-            case "register_onboard_1":
+            case "register_onboard_websites":
               if (state["sessionActive"] == true) {
                 pageToDisplay = const RegisterOnboardHost(
                   currentIndex: 1,
                 );
               }
               break;
-            case "register_onboard_2":
+            case "register_onboard_1":
               if (state["sessionActive"] == true) {
                 pageToDisplay = const RegisterOnboardHost(
                   currentIndex: 2,
                 );
               }
               break;
-            case "register_onboard_3":
+            case "register_onboard_2":
               if (state["sessionActive"] == true) {
                 pageToDisplay = const RegisterOnboardHost(
                   currentIndex: 3,
+                );
+              }
+              break;
+            case "register_onboard_3":
+              if (state["sessionActive"] == true) {
+                pageToDisplay = const RegisterOnboardHost(
+                  currentIndex: 4,
                 );
               }
               break;
