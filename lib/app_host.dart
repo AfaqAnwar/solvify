@@ -149,21 +149,30 @@ class _AppHostState extends State<AppHost> {
             case "app":
               if (state["sessionActive"] == true) {
                 var isValid = false;
+                var key = "";
 
-                if (prefs.getString("localKey") != null) {
+                if (prefs.getString("localKey") != null || key != "") {
                   isValid =
                       await checkIfAPIKeyIsValid(prefs.getString("localKey")!);
+                  print("${prefs.getString("localKey")!} local");
+                } else {
+                  var result = await getAPIKey();
+                  if (result == true) {
+                    key = state["apiKey"];
+                    print(key);
+                  } else {
+                    key = "";
+                  }
+                  isValid = await checkIfAPIKeyIsValid(key);
                 }
-                OpenAI.apiKey = prefs.getString("localKey")!;
+
+                print("valid $isValid");
 
                 if (isValid == false) {
-                  await getAPIKey();
-                  isValid =
-                      await checkIfAPIKeyIsValid(state["apiKey"].toString());
-                  OpenAI.apiKey = state["apiKey"].toString();
-                }
-
-                if (isValid) {
+                  pageToDisplay = const ApiKeyInit(retry: true);
+                } else {
+                  prefs.setString("localKey", key);
+                  OpenAI.apiKey = key;
                   String? question = prefs.getString("currentQuestion");
                   String? answer = prefs.getString("currentAnswer");
                   String? confidence = prefs.getString("currentConfidence");
@@ -177,23 +186,26 @@ class _AppHostState extends State<AppHost> {
                   } else {
                     pageToDisplay = const MainAppPage();
                   }
-                } else {
-                  pageToDisplay = const ApiKeyInit(retry: true);
                 }
 
                 var websites = prefs.getStringList("websites");
+                print("local websites + $websites");
 
                 if (websites == null || websites.isEmpty) {
                   var result =
                       await promiseToFuture(getWebsitesFromFirestore());
 
+                  print("null getting from firestore");
+
                   if (result == true) {
                     if (state["websites"] != null) {
                       prefs.setStringList("websites", state["websites"]);
+                      print("${state["websites"]} firestore");
                     }
                   } else if (result == false ||
                       state["websites"] == null ||
                       state["websites"].isEmpty) {
+                    print("null setting blank");
                     prefs.setStringList("websites", []);
                   }
                 }

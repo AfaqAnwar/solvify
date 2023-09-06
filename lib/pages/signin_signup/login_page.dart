@@ -5,6 +5,7 @@ import 'dart:js_util';
 import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:solvify/app_host.dart';
 import 'package:solvify/firebase_js.dart';
 import 'package:solvify/components/generic_components/styled_modal.dart';
 import 'package:solvify/components/generic_components/input_textfield.dart';
@@ -64,11 +65,13 @@ class _LoginPageState extends State<LoginPage> {
         if (state['loggedIn'] == true) {
           // ignore: use_build_context_synchronously
           Navigator.pop(context);
-          Future.delayed(const Duration(milliseconds: 500), () {
+          final SharedPreferences prefs = await _prefs;
+          prefs.setString("currentPage", "app");
+          await Future.delayed(const Duration(milliseconds: 500), () {
             Navigator.pushReplacement(
                 context,
                 PageTransition(
-                    child: const MainAppPage(),
+                    child: const AppHost(),
                     type: PageTransitionType.rightToLeftWithFade));
           });
         }

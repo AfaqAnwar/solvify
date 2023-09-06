@@ -167,6 +167,7 @@ window.updateAPIKeyToFirestore = async (apiKey) => {
       .then(() => {
         window.userState.apiKeyUpdated = true;
         window.userState.apiKey = apiKey;
+        console.log(window.userState.apiKey);
         resolve(true);
       })
       .catch((error) => {
@@ -231,10 +232,11 @@ window.getOnboardedStatus = async () => {
 window.getWebsitesFromFirestore = async () => {
   return new Promise(async (resolve, reject) => {
     const db = getFirestore(window.appInstance);
-    const docRef = doc(db, "websites", window.userState.uid);
+    const docRef = doc(db, "users", window.userState.uid);
     await getDoc(docRef).then((doc) => {
       if (doc.exists()) {
         window.userState.websites = doc.data().websites;
+        console.log(window.userState.websites);
         resolve(true);
       } else {
         window.userState.websites = [];

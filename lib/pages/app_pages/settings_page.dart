@@ -36,6 +36,13 @@ class _SettingsPageState extends State<SettingsPage> {
     });
   }
 
+  void clearPrefs() async {
+    final SharedPreferences prefs = await _prefs;
+    setState(() {
+      prefs.clear();
+    });
+  }
+
   void setSharedStateTheme() async {
     final SharedPreferences prefs = await _prefs;
     setState(() {
@@ -247,6 +254,7 @@ class _SettingsPageState extends State<SettingsPage> {
                                       Future.delayed(
                                           const Duration(milliseconds: 500),
                                           () {
+                                        clearPrefs();
                                         Navigator.pop(context);
                                         Navigator.pushReplacement(
                                             context,
