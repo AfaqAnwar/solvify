@@ -7,7 +7,7 @@ import 'package:js/js.dart';
 external dynamic scrapeHTML();
 
 @JS('checkCurrentTabURL')
-external dynamic checkCurrentTabURL();
+external dynamic checkCurrentTabURL(List<String> list);
 
 @JS('checkForMcGraw')
 external dynamic checkForMcGraw();

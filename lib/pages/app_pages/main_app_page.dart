@@ -59,8 +59,9 @@ class _MainAppPageState extends State<MainAppPage> {
   void initState() async {
     super.initState();
     setSharedState();
-
-    isValid = await promiseToFuture(checkCurrentTabURL());
+    final SharedPreferences prefs = await _prefs;
+    var list = prefs.getStringList("websites");
+    isValid = await promiseToFuture(checkCurrentTabURL(list!));
 
     if (isValid == true) {
       if (widget.question == null) {

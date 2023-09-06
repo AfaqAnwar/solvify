@@ -10,11 +10,9 @@ import 'package:solvify/firebase_js.dart';
 import 'package:solvify/components/generic_components/styled_modal.dart';
 import 'package:solvify/components/generic_components/input_textfield.dart';
 import 'package:solvify/components/generic_components/styled_button.dart';
-import 'package:solvify/pages/app_pages/main_app_page.dart';
 import 'package:solvify/pages/registration/register_page.dart';
 import 'package:solvify/styles/app_style.dart';
 
-//TODO: ADD API CHECK TO LOGIN.
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
 

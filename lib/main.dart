@@ -3,8 +3,6 @@ import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:solvify/app_host.dart';
 
-//TODO: ADD SELF MANAGED WEBSITES.
-
 void main() async {
   runApp(const MyApp());
 }

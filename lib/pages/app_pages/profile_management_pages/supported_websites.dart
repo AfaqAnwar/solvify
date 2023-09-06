@@ -50,16 +50,6 @@ class _SupportedWebsitesState extends State<SupportedWebsites> {
       website = 'https://$website';
     }
 
-    // Adding "www."
-    if (!website.startsWith('https://www.')) {
-      website = website.replaceFirst('https://', 'https://www.');
-    }
-
-    // Adding trailing "/"
-    if (!website.endsWith('/')) {
-      website += '/';
-    }
-
     websiteLink = website;
   }
 

@@ -8,7 +8,6 @@ import 'package:page_transition/page_transition.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:solvify/firebase_js.dart';
-import 'package:solvify/functions_js.dart';
 import 'package:solvify/options.dart';
 import 'package:solvify/pages/app_pages/info_page.dart';
 import 'package:solvify/pages/app_pages/main_app_page.dart';
@@ -77,11 +76,6 @@ class _AppHostState extends State<AppHost> {
     return result;
   }
 
-  Future getURLResult() async {
-    var result = await promiseToFuture(checkCurrentTabURL());
-    return result;
-  }
-
   Future getOnboarded() async {
     var result = await promiseToFuture(getOnboardedStatus());
     return result;
@@ -131,7 +125,9 @@ class _AppHostState extends State<AppHost> {
 
       dynamic result = await getOnboarded();
 
-      if (result == false && page == "register_onboard_api_init") {
+      if (result == true &&
+          state["onboarded"] == false &&
+          page == "register_onboard_api_init") {
         // ignore: use_build_context_synchronously
         Navigator.pushReplacement(
             context,
@@ -149,24 +145,20 @@ class _AppHostState extends State<AppHost> {
             case "app":
               if (state["sessionActive"] == true) {
                 var isValid = false;
-                var key = "";
+                var key = prefs.getString("localKey");
 
-                if (prefs.getString("localKey") != null || key != "") {
-                  isValid =
-                      await checkIfAPIKeyIsValid(prefs.getString("localKey")!);
-                  print("${prefs.getString("localKey")!} local");
+                if (key != null) {
+                  isValid = await checkIfAPIKeyIsValid(key);
                 } else {
                   var result = await getAPIKey();
+
                   if (result == true) {
                     key = state["apiKey"];
-                    print(key);
                   } else {
                     key = "";
                   }
-                  isValid = await checkIfAPIKeyIsValid(key);
+                  isValid = await checkIfAPIKeyIsValid(key!);
                 }
-
-                print("valid $isValid");
 
                 if (isValid == false) {
                   pageToDisplay = const ApiKeyInit(retry: true);
@@ -189,23 +181,18 @@ class _AppHostState extends State<AppHost> {
                 }
 
                 var websites = prefs.getStringList("websites");
-                print("local websites + $websites");
 
                 if (websites == null || websites.isEmpty) {
                   var result =
                       await promiseToFuture(getWebsitesFromFirestore());
 
-                  print("null getting from firestore");
-
                   if (result == true) {
                     if (state["websites"] != null) {
                       prefs.setStringList("websites", state["websites"]);
-                      print("${state["websites"]} firestore");
                     }
                   } else if (result == false ||
                       state["websites"] == null ||
                       state["websites"].isEmpty) {
-                    print("null setting blank");
                     prefs.setStringList("websites", []);
                   }
                 }
