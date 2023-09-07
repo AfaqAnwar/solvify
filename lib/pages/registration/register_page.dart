@@ -11,10 +11,13 @@ import 'package:solvify/components/generic_components/input_textfield.dart';
 import 'package:solvify/firebase_js.dart';
 import 'package:solvify/pages/registration/onboarding/register_onboard_host.dart';
 import 'package:solvify/pages/signin_signup/login_page.dart';
+import 'package:solvify/pages/signin_signup/reset_password_page.dart';
 import 'package:solvify/styles/app_style.dart';
 
 class RegisterPage extends StatefulWidget {
-  const RegisterPage({super.key});
+  final bool? isReset;
+
+  const RegisterPage({super.key, this.isReset});
 
   @override
   State<RegisterPage> createState() => _RegisterPageState();
@@ -141,6 +144,13 @@ class _RegisterPageState extends State<RegisterPage> {
             child: const LoginPage(), type: PageTransitionType.fade));
   }
 
+  void goBackToResetPage() {
+    Navigator.pushReplacement(
+        context,
+        PageTransition(
+            child: const ResetPasswordPage(), type: PageTransitionType.fade));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -151,7 +161,11 @@ class _RegisterPageState extends State<RegisterPage> {
           cursor: SystemMouseCursors.click,
           child: GestureDetector(
             onTap: () {
-              goBackToLogin();
+              if (widget.isReset!) {
+                goBackToResetPage();
+              } else {
+                goBackToLogin();
+              }
             },
             child: Icon(
               Icons.arrow_back_ios,

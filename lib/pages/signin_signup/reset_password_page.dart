@@ -10,6 +10,7 @@ import 'package:solvify/components/generic_components/styled_button.dart';
 import 'package:solvify/components/generic_components/styled_modal.dart';
 import 'package:solvify/firebase_js.dart';
 import 'package:solvify/pages/registration/register_page.dart';
+import 'package:solvify/pages/signin_signup/login_page.dart';
 import 'package:solvify/styles/app_style.dart';
 
 class ResetPasswordPage extends StatefulWidget {
@@ -26,7 +27,10 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
     Navigator.pushReplacement(
         context,
         PageTransition(
-            child: const RegisterPage(), type: PageTransitionType.fade));
+            child: const RegisterPage(
+              isReset: true,
+            ),
+            type: PageTransitionType.fade));
   }
 
   bool checkFields() {
@@ -39,11 +43,11 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
 
   void displayError(String errorMessage) {
     switch (errorMessage) {
-      case "invalid-email":
-        errorMessage = "You entered an invalid email address.";
+      case "user-not-found":
+        errorMessage = "No user found with that email.";
         break;
       case "empty-fields":
-        errorMessage = "Please fill out both your email and password.";
+        errorMessage = "Please fill in all fields.";
         break;
       default:
         errorMessage = "An undefined error happened - $errorMessage";
@@ -68,9 +72,32 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
         });
   }
 
+  void goBackToLogin() {
+    Navigator.pushReplacement(
+        context,
+        PageTransition(
+            child: const LoginPage(), type: PageTransitionType.fade));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        leading: MouseRegion(
+          cursor: SystemMouseCursors.click,
+          child: GestureDetector(
+            onTap: () {
+              goBackToLogin();
+            },
+            child: Icon(
+              Icons.arrow_back_ios,
+              color: AppStyle.primaryAccent,
+            ),
+          ),
+        ),
+      ),
       backgroundColor: AppStyle.primaryBackground,
       body: SafeArea(
         child: Center(
@@ -132,15 +159,14 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                                       onTap: () => Navigator.pop(context),
                                     ));
                           });
-                        } else {
-                          Future.delayed(const Duration(milliseconds: 500), () {
-                            Navigator.pop(context);
-                            String errorMessage = state['error']
-                                .toString()
-                                .replaceAll("auth/", "");
-                            displayError(errorMessage);
-                          });
                         }
+                      } else {
+                        Future.delayed(const Duration(milliseconds: 500), () {
+                          Navigator.pop(context);
+                          String errorMessage =
+                              state['error'].toString().replaceAll("auth/", "");
+                          displayError(errorMessage);
+                        });
                       }
                     }
                   },

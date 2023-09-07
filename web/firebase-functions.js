@@ -310,6 +310,7 @@ window.sendPasswordResetEmail = async (email) => {
         resolve(true);
       })
       .catch((error) => {
+        console.log("Error sending password reset email: " + error.code);
         window.userState.error = error.code;
         window.userState.resetSent = false;
         resolve(false);
