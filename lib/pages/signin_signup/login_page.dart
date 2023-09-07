@@ -11,6 +11,7 @@ import 'package:solvify/components/generic_components/styled_modal.dart';
 import 'package:solvify/components/generic_components/input_textfield.dart';
 import 'package:solvify/components/generic_components/styled_button.dart';
 import 'package:solvify/pages/registration/register_page.dart';
+import 'package:solvify/pages/signin_signup/reset_password_page.dart';
 import 'package:solvify/styles/app_style.dart';
 
 class LoginPage extends StatefulWidget {
@@ -137,6 +138,13 @@ class _LoginPageState extends State<LoginPage> {
             child: const RegisterPage(), type: PageTransitionType.fade));
   }
 
+  void goToResetPage() {
+    Navigator.pushReplacement(
+        context,
+        PageTransition(
+            child: const ResetPasswordPage(), type: PageTransitionType.fade));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -190,7 +198,7 @@ class _LoginPageState extends State<LoginPage> {
                     MouseRegion(
                       cursor: SystemMouseCursors.click,
                       child: GestureDetector(
-                        onTap: () {},
+                        onTap: goToResetPage,
                         child: Text("Forgot Password?",
                             style: TextStyle(color: AppStyle.faqTextHeading)),
                       ),

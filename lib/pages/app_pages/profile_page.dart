@@ -69,13 +69,13 @@ class _ProfilePageState extends State<ProfilePage> {
     }
   }
 
-  Future<bool> signIn() async {
+  Future signIn() async {
     if (checkFields() == false) {
       displayError("empty-fields");
     } else {
+      Navigator.pop(context);
       displayLoad();
       var state = js.JsObject.fromBrowserObject(js.context['userState']);
-
       dynamic result = await promiseToFuture(signUserIn(
           state['email'], passwordController.text.trim().toString()));
 
@@ -89,10 +89,40 @@ class _ProfilePageState extends State<ProfilePage> {
           String errorMessage =
               state['error'].toString().replaceAll("auth/", "");
           displayError(errorMessage);
+          return false;
         });
       }
     }
-    return false;
+  }
+
+  void reauth() async {
+    var state = js.JsObject.fromBrowserObject(js.context['userState']);
+    var result = await signIn();
+    if (result == true) {
+      dynamic result = await promiseToFuture(deleteUserFromCloud());
+      if (result && state["loggedIn"] == false) {
+        Future.delayed(const Duration(milliseconds: 500), () {
+          clearPrefs();
+          Navigator.pop(context);
+          Navigator.pushReplacement(
+              context,
+              PageTransition(
+                  child: const LoginPage(), type: PageTransitionType.fade));
+        });
+      } else {
+        Future.delayed(const Duration(milliseconds: 500), () {
+          Navigator.pop(context);
+          showDialog(
+            context: context,
+            builder: (context) => StyledModal(
+                backgroundColor: AppStyle.secondaryBackground,
+                title: 'Deletion Error',
+                body: 'An unknown error occurred while deleting your account.',
+                onTap: () => Navigator.pop(context)),
+          );
+        });
+      }
+    }
   }
 
   void displayError(String errorMessage) {
@@ -125,7 +155,7 @@ class _ProfilePageState extends State<ProfilePage> {
         context: context,
         builder: (context) => StyledModal(
               backgroundColor: AppStyle.secondaryBackground,
-              title: 'Login Error',
+              title: 'Reauthentication Error',
               body: errorMessage.toString(),
               onTap: () => Navigator.pop(context),
             ));
@@ -210,8 +240,6 @@ class _ProfilePageState extends State<ProfilePage> {
                                   dynamic result = await promiseToFuture(
                                       deleteDocFromCloud(state['uid']));
 
-                                  print(state["dataDeleted"]);
-
                                   if (state["dataDeleted"] == true && result) {
                                     dynamic result = await promiseToFuture(
                                         deleteUserFromCloud());
@@ -238,57 +266,13 @@ class _ProfilePageState extends State<ProfilePage> {
                                           context: context,
                                           builder: (context) =>
                                               StyledModalInput(
+                                            buttonText: "Delete Account",
                                             backgroundColor:
                                                 AppStyle.secondaryBackground,
                                             title: 'Deletion Error',
                                             body:
                                                 'You need to reauthenticate to delete your account. Please provide your password to continue.',
-                                            onTap: () => () async {
-                                              var result = await signIn();
-                                              if (result == true) {
-                                                dynamic result =
-                                                    await promiseToFuture(
-                                                        deleteUserFromCloud());
-                                                if (result &&
-                                                    state["loggedIn"]) {
-                                                  Future.delayed(
-                                                      const Duration(
-                                                          milliseconds: 500),
-                                                      () {
-                                                    clearPrefs();
-                                                    Navigator.pop(context);
-                                                    Navigator.pushReplacement(
-                                                        context,
-                                                        PageTransition(
-                                                            child:
-                                                                const LoginPage(),
-                                                            type:
-                                                                PageTransitionType
-                                                                    .fade));
-                                                  });
-                                                } else {
-                                                  Future.delayed(
-                                                      const Duration(
-                                                          milliseconds: 500),
-                                                      () {
-                                                    Navigator.pop(context);
-                                                    showDialog(
-                                                      context: context,
-                                                      builder: (context) => StyledModal(
-                                                          backgroundColor: AppStyle
-                                                              .secondaryBackground,
-                                                          title:
-                                                              'Deletion Error',
-                                                          body:
-                                                              'An unknown error occurred while deleting your account.',
-                                                          onTap: () =>
-                                                              Navigator.pop(
-                                                                  context)),
-                                                    );
-                                                  });
-                                                }
-                                              }
-                                            },
+                                            onTap: reauth,
                                             inputTextField: InputTextField(
                                               controller: passwordController,
                                               hintText: "Password",

@@ -50,3 +50,6 @@ external dynamic deleteUserFromCloud();
 
 @JS('deleteDocFromCloud')
 external dynamic deleteDocFromCloud(String docID);
+
+@JS('sendPasswordResetEmail')
+external dynamic sendPasswordResetEmail(String email);

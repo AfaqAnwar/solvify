@@ -8,6 +8,7 @@ import {
   updateEmail,
   updatePassword,
   deleteUser,
+  sendPasswordResetEmail,
 } from "./firebase/firebase-auth.js";
 
 import {
@@ -30,6 +31,7 @@ window.userState = {
   onboarded: false,
   websites: [],
   dataDeleted: false,
+  resetSent: false,
 };
 
 window.auth = getAuth();
@@ -99,6 +101,8 @@ window.clearState = () => {
   window.userState.apiKey = "";
   window.userState.onboarded = false;
   window.userState.websites = [];
+  window.userState.dataDeleted = false;
+  window.userState.resetSent = false;
 };
 
 window.checkSession = () => {
@@ -293,6 +297,21 @@ window.deleteDocFromCloud = async (docId) => {
         window.userState.error = error.code;
         console.log("Error deleting document: " + error.code);
         window.userState.dataDeleted = false;
+        resolve(false);
+      });
+  });
+};
+
+window.sendPasswordResetEmail = async (email) => {
+  return new Promise(async (resolve, reject) => {
+    await sendPasswordResetEmail(window.auth, email)
+      .then(() => {
+        window.userState.resetSent = true;
+        resolve(true);
+      })
+      .catch((error) => {
+        window.userState.error = error.code;
+        window.userState.resetSent = false;
         resolve(false);
       });
   });
