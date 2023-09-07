@@ -7,6 +7,7 @@ import {
   signOut,
   updateEmail,
   updatePassword,
+  deleteUser,
 } from "./firebase/firebase-auth.js";
 
 import {
@@ -14,6 +15,7 @@ import {
   doc,
   setDoc,
   getDoc,
+  deleteDoc,
 } from "./firebase/firebase-firestore.js";
 
 window.userState = {
@@ -27,6 +29,7 @@ window.userState = {
   apiKey: "",
   onboarded: false,
   websites: [],
+  dataDeleted: false,
 };
 
 window.auth = getAuth();
@@ -254,6 +257,42 @@ window.updateWebsites = async (list) => {
       .catch((error) => {
         window.userState.websites = [];
         window.userState.error = error.code;
+        resolve(false);
+      });
+  });
+};
+
+window.deleteUserFromCloud = async () => {
+  return new Promise(async (resolve, reject) => {
+    window.auth = getAuth();
+    await deleteUser(window.auth.currentUser)
+      .then(() => {
+        console.log("User deleted");
+        window.clearState();
+        resolve(true);
+      })
+      .catch((error) => {
+        console.log("Error deleting user: " + error.code);
+        window.userState.error = error.code;
+        resolve(false);
+      });
+  });
+};
+
+window.deleteDocFromCloud = async (docId) => {
+  return new Promise(async (resolve, reject) => {
+    const db = getFirestore(window.appInstance);
+    const docRef = doc(db, "users", window.userState.uid);
+    await deleteDoc(docRef)
+      .then(() => {
+        console.log("Document deleted");
+        window.userState.dataDeleted = true;
+        resolve(true);
+      })
+      .catch((error) => {
+        window.userState.error = error.code;
+        console.log("Error deleting document: " + error.code);
+        window.userState.dataDeleted = false;
         resolve(false);
       });
   });

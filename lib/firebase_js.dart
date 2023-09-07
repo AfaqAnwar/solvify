@@ -44,3 +44,9 @@ external dynamic getWebsitesFromFirestore();
 
 @JS('updateWebsites')
 external dynamic updateWebsites(List<String> websites);
+
+@JS('deleteUserFromCloud')
+external dynamic deleteUserFromCloud();
+
+@JS('deleteDocFromCloud')
+external dynamic deleteDocFromCloud(String docID);
