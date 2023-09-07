@@ -8,6 +8,8 @@ class ConfirmModal extends StatelessWidget {
   final Color backgroundColor;
   final String title;
   final String body;
+  final Color? buttonColorYes;
+  final Color? buttonColorNo;
 
   const ConfirmModal(
       {super.key,
@@ -15,7 +17,9 @@ class ConfirmModal extends StatelessWidget {
       required this.title,
       required this.body,
       required this.onYesTap,
-      required this.onNoTap});
+      required this.onNoTap,
+      this.buttonColorYes,
+      this.buttonColorNo});
 
   @override
   Widget build(BuildContext context) {
@@ -60,7 +64,8 @@ class ConfirmModal extends StatelessWidget {
                       onTap: () {
                         onYesTap!();
                       },
-                      buttonColor: AppStyle.getAccent().withOpacity(0.4),
+                      buttonColor: buttonColorYes ??
+                          AppStyle.getAccent().withOpacity(0.4),
                       buttonText: "Yes",
                       buttonTextColor: Colors.white),
                 ),
@@ -70,7 +75,7 @@ class ConfirmModal extends StatelessWidget {
                       onTap: () {
                         onNoTap!();
                       },
-                      buttonColor: AppStyle.getAccent(),
+                      buttonColor: buttonColorNo ?? AppStyle.getAccent(),
                       buttonText: "No",
                       buttonTextColor: Colors.white),
                 ),

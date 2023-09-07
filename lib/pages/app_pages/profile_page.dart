@@ -231,6 +231,7 @@ class _ProfilePageState extends State<ProfilePage> {
                           builder: (context) => ConfirmModal(
                                 backgroundColor: AppStyle.secondaryBackground,
                                 title: 'Delete Account',
+                                buttonColorYes: AppStyle.primaryError,
                                 body:
                                     'Are you sure you want to delete your account? This action cannot be undone. However, you are always welcome to create a account.',
                                 onYesTap: () async {
