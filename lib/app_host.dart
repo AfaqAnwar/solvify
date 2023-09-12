@@ -6,9 +6,7 @@ import 'package:dart_openai/dart_openai.dart';
 import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
 import 'package:solvify/firebase_js.dart';
-import 'package:solvify/options.dart';
 import 'package:solvify/pages/app_pages/info_page.dart';
 import 'package:solvify/pages/app_pages/main_app_page.dart';
 import 'package:solvify/pages/app_pages/profile_page.dart';
@@ -45,15 +43,6 @@ class _AppHostState extends State<AppHost> {
       AppStyle.isDarkMode = false;
       AppStyle.setToLightMode();
     }
-
-    String? mode = prefs.getString("mode");
-
-    if (mode == "mcgraw") {
-      Options.setMcGrawEnabled(true);
-    } else {
-      Options.setMcGrawEnabled(false);
-    }
-
     return true;
   }
 

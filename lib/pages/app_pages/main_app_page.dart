@@ -1,19 +1,15 @@
 // ignore: avoid_web_libraries_in_flutter
 import 'dart:js_util';
-
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:dart_openai/dart_openai.dart';
 import 'package:flutter/material.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:solvify/chrome_api.dart';
-
 import 'package:solvify/components/app_components/custom_scaffold.dart';
 import 'package:solvify/components/generic_components/styled_button.dart';
 import 'package:solvify/components/generic_components/styled_modal.dart';
 import 'package:solvify/functions_js.dart';
 import 'package:solvify/helpers/Solver.dart';
-import 'package:solvify/options.dart';
 
 import 'package:solvify/styles/app_style.dart';
 // ignore: avoid_web_libraries_in_flutter
@@ -73,20 +69,15 @@ class _MainAppPageState extends State<MainAppPage> {
       if (widget.question == null) {
         bodyContent = getImage();
       } else {
-        if (Options.mcGrawEnabled == false) {
-          setState(() {
-            solver.setQuestion(widget.question!);
-            solver.setAnswer(widget.answer!);
-            solver.setConfidence(widget.confidence!);
-            _subtitleOpacity = 1;
-            buttonText = "Solve Again";
-            bodyContent = getBody();
-          });
-        } else {
-          bodyContent = getImage();
-        }
+        setState(() {
+          solver.setQuestion(widget.question!);
+          solver.setAnswer(widget.answer!);
+          solver.setConfidence(widget.confidence!);
+          _subtitleOpacity = 1;
+          buttonText = "Solve Again";
+          bodyContent = getBody();
+        });
       }
-      checkMcGraw();
     } else {
       milli = 0;
       setState(() {
@@ -119,18 +110,6 @@ class _MainAppPageState extends State<MainAppPage> {
         )
       ],
     );
-  }
-
-  void checkMcGraw() {
-    if (Options.getMcGrawEnabled() == true) {
-      setState(() {
-        buttonText = "Auto Solve";
-      });
-    } else {
-      setState(() {
-        buttonText = "Solve";
-      });
-    }
   }
 
   Widget getImage() {
@@ -270,58 +249,6 @@ class _MainAppPageState extends State<MainAppPage> {
                 _loading = true;
               }));
     }
-  }
-
-  void setLoadingAndChangeAssetsMcGraw() async {
-    if (_loading == false) {
-      setState(() => _textOpacity = 0);
-      setState(() => _bodyOpacity = 0);
-      setState(() => _subtitleOpacity = 0);
-      setState(() => _buttonOpacity = 0);
-      setState(() => _loading = true);
-
-      Future.delayed(
-          const Duration(milliseconds: 200),
-          () => setState(() {
-                hideDrawer = true;
-                disableDrawer = true;
-                logo = AssetImage(AppStyle.getLoadingGif());
-                bodyContent = getImage();
-                titleText = "AUTO SOLVING...";
-                _textOpacity = 1;
-                _bodyOpacity = 1;
-                _subtitleOpacity = 0;
-                setState(() => _buttonOpacity = 1);
-                setState(() => _loading = false);
-                currentButtonColor = AppStyle.primaryError;
-                buttonText = "Stop";
-              }));
-    }
-  }
-
-  void finishLoadUpdateBodyMcGraw() async {
-    setState(() => _textOpacity = 0);
-    setState(() => _bodyOpacity = 0);
-    setState(() => _subtitleOpacity = 0);
-    setState(() => _buttonOpacity = 0);
-    setState(() => _loading = true);
-
-    Future.delayed(
-        const Duration(milliseconds: 200),
-        () => setState(() {
-              hideDrawer = false;
-              disableDrawer = false;
-              logo = AssetImage(AppStyle.getIdleGif());
-              titleText = "SOLVIFY";
-              _textOpacity = 1;
-              _bodyOpacity = 1;
-              _buttonOpacity = 1;
-              _subtitleOpacity = 1;
-              _loading = false;
-              bodyContent = getImage();
-              currentButtonColor = AppStyle.primaryAccent;
-              buttonText = "Auto Solve";
-            }));
   }
 
   void finishLoadUpdateBody() async {
@@ -474,60 +401,21 @@ class _MainAppPageState extends State<MainAppPage> {
                     child: StyledButton(
                         disable: disabled,
                         onTap: () async {
-                          var mcGrawTabActive =
-                              await promiseToFuture(checkForMcGraw());
+                          if (_loading == false && disabled == false) {
+                            // NEEDS CHANGING DELAY IS RUINING FLOW.
+                            setLoadingAndChangeAssets();
+                            await scrape();
+                            await parse();
 
-                          if (Options.getMcGrawEnabled() &&
-                              _loading == false &&
-                              disabled == false &&
-                              mcGrawTabActive == true) {
-                            if (Options.getMcGrawRunning() == false) {
-                              sendMessage(ParameterSendMessage(
-                                  type: "bot", data: "start"));
-                              Options.setMcGrawRunning(true);
-                              setLoadingAndChangeAssetsMcGraw();
+                            if (solver.getQuestion() == "ERROR") {
+                              updateBodyToError();
                             } else {
-                              sendMessage(ParameterSendMessage(
-                                  type: "bot", data: "stop"));
-                              Options.setMcGrawRunning(false);
-                              finishLoadUpdateBodyMcGraw();
-                            }
-                          } else if (mcGrawTabActive == false &&
-                              _loading == false &&
-                              disabled == false &&
-                              Options.getMcGrawEnabled()) {
-                            // ignore: use_build_context_synchronously
-                            showDialog(
-                                context: context,
-                                builder: (BuildContext context) {
-                                  return StyledModal(
-                                    backgroundColor:
-                                        AppStyle.secondaryBackground,
-                                    title: "McGraw Hill Tab Not Found",
-                                    body:
-                                        "Please open a McGraw Hill Connect SmartBook assignment and try again or disable McGraw Hill Connect SmartBook Auto Solver in the settings page.",
-                                    onTap: () {
-                                      Navigator.pop(context);
-                                    },
-                                  );
-                                });
-                          } else {
-                            if (_loading == false && disabled == false) {
-                              // NEEDS CHANGING DELAY IS RUINING FLOW.
-                              setLoadingAndChangeAssets();
-                              await scrape();
-                              await parse();
-
-                              if (solver.getQuestion() == "ERROR") {
-                                updateBodyToError();
-                              } else {
-                                await answer();
-                                Future.delayed(
-                                    const Duration(milliseconds: 50),
-                                    () => setState(() {
-                                          finishLoadUpdateBody();
-                                        }));
-                              }
+                              await answer();
+                              Future.delayed(
+                                  const Duration(milliseconds: 50),
+                                  () => setState(() {
+                                        finishLoadUpdateBody();
+                                      }));
                             }
                           }
                         },

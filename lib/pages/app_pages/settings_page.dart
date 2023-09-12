@@ -1,11 +1,8 @@
 import 'package:day_night_switcher/day_night_switcher.dart';
 import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
-
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:solvify/components/app_components/custom_scaffold.dart';
-import 'package:solvify/functions_js.dart';
-import 'package:solvify/options.dart';
 import 'package:solvify/styles/app_style.dart';
 import 'package:solvify/components/generic_components/confirm_modal.dart';
 import 'package:solvify/components/generic_components/styled_button.dart';
@@ -26,7 +23,6 @@ class SettingsPage extends StatefulWidget {
 
 class _SettingsPageState extends State<SettingsPage> {
   final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
-  bool switchValue = Options.getMcGrawEnabled();
   Color textColor = AppStyle.getTextColor();
 
   void setSharedState() async {
@@ -50,19 +46,6 @@ class _SettingsPageState extends State<SettingsPage> {
     });
   }
 
-  void setSharedStateMode(bool isEnabled) async {
-    final SharedPreferences prefs = await _prefs;
-    if (isEnabled) {
-      setState(() {
-        prefs.setString("mode", "mcgraw");
-      });
-    } else {
-      setState(() {
-        prefs.setString("mode", "normal");
-      });
-    }
-  }
-
   @override
   void initState() {
     super.initState();
@@ -77,11 +60,6 @@ class _SettingsPageState extends State<SettingsPage> {
             child: CircularProgressIndicator(color: AppStyle.primaryAccent),
           );
         });
-  }
-
-  Future checkMcgraw() async {
-    var result = await promiseToFuture(checkForMcGraw());
-    return result;
   }
 
   void setTextColorHighlight() {
@@ -150,88 +128,6 @@ class _SettingsPageState extends State<SettingsPage> {
                     ),
                   ),
                 ),
-                // const SizedBox(
-                //   height: 10,
-                // ),
-                // Container(
-                //   margin: const EdgeInsets.only(left: 15, right: 15),
-                //   child: ListTile(
-                //     title: MouseRegion(
-                //       onEnter: (event) => setTextColorHighlight(),
-                //       onExit: (event) => setTextColorNormal(),
-                //       cursor: SystemMouseCursors.click,
-                //       child: GestureDetector(
-                //         onTap: () {
-                //           setState(() {
-                //             showDialog(
-                //                 context: context,
-                //                 builder: (context) => StyledModal(
-                //                       backgroundColor:
-                //                           AppStyle.secondaryBackground,
-                //                       title:
-                //                           'What Is McGraw Hill Connect SmartBook Auto Solver?',
-                //                       body:
-                //                           'McGraw Hill Connect SmartBook Auto Solver is a feature that attempts automatically solve McGraw Hill Connect SmartBook assignments. This feature learns as you go, it may select the wrong answer for the first few questions. This feature is currently in beta and may not work properly on all assignments. If you encounter any issues, please report them to us. We are working hard to improve this feature and make it more reliable.',
-                //                       onTap: () => Navigator.pop(context),
-                //                     ));
-                //           });
-                //         },
-                //         child: Text(
-                //           "McGraw Hill Connect SmartBook Auto Solver",
-                //           style: TextStyle(
-                //               color: textColor,
-                //               fontSize: 18,
-                //               fontWeight: FontWeight.w800),
-                //         ),
-                //       ),
-                //     ),
-                //     trailing: MouseRegion(
-                //       cursor: SystemMouseCursors.click,
-                //       child: SizedBox(
-                //         width: 50,
-                //         child: SwitchButton(
-                //           backgroundColor: AppStyle.getTextColor(),
-                //           activeColor: AppStyle.getAccent(),
-                //           value: switchValue,
-                //           onToggle: (value) async {
-                //             switchValue = value;
-                //             var result = await checkMcgraw();
-                //             if (result == true && value == true) {
-                //               setState(() {
-                //                 Options.setMcGrawEnabled(value);
-                //                 setSharedStateMode(value);
-                //               });
-                //             } else if (result == false && value == true) {
-                //               setState(() {
-                //                 switchValue = false;
-                //                 Options.setMcGrawEnabled(false);
-                //                 setSharedStateMode(false);
-                //               });
-
-                //               // ignore: use_build_context_synchronously
-                //               showDialog(
-                //                   context: context,
-                //                   builder: (context) => StyledModal(
-                //                         backgroundColor:
-                //                             AppStyle.secondaryBackground,
-                //                         title:
-                //                             'McGraw Hill Connect SmartBook Error',
-                //                         body:
-                //                             'You must be on a McGraw Hill Connect SmartBook assignment to enable this feature.',
-                //                         onTap: () => Navigator.pop(context),
-                //                       ));
-                //             } else {
-                //               setState(() {
-                //                 Options.setMcGrawEnabled(value);
-                //                 setSharedStateMode(value);
-                //               });
-                //             }
-                //           },
-                //         ),
-                //       ),
-                //     ),
-                //   ),
-                // ),
                 const Spacer(),
                 StyledButton(
                     onTap: () {
