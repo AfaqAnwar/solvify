@@ -135,7 +135,10 @@ class _LoginPageState extends State<LoginPage> {
     Navigator.pushReplacement(
         context,
         PageTransition(
-            child: const RegisterPage(), type: PageTransitionType.fade));
+            child: const RegisterPage(
+              isReset: false,
+            ),
+            type: PageTransitionType.fade));
   }
 
   void goToResetPage() {

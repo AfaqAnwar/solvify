@@ -242,12 +242,10 @@ window.deleteUserFromCloud = async () =>
     window.auth = getAuth();
     await deleteUser(window.auth.currentUser)
       .then(() => {
-        console.log("User deleted");
         window.clearState();
         e(!0);
       })
       .catch((t) => {
-        console.log("Error deleting user: " + t.code);
         window.userState.error = t.code;
         e(!1);
       });
@@ -258,13 +256,11 @@ window.deleteDocFromCloud = async (e) =>
       o = doc(s, "users", window.userState.uid);
     await deleteDoc(o)
       .then(() => {
-        console.log("Document deleted");
         window.userState.dataDeleted = !0;
         e(!0);
       })
       .catch((t) => {
         window.userState.error = t.code;
-        console.log("Error deleting document: " + t.code);
         window.userState.dataDeleted = !1;
         e(!1);
       });
@@ -277,7 +273,6 @@ window.sendPasswordResetEmail = async (e) =>
         t(!0);
       })
       .catch((e) => {
-        console.log("Error sending password reset email: " + e.code);
         window.userState.error = e.code;
         window.userState.resetSent = !1;
         t(!1);

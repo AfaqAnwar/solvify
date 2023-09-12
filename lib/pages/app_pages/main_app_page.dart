@@ -311,6 +311,7 @@ class _MainAppPageState extends State<MainAppPage> {
   }
 
   Future<void> parse() async {
+    print(solver.getBodyText());
     OpenAIChatCompletionModel chatCompletion =
         await OpenAI.instance.chat.create(
       model: "gpt-3.5-turbo",
@@ -323,10 +324,12 @@ class _MainAppPageState extends State<MainAppPage> {
             content: solver.getBodyText(), role: OpenAIChatMessageRole.user),
       ],
     );
+    print(chatCompletion.choices.first.message.content);
     solver.setQuestion(chatCompletion.choices.first.message.content);
   }
 
   Future<void> answer() async {
+    print(solver.getQuestion());
     OpenAIChatCompletionModel chatCompletion =
         await OpenAI.instance.chat.create(
       model: "gpt-3.5-turbo",
@@ -343,6 +346,7 @@ class _MainAppPageState extends State<MainAppPage> {
             content: solver.getQuestion(), role: OpenAIChatMessageRole.user),
       ],
     );
+    print(chatCompletion.choices.first.message.content);
     solver.setAnswer(chatCompletion.choices.first.message.content);
     solver.setConfidenceFromAnswer();
     solver.parseAnswer();
