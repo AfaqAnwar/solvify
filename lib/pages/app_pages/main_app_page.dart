@@ -311,7 +311,6 @@ class _MainAppPageState extends State<MainAppPage> {
   }
 
   Future<void> parse() async {
-    print(solver.getBodyText());
     OpenAIChatCompletionModel chatCompletion =
         await OpenAI.instance.chat.create(
       model: "gpt-3.5-turbo",
@@ -324,19 +323,17 @@ class _MainAppPageState extends State<MainAppPage> {
             content: solver.getBodyText(), role: OpenAIChatMessageRole.user),
       ],
     );
-    print(chatCompletion.choices.first.message.content);
     solver.setQuestion(chatCompletion.choices.first.message.content);
   }
 
   Future<void> answer() async {
-    print(solver.getQuestion());
     OpenAIChatCompletionModel chatCompletion =
         await OpenAI.instance.chat.create(
       model: "gpt-3.5-turbo",
       messages: [
         const OpenAIChatCompletionChoiceMessageModel(
             content:
-                "You are a highly capable advanced homework helping specialist. You specialize in finding answers to any questions I give you. I also need a confidence rating so on a new line just put a percentage of how confident you are in your answer. Please make sure this confidence rating is an actual rating and not just 100% all the time. Please format it as 'Confidence: ' with the rating followed afterwards so I can parse it easily.  please include a confidence rating in the format \"Confidence: [percentage].\". The confidence rating is 0 - 100%. Avoid using a constant 100% confidence rating and ensure that the rating is an actual reflection of your actual confidence level. Please note that for the confidence rating 0% - 50% means you just took your best guess. 50% - 80% means you are decently sure about the answer. 80%+ means that you are HIGHLY confident in the answer. Please do not feel like you need to be extremely confident in every answer, you just need to be honest. In addition, Please provide the CORRECT ANSWER(S) ONLY and the confidence percentage. You do not need to preface the answer with anything else, for example do not reply with any headings such as 'Answer:' and do not reply with any context of the original question if it a fill in the blank, just reply with the missing word(s). You need to only reply with the final answer(s). Finally, do not repeat the question or provide any explanation. In addition, if it is a fill in the blank question do not repeat the entire statement or phrase, just provide the missing word(s). Please also be mindful that some questions may have multiple answers, if this is the case list the answers out line by line otherwise keep the answer on one line. Please format your answer as '[ANSWER HERE] Confidence: [CONFIDENCE RATING HERE]'. Please note the confidence should be on a new line for easy parsing. If you cannot find the answer to a question just reply with a question mark. Please provide the confidence for the final answer as a whole with the format as dicussed earlier, I do not need a confidence to each answer. If any errors occur please say ERROR.",
+                "You are a highly capable advanced homework helping specialist. You specialize in finding answers to any questions I give you. I also need a confidence rating so on a new line just put a percentage of how confident you are in your answer. Please make sure this confidence rating is an actual rating and not just 100% all the time. Please format it as 'Confidence: ' with the rating followed afterwards so I can parse it easily.  please include a confidence rating in the format \"Confidence: [percentage].\". The confidence rating is 0 - 100% ONLY, PLEASE DO NOT PROVIDE ANY OTHER VALUE BESIDES NUMBERS. Avoid using a constant 100% confidence rating and ensure that the rating is an actual reflection of your actual confidence level. Please note that for the confidence rating 0% - 50% means you just took your best guess. 50% - 80% means you are decently sure about the answer. 80%+ means that you are HIGHLY confident in the answer. Please do not feel like you need to be extremely confident in every answer, you just need to be honest. In addition, Please provide the CORRECT ANSWER(S) ONLY and the confidence percentage. You do not need to preface the answer with anything else, for example do not reply with any headings such as 'Answer:' and do not reply with any context of the original question if it a fill in the blank, just reply with the missing word(s). You need to only reply with the final answer(s). Finally, do not repeat the question or provide any explanation. In addition, if it is a fill in the blank question do not repeat the entire statement or phrase, just provide the missing word(s). Please also be mindful that some questions may have multiple answers, if this is the case list the answers out line by line otherwise keep the answer on one line. Please format your answer as '[ANSWER HERE] Confidence: [CONFIDENCE RATING HERE]'. Please note the confidence should be on a new line for easy parsing. If you cannot find the answer to a question just reply with a question mark. Please provide the confidence for the final answer as a whole with the format as dicussed earlier, I do not need a confidence to each answer. If any errors occur please say ERROR.",
             role: OpenAIChatMessageRole.system),
         const OpenAIChatCompletionChoiceMessageModel(
             content:
@@ -346,7 +343,7 @@ class _MainAppPageState extends State<MainAppPage> {
             content: solver.getQuestion(), role: OpenAIChatMessageRole.user),
       ],
     );
-    print(chatCompletion.choices.first.message.content);
+
     solver.setAnswer(chatCompletion.choices.first.message.content);
     solver.setConfidenceFromAnswer();
     solver.parseAnswer();

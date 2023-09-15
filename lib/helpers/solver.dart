@@ -28,11 +28,42 @@ class Solver {
   }
 
   void setConfidenceFromAnswer() {
-    confidence = answer.substring(answer.indexOf("Confidence: ") + 12).trim();
+    // Use a regular expression to capture all confidence percentages in the response
+    RegExp confidenceExp = RegExp(r'Confidence: (\d+)%');
+    Iterable<Match> matches = confidenceExp.allMatches(answer);
+
+    int sum = 0;
+    int count = 0;
+
+    for (Match match in matches) {
+      sum += int.parse(
+          match.group(1)!); // Add the confidence percentage to the sum
+      count++; // Increment the number of confidences found
+    }
+
+    if (count > 0) {
+      int averageConfidence = (sum / count).round();
+      confidence = '$averageConfidence%';
+    } else {
+      confidence = '0%';
+    }
   }
 
   void parseAnswer() {
-    answer = answer.substring(0, answer.indexOf("Confidence: ")).trim();
+    // First, remove all confidence portions from the string
+    String withoutConfidence =
+        answer.replaceAll(RegExp(r'Confidence: \d+%'), '').trim();
+
+    // Split the result by lines and remove any empty lines
+    List<String> lines = withoutConfidence
+        .split('\n')
+        .where((line) => line.trim().isNotEmpty)
+        .toList();
+
+    // Join the answer lines back together to form the final parsed answer
+    String parsedAnswer = lines.join('\n').trim();
+
+    answer = parsedAnswer;
   }
 
   void setBodyText(String bodyText) {
