@@ -9,7 +9,7 @@ AI powered Chrome extension that automatically scans and solves your assignment 
 - Navigate to the root folder within a terminal.
 - Run the following command. `dart pub get`
 - Run the following command. `flutter build web --web-renderer html --csp`
-- Open Chrome and type chrome://extensions in the URL address bar.
+- Open Google Chrome and type chrome://extensions in the URL address bar.
 - Enable Developer mode.
 - Click on "Load unpacked" and select the <solvify_project_dir>/build/web folder.
 
