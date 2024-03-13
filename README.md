@@ -15,7 +15,7 @@ AI powered Chrome extension that automatically scans and solves your assignment 
 
 _You can also find zipped versions of the published builds on the side, however they will not function due to the Firebase project being deleted._
 
-_Due to this project being directly corellated with a custom Firebase project, in case of the Firebase project being depricated, please connect to a local Firebase project with Firebase Authentication & Firebase Firestore via the JS file fire-init-min.js_
+_Due to this project being directly corellated with a custom Firebase project, in case of the Firebase project being depricated, please connect to a local Firebase project with Firebase Authentication & Firebase Firestore via the JS file `fire-init-min.js`_
 
 ## Solvify Demo
 
