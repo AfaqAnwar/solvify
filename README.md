@@ -25,10 +25,10 @@ Since the project and its respective Google domains will be deleted, there is a 
 
 ## Solvify Screenshots
 
-<img src = "https://github.com/AfaqAnwar/solvify/blob/main/screenshots/MAIN%20SCREEN.png?raw=true" width="30%" height="30%">
+<img src = "https://github.com/AfaqAnwar/solvify/blob/main/screenshots/MAIN%20SCREEN.png?raw=true" width="50%" height="50%">
 
-<img src = "https://github.com/AfaqAnwar/solvify/blob/main/screenshots/DASHBOARD.png?raw=true" width="30%" height="30%">
+<img src = "https://github.com/AfaqAnwar/solvify/blob/main/screenshots/DASHBOARD.png?raw=true" width="50%" height="50%">
 
-<img src = "https://github.com/AfaqAnwar/solvify/blob/main/screenshots/MAIN%20SCREEN.png?raw=true" width="30%" height="30%">
+<img src = "https://github.com/AfaqAnwar/solvify/blob/main/screenshots/MAIN%20SCREEN.png?raw=true" width="50%" height="50%">
 
-<img src = "https://github.com/AfaqAnwar/solvify/blob/main/screenshots/PROFILE%20PAGE.png?raw=true" width="30%" height="30%">
+<img src = "https://github.com/AfaqAnwar/solvify/blob/main/screenshots/PROFILE%20PAGE.png?raw=true" width="50%" height="50%">
